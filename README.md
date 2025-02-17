@@ -1,6 +1,6 @@
-# Laravel 11 Admin Template
+# Fast Auto Clinic
 
-A ready-to-use admin panel template built with Laravel 11 for quick project setup.
+One stop solution for all your auto clinic needs.
 
 ## Requirements
 
@@ -12,7 +12,7 @@ A ready-to-use admin panel template built with Laravel 11 for quick project setu
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/steadfast-it/template-mastering-laravel-11.git
+git clone https://github.com/steadfast-it/auto-clinic.git
 cd [project-name]
 ```
 
@@ -52,30 +52,3 @@ npm run dev
 ```bash
 php artisan serve
 ```
-
-## Features
-
-- Pre-built authentication system
-- User management
-- Role-based access control
-- Responsive admin dashboard
-- Common UI components
-- Form validation
-
-## Project Structure
-
-- `app/` - Contains controllers, models, and other PHP classes
-- `resources/views/` - Blade template files
-- `public/` - Static assets
-- `routes/` - Application routes
-- `database/` - Migrations and seeders
-
-## Customization
-
-- Update branding in `resources/views/layouts/`
-- Modify styles in `resources/css/`
-- Add new routes in `routes/web.php`
-
-## Support
-
-Contact the development team for support and feature requests.
