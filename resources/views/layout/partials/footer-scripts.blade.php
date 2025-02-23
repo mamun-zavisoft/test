@@ -114,40 +114,11 @@
      <script src="{{ URL::asset('/build/plugins/ion-rangeslider/js/custom-rangeslider.js') }}"></script>
  @endif
 
- @if (Route::is(['form-mask']))
-     <!-- Mask JS -->
-     <script src="{{ URL::asset('/build/js/jquery.maskedinput.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/js/mask.js') }}"></script>
- @endif
 
  @if (Route::is(['ui-scrollbar']))
      <!-- Plyr JS -->
      <script src="{{ URL::asset('/build/plugins/scrollbar/scrollbar.min.js') }}"></script>
      <script src="{{ URL::asset('/build/plugins/scrollbar/custom-scroll.js') }}"></script>
- @endif
-
- @if (Route::is(['ui-stickynote']))
-     <!-- Stickynote JS -->
-     <script src="{{ URL::asset('/build/js/jquery-ui.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/stickynote/sticky.js') }}"></script>
- @endif
-
- @if (Route::is(['ui-toasts']))
-     <!-- Mask JS -->
-     <script src="{{ URL::asset('/build/plugins/toastr/toastr.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/toastr/toastr.js') }}"></script>
- @endif
-
- @if (Route::is(['ui-lightbox']))
-     <script src="{{ URL::asset('/build/plugins/lightbox/glightbox.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/lightbox/lightbox.js') }}"></script>
- @endif
-
- @if (Route::is(['chart-c3']))
-     <!-- Chart JS -->
-     <script src="{{ URL::asset('/build/plugins/c3-chart/d3.v5.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/c3-chart/c3.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/c3-chart/chart-data.js') }}"></script>
  @endif
 
  @if (Route::is(['chart-flot']))
@@ -158,29 +129,10 @@
      <script src="{{ URL::asset('/build/plugins/flot/chart-data.js') }}"></script>
  @endif
 
- @if (Route::is(['lightbox']))
-     <!-- lightbox JS -->
-     <script src="{{ URL::asset('/build/plugins/lightbox/glightbox.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/lightbox/lightbox.js') }}"></script>
- @endif
-
  @if (Route::is(['chart-js']))
      <!-- Chart JS -->
      <script src="{{ URL::asset('/build/plugins/chartjs/chart.min.js') }}"></script>
      <script src="{{ URL::asset('/build/plugins/chartjs/chart-data.js') }}"></script>
- @endif
-
- @if (Route::is(['chart-morris']))
-     <!-- Chart JS -->
-     <script src="{{ URL::asset('/build/plugins/morris/raphael-min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/morris/morris.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/morris/chart-data.js') }}"></script>
- @endif
-
- @if (Route::is(['chart-peity']))
-     <!-- Chart JS -->
-     <script src="{{ URL::asset('/build/plugins/peity/jquery.peity.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/peity/chart-data.js') }}"></script>
  @endif
 
  @if (Route::is(['form-select2']))
@@ -199,6 +151,42 @@
      <script src="{{ URL::asset('/build/plugins/twitter-bootstrap-wizard/form-wizard.js') }}"></script>
  @endif
 
+
+ <script>
+    function toast(msg, type = 'success') {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: type,
+            title: msg
+        });
+    }
+    // session flash message
+    @if (Session::has('success'))
+        toast("{{ Session::get('success') }}", 'success');
+    @elseif (Session::has('error'))
+        toast("{{ Session::get('error') }}", 'error');
+    @elseif (Session::has('info'))
+        toast("{{ Session::get('info') }}", 'info');
+    @elseif (Session::has('warning'))
+        toast("{{ Session::get('warning') }}", 'warning');
+    @endif
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
  <!-- Custom JS -->
  <script src="{{ URL::asset('/build/js/theme-script.js') }}"></script>
  <script src="{{ URL::asset('/build/js/script.js') }}"></script>
+ <script src="{{ URL::asset('build/js/custom-script.js') }}"></script>

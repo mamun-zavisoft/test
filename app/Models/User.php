@@ -3,16 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Media\HasMedia;
+use App\Media\Mediable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Modules\RolePermission\Traits\RolePermission;
 use Illuminate\Support\Facades\Cache;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Mediable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, RolePermission;
+    use HasFactory, Notifiable, RolePermission, HasMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -21,12 +24,14 @@ class User extends Authenticatable
      */
 
     protected $guard_name = 'admin';
+    protected $appends = ['image'];
 
     protected $fillable = [
         'name',
         'email',
         'phone',
         'password',
+        'image',
     ];
 
     /**
@@ -58,5 +63,21 @@ class User extends Authenticatable
             return $this->getAllPermissions()->pluck('name')->toArray();
         });
         return in_array($permissionName, $permissions);
+    }
+
+    public function setImageAttribute($file)
+    {
+        if ($file) {
+            $this->deleteMedia();
+
+            $this->addMedia($file, 'images', [
+                'tags' => 'profile',
+            ]);
+        }
+    }
+
+    public function getImageAttribute()
+    {
+        return $this->getFirstUrl('images');
     }
 }
