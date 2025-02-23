@@ -32,7 +32,7 @@
                                     <th class="no-sort">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbody">
                                 @foreach ($brands as $brand)
                                     <tr>
                                         <td>
@@ -52,7 +52,8 @@
                                                     data-bs-target="#edit-brand-{{ $brand->id }}">
                                                     <i data-feather="edit" class="feather-edit"></i>
                                                 </a>
-                                                <form action="{{ route('admin.brands.destroy', $brand->id) }}" method="post" class="delete-form">
+                                                <form action="{{ route('admin.brands.destroy', $brand->id) }}"
+                                                    method="post" class="delete-form">
                                                     @csrf
                                                     @method('DELETE')
                                                     <a class="confirm-text2 p-2" href="javascript:void(0);">
@@ -80,12 +81,13 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body custom-modal-body new-employee-field">
-                                                            <form action="{{ route('admin.brands.update', $brand->id) }}"
+                                                            <form class="editForm" data-id="{{ $brand->id }}"
+                                                                action="{{ route('admin.brands.update', $brand->id) }}"
                                                                 method="POST" enctype="multipart/form-data">
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">Brand</label>
+                                                                    <label class="form-label">Brand*</label>
                                                                     <input type="text" class="form-control"
                                                                         value="{{ $brand->name }}" name="name">
                                                                 </div>
@@ -146,7 +148,8 @@
                             </button>
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
-                            <form action="{{ route('admin.brands.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.brands.store') }}" method="POST" enctype="multipart/form-data"
+                                id="storeForm">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Brand</label>
@@ -169,7 +172,7 @@
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"
                                         data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-submit">Create Brand</button>
+                                    <button type="submit" class="btn btn-submit" id="submit_btn">Create Brand</button>
                                 </div>
                             </form>
                         </div>
@@ -182,25 +185,73 @@
 
 @push('scripts')
     <script>
-        $('.confirm-text2').on('click', function(e) {
-            e.preventDefault();
+        // ajax call for store
+        $(document).ready(function() {
+            $('#storeForm').submit(function(e) {
+                e.preventDefault();
+                let SubmitBtn = $('#submit_btn');
+                SubmitBtn.prop('disabled', true);
+                let formData = new FormData(this);
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
 
-            // Get the associated delete form
-            var deleteForm = $(this).closest('tr').find('.delete-form');
+                }).done(function(response) {
+                    if (response.type == 'success') {
+                        $('#add-brand').modal('hide');
+                        toastr.success(response.message);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }).fail(function(xhr) {
+                    SubmitBtn.prop('disabled', false);
+                    $('#submit_btn').attr('disabled', false);
+                    let response = xhr.responseJSON;
+                    if (response && response.errors) {
+                        $.each(response.errors, function(key, value) {
+                            toastr.error(value);
+                        });
+                    }
+                });
+            });
 
-            // Show the SweetAlert confirmation dialog
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                // icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    deleteForm.submit();
-                }
+            $('.editForm').submit(function(e) {
+                e.preventDefault();
+                let formData = new FormData(this);
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+
+                }).done(function(response) {
+                    if (response.type == 'success') {
+                        $('.edit-brand').modal('hide');
+                        toastr.success(response.message);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }).fail(function(xhr) {
+                    $('#submit_btn').attr('disabled', false);
+                    let response = xhr.responseJSON;
+                    if (response && response.errors) {
+                        $.each(response.errors, function(key, value) {
+                            toastr.error(value);
+                        });
+                    }
+                });
             });
         });
     </script>

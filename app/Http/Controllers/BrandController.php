@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\FetchBrand;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
 class BrandController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->per_page ?? 10;
-        $brands = Brand::orderBy('id', 'DESC')->paginate($perPage);
+       $brands = (new FetchBrand)->execute($request);
+        if ($request->ajax()) {
+            return view('components.brand.table', ['entity' => $brands])->render();
+        }
 
         return view('backend.brands.index', compact('brands'));
     }
@@ -20,13 +24,17 @@ class BrandController extends Controller
         $request->validate([
             'name' => 'required|string|max:50|unique:brands,name',
         ]);
+        try {
+            $brand = Brand::create([
+                'name' => $request->name,
+            ]);
+    
+            return response()->json(['message' => 'Brand created successfully!', 'type' => 'success' ], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage(), 'type' => 'error' ]);
+        }
 
-        $brand = Brand::create([
-            'name' => $request->name,
-        ]);
-
-        // return response()->json(['message' => 'Brand created successfully!', 'brand' => $brand]);
-        return redirect()->back()->with('success', 'Brand created successfully!');
+        
     }
 
     public function update(Request $request, Brand $brand)
@@ -35,11 +43,15 @@ class BrandController extends Controller
             'name' => 'required|string|max:50|unique:brands,name,' . $brand->id,
         ]);
 
-        $brand->update([
-            'name' => $request->name,
-        ]);
+        try {
+            $brand->update([
+                'name' => $request->name,
+            ]);
 
-        return redirect()->back()->with('success', 'Brand updated successfully!');
+            return response()->json(['message' => 'Brand updated successfully!', 'type' => 'success' ]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage(), 'type' => 'error' ]);
+        }
 
     }
 

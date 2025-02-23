@@ -121,13 +121,6 @@
      <script src="{{ URL::asset('/build/plugins/scrollbar/custom-scroll.js') }}"></script>
  @endif
 
-
- @if (Route::is(['ui-toasts']))
-     <!-- Mask JS -->
-     <script src="{{ URL::asset('/build/plugins/toastr/toastr.min.js') }}"></script>
-     <script src="{{ URL::asset('/build/plugins/toastr/toastr.js') }}"></script>
- @endif
-
  @if (Route::is(['chart-flot']))
      <!-- Chart JS -->
      <script src="{{ URL::asset('/build/plugins/flot/jquery.flot.js') }}"></script>
@@ -188,6 +181,10 @@
         toast("{{ Session::get('warning') }}", 'warning');
     @endif
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
  <!-- Custom JS -->
  <script src="{{ URL::asset('/build/js/theme-script.js') }}"></script>
