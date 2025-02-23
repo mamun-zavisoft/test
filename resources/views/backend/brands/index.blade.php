@@ -40,7 +40,8 @@
                                         </td>
                                         <td>{{ $brand->name }}</td>
                                         <td><span class="d-flex"><img
-                                                    src="{{ URL::asset('/build/img/brand/brand-icon-01.png') }}"
+                                                    src="{{ $brand->image ?: asset('build/img/no-image.svg') }}"
+                                                    style="width: 50px; height: 50px;"
                                                     alt=""></span></td>
                                         <td>{{ $brand->created_at->format('d M Y') }}</td>
                                         <td><span

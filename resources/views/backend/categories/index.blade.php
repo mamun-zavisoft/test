@@ -24,8 +24,8 @@
                             <thead>
                                 <tr>
                                     <th class="no-sort">SL</th>
-                                    <th>Brand</th>
-                                    <th>Logo</th>
+                                    <th>Category</th>
+                                    <th>Image</th>
                                     <th>Created On</th>
                                     <th class="no-sort">Action</th>
                                 </tr>
@@ -38,7 +38,7 @@
                                         </td>
                                         <td>{{ $category->name }}</td>
                                         <td><span class="d-flex"><img
-                                                    src="{{ URL::asset('/build/img/brand/brand-icon-01.png') }}"
+                                                    src="{{ $category->image ?: URL::asset('/build/img/brand/brand-icon-01.png') }}"
                                                     alt=""></span></td>
                                         <td>{{ $category->created_at->format('d M Y') }}</td>
                                         <td class="action-table-data">
