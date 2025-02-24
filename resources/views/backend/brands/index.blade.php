@@ -1,4 +1,3 @@
-<?php $page = 'brand-list'; ?>
 @extends('layout.mainlayout')
 @section('content')
     <div class="page-wrapper">
@@ -41,8 +40,7 @@
                                         <td>{{ $brand->name }}</td>
                                         <td><span class="d-flex"><img
                                                     src="{{ $brand->image ?: asset('build/img/no-image.svg') }}"
-                                                    style="width: 50px; height: 50px;"
-                                                    alt=""></span></td>
+                                                    style="width: 50px; height: 50px;" alt=""></span></td>
                                         <td>{{ $brand->created_at->format('d M Y') }}</td>
                                         <td><span
                                                 class="badge rounded-pill bg-outline-{{ $brand->status == 1 ? 'success' : 'warning' }}">{{ $brand->status == 1 ? 'Active' : 'Inactive' }}</span>
@@ -93,22 +91,26 @@
                                                                         value="{{ $brand->name }}" name="name">
                                                                 </div>
                                                                 <label class="form-label">Logo</label>
-                                                                <div class="profile-pic-upload mb-3">
+                                                                <div class="profile-pic-upload mb-3 image-container">
                                                                     <div class="profile-pic brand-pic">
-                                                                        <span><img
-                                                                                src="{{ URL::asset('/build/img/brand/brand-icon-02.png') }}"
-                                                                                alt=""></span>
+                                                                        <span>
+                                                                            <img src="{{ $brand->image ?: asset('build/img/icons/upload.svg') }}"
+                                                                                class="image-preview" alt="">
+                                                                        </span>
                                                                         <a href="javascript:void(0);"
-                                                                            class="remove-photo"><i data-feather="x"
-                                                                                class="x-square-add"></i></a>
+                                                                            class="remove-photo d-none">
+                                                                            <i data-feather="x" class="x-square-add"></i>
+                                                                        </a>
                                                                     </div>
                                                                     <div class="image-upload mb-0">
-                                                                        <input type="file">
+                                                                        <input class="image-input" type="file"
+                                                                            name="image">
                                                                         <div class="image-uploads">
                                                                             <h4>Change Image</h4>
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="modal-footer-btn">
                                                                     <button type="button" class="btn btn-cancel me-2"
                                                                         data-bs-dismiss="modal">Cancel</button>
@@ -149,26 +151,32 @@
                             </button>
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
-                            <form action="{{ route('admin.brands.store') }}" method="POST" enctype="multipart/form-data"
-                                id="storeForm">
+                            <form action="{{ route('admin.brands.store') }}" method="POST"
+                                enctype="multipart/form-data" id="storeForm">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Brand</label>
                                     <input type="text" name="name" class="form-control">
                                 </div>
                                 <label class="form-label">Logo</label>
-                                <div class="profile-pic-upload mb-3">
+                                <div class="profile-pic-upload mb-3 image-container">
                                     <div class="profile-pic brand-pic">
-                                        <span><i data-feather="plus-circle" class="plus-down-add"></i> Add
-                                            Image</span>
+                                        <span>
+                                            <img src="{{ $brand->image ?: asset('build/img/icons/upload.svg') }}"
+                                                class="image-preview" alt="">
+                                        </span>
+                                        <a href="javascript:void(0);" class="remove-photo d-none">
+                                            <i data-feather="x" class="x-square-add"></i>
+                                        </a>
                                     </div>
                                     <div class="image-upload mb-0">
-                                        <input type="file" name="image">
+                                        <input class="image-input" type="file" name="image">
                                         <div class="image-uploads">
                                             <h4>Change Image</h4>
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"
@@ -254,6 +262,11 @@
                     }
                 });
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            
         });
     </script>
 @endpush

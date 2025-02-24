@@ -24,6 +24,7 @@ class BrandController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:50|unique:brands,name',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         try {
             DB::beginTransaction();
@@ -46,12 +47,16 @@ class BrandController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:50|unique:brands,name,' . $brand->id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         try {
             $brand->update([
                 'name' => $request->name,
             ]);
+            
+            $brand->image = $request->file('image');
+            $brand->save();
 
             return response()->json(['message' => 'Brand updated successfully!', 'type' => 'success']);
         } catch (\Throwable $th) {

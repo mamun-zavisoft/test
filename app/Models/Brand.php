@@ -26,7 +26,6 @@ class Brand extends Model implements Mediable
 
     public function getImageAttribute()
     {
-        $img_url =  $this->getFirstUrl('image');
-        return $img_url;
+        return $this->getFirstUrl('image');
     }
 }

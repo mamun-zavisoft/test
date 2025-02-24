@@ -51,6 +51,10 @@
 <!-- /Main Wrapper -->
 {{-- @include('layout.partials.theme-settings') --}}
 @include('layout.partials.footer-scripts')
+<script>
+    // Default image path
+    const defaultUploadImagePath = '{{ asset('build/img/icons/upload.svg') }}';
+</script>
 
 @stack('scripts')
 </body>
