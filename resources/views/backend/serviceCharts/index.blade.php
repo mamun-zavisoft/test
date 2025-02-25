@@ -1,11 +1,11 @@
-<?php $page = 'zone-list'; ?>
+<?php $page = 'serviceChart-list'; ?>
 @extends('layout.mainlayout')
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            <x-breadcrumb-modal title="Zone List" sub-title="Manage Your Zone" button="Add Zone" modal-id="add-zone" />
+            <x-breadcrumb-modal title="Service Chart List" sub-title="Manage Service Chart" button="Add Service Chart" modal-id="add-serviceChart" />
 
-            <!-- /product list -->
+           
             <div class="card table-list-card">
                 <div class="card-body">
                     <div class="table-top">
@@ -26,29 +26,31 @@
                                 <tr>
                                     <th class="no-sort">SL</th>
                                     <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>Location</th>
+                                    <th>Price</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
                                     <th>Created On</th>
                                     <th class="no-sort">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach ($zones as $zone)
+                                @foreach ($serviceCharts as $serviceChart)
                                     <tr>
                                         <td>
-                                            {{ $loop->iteration + $zones->firstItem() - 1 }}
+                                            {{ $loop->iteration + $serviceCharts->firstItem() - 1 }}
                                         </td>
-                                        <td>{{ $zone->name }}</td>
-                                        <td>{{ $zone->phone }}</td>
-                                        <td>{{ $zone->location }}</td>
-                                        <td>{{ $zone->created_at?->format('d M Y') }}</td>
+                                        <td>{{ $serviceChart->name }}</td>
+                                        <td>{{ number_format($serviceChart->price) }}</td>
+                                        <td>{{ $serviceChart->code }}</td>
+                                        <td>{{ $serviceChart->description }}</td>
+                                        <td>{{ $serviceChart->created_at?->format('d M Y') }}</td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
                                                 <a class="me-2 p-2" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-zone-{{ $zone->id }}">
+                                                    data-bs-target="#edit-serviceChart-{{ $serviceChart->id }}">
                                                     <i data-feather="edit" class="feather-edit"></i>
                                                 </a>
-                                                <form action="{{ route('admin.zones.destroy', $zone->id) }}"
+                                                <form action="{{ route('admin.service-charts.destroy', $serviceChart->id) }}"
                                                     method="post" class="delete-form">
                                                     @csrf
                                                     @method('DELETE')
@@ -62,14 +64,14 @@
                                     </tr>
 
                                     <!-- Edit Brand -->
-                                    <div class="modal fade" id="edit-zone-{{ $zone->id }}">
+                                    <div class="modal fade" id="edit-serviceChart-{{ $serviceChart->id }}">
                                         <div class="modal-dialog modal-dialog-centered custom-modal-two">
                                             <div class="modal-content">
                                                 <div class="page-wrapper-new p-0">
                                                     <div class="content">
                                                         <div class="modal-header border-0 custom-modal-header">
                                                             <div class="page-title">
-                                                                <h4>Edit Zone</h4>
+                                                                <h4>Edit Service Chart</h4>
                                                             </div>
                                                             <button type="button" class="close" data-bs-dismiss="modal"
                                                                 aria-label="Close">
@@ -77,25 +79,31 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body custom-modal-body new-employee-field">
-                                                            <form class="editForm" data-id="{{ $zone->id }}"
-                                                                action="{{ route('admin.zones.update', $zone->id) }}"
+                                                            <form class="editForm" data-id="{{ $serviceChart->id }}"
+                                                                action="{{ route('admin.service-charts.update', $serviceChart->id) }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Name*</label>
                                                                     <input type="text" class="form-control"
-                                                                        value="{{ $zone->name }}" name="name">
+                                                                        value="{{ $serviceChart->name }}" name="name">
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">Phone*</label>
+                                                                    <label class="form-label">Price*</label>
                                                                     <input type="text" class="form-control"
-                                                                        value="{{ $zone->phone }}" name="phone">
+                                                                        value="{{ $serviceChart->price }}" name="price">
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">Location*</label>
+                                                                    <label class="form-label">Code*</label>
                                                                     <input type="text" class="form-control"
-                                                                        value="{{ $zone->location }}" name="location">
+                                                                        value="{{ $serviceChart->code }}" name="code">
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="input-blocks summer-description-box transfer mb-3">
+                                                                        <label>Description</label>
+                                                                        <textarea class="form-control h-100" rows="5" name="description">{{ $serviceChart->description }}</textarea>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="modal-footer-btn">
                                                                     <button type="button" class="btn btn-cancel me-2"
@@ -123,21 +131,21 @@
     </div>
 
     <!-- Add Brand -->
-    <div class="modal fade" id="add-zone">
+    <div class="modal fade" id="add-serviceChart">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
             <div class="modal-content">
                 <div class="page-wrapper-new p-0">
                     <div class="content">
                         <div class="modal-header border-0 custom-modal-header">
                             <div class="page-title">
-                                <h4>Create Zone</h4>
+                                <h4>Create Service Chart</h4>
                             </div>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
-                            <form action="{{ route('admin.zones.store') }}" method="POST"
+                            <form action="{{ route('admin.service-charts.store') }}" method="POST"
                                 id="storeForm">
                                 @csrf
                                 <div class="mb-3">
@@ -145,18 +153,24 @@
                                     <input type="text" name="name" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Phone*</label>
-                                    <input type="text" name="phone" class="form-control">
+                                    <label class="form-label">Price*</label>
+                                    <input type="text" name="price" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Location*</label>
-                                    <input type="text" name="location" class="form-control">
+                                    <label class="form-label">Code*</label>
+                                    <input type="text" class="form-control" name="code">
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="input-blocks summer-description-box transfer mb-3">
+                                        <label>Description</label>
+                                        <textarea class="form-control h-100" rows="5" name="description"></textarea>
+                                    </div>
                                 </div>
 
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"
                                         data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-submit" id="submit_btn">Create Zone</button>
+                                    <button type="submit" class="btn btn-submit" id="submit_btn">Create Service Chart</button>
                                 </div>
                             </form>
                         </div>
@@ -186,7 +200,7 @@
 
                 }).done(function(response) {
                     if (response.type == 'success') {
-                        $('#add-zone').modal('hide');
+                        $('#add-serviceChart').modal('hide');
                         toastr.success(response.message);
                         setTimeout(() => {
                             location.reload();
@@ -220,7 +234,7 @@
 
                 }).done(function(response) {
                     if (response.type == 'success') {
-                        $('.edit-zone').modal('hide');
+                        $('.edit-serviceChart').modal('hide');
                         toastr.success(response.message);
                         setTimeout(() => {
                             location.reload();

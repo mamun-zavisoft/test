@@ -26,7 +26,6 @@
                                 <tr>
                                     <th class="no-sort">SL</th>
                                     <th>Name</th>
-                                    <th>Zone</th>
                                     <th>Created On</th>
                                     <th class="no-sort">Action</th>
                                 </tr>
@@ -38,7 +37,6 @@
                                             {{ $loop->iteration + $racks->firstItem() - 1 }}
                                         </td>
                                         <td>{{ $rack->name }}</td>
-                                        <td>{{ $rack->zone?->name }}</td>
                                         <td>{{ $rack->created_at?->format('d M Y') }}</td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
@@ -172,6 +170,7 @@
                             location.reload();
                         }, 1000);
                     } else {
+                     SubmitBtn.prop('disabled', false);
                         toastr.error(response.message);
                     }
                 }).fail(function(xhr) {
