@@ -6,7 +6,7 @@
                 back-button-route="admin.products.index" />
 
             <!-- /add -->
-            <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="storeForm" action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card">
                     <div class="card-body add-product pb-0">
@@ -150,50 +150,71 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
-                                                        
-                                                        <div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree" data-bs-parent="#accordionExample3">
+
+
+                                                        <div id="collapseThree" class="accordion-collapse collapse show"
+                                                            aria-labelledby="headingThree"
+                                                            data-bs-parent="#accordionExample3">
                                                             <div class="accordion-body">
                                                                 <div class="text-editor add-list add">
                                                                     <div class="col-lg-12">
                                                                         <div class="add-choosen gap-2">
                                                                             <div class="input-blocks">
-                                                                                <div class="image-upload" style="width: 180px; height: 180px;">
-                                                                                    <input type="file" class="file-input" name="thumbnail">
+                                                                                <div class="image-upload"
+                                                                                    style="width: 180px; height: 180px;">
+                                                                                    <input type="file"
+                                                                                        class="file-input"
+                                                                                        name="thumbnail">
                                                                                     <div class="image-uploads">
-                                                                                        <i data-feather="plus-circle" class="plus-down-add me-0"></i>
+                                                                                        <i data-feather="plus-circle"
+                                                                                            class="plus-down-add me-0"></i>
                                                                                         <h4>Add Thumbnail *</h4>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="phone-img d-none">
-                                                                                    <img class="image-preview" src="" alt="image">
-                                                                                    <a href="javascript:void(0);"><i data-feather="x" class="x-square-add remove-product"></i></a>
+                                                                                    <img class="image-preview"
+                                                                                        src="" alt="image">
+                                                                                    <a href="javascript:void(0);"><i
+                                                                                            data-feather="x"
+                                                                                            class="x-square-add remove-product"></i></a>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="input-blocks">
                                                                                 <div class="image-upload">
-                                                                                    <input type="file" class="file-input" name="images[]">
+                                                                                    <input type="file"
+                                                                                        class="file-input"
+                                                                                        name="images[]">
                                                                                     <div class="image-uploads">
-                                                                                        <i data-feather="plus-circle" class="plus-down-add me-0"></i>
+                                                                                        <i data-feather="plus-circle"
+                                                                                            class="plus-down-add me-0"></i>
                                                                                         <h4>Add Images</h4>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="phone-img d-none">
-                                                                                    <img class="image-preview" src="" alt="image">
-                                                                                    <a href="javascript:void(0);"><i data-feather="x" class="x-square-add remove-product"></i></a>
+                                                                                    <img class="image-preview"
+                                                                                        src="" alt="image">
+                                                                                    <a href="javascript:void(0);"><i
+                                                                                            data-feather="x"
+                                                                                            class="x-square-add remove-product"></i></a>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="input-blocks">
                                                                                 <div class="image-upload">
-                                                                                    <input type="file" class="file-input" name="images[]">
+                                                                                    <input type="file"
+                                                                                        class="file-input"
+                                                                                        name="images[]">
                                                                                     <div class="image-uploads">
-                                                                                        <i data-feather="plus-circle" class="plus-down-add me-0"></i>
+                                                                                        <i data-feather="plus-circle"
+                                                                                            class="plus-down-add me-0"></i>
                                                                                         <h4>Add Images</h4>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="phone-img d-none">
-                                                                                    <img class="image-preview" src="" alt="image">
-                                                                                    <a href="javascript:void(0);"><i data-feather="x" class="x-square-add remove-product"></i></a>
+                                                                                    <img class="image-preview"
+                                                                                        src="" alt="image">
+                                                                                    <a href="javascript:void(0);"><i
+                                                                                            data-feather="x"
+                                                                                            class="x-square-add remove-product"></i></a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -216,7 +237,7 @@
                 <div class="col-lg-12">
                     <div class="btn-addproduct mb-4">
                         <button type="button" class="btn btn-cancel me-2">Cancel</button>
-                        <button type="submit" class="btn btn-submit">Save Product</button>
+                        <button type="submit" class="btn btn-submit" id="submit_btn">Save Product</button>
                     </div>
                 </div>
             </form>
@@ -226,36 +247,72 @@
     </div>
 @endsection
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        feather.replace();
+    <script>
+        $(document).ready(function() {
+            feather.replace();
 
-        $('.file-input').on('change', function(event) {
-            var file = event.target.files[0];
-            if (file) {
-                var reader = new FileReader();
-                var $imageUpload = $(this).closest('.image-upload');
-                var $phoneImg = $imageUpload.next('.phone-img');
-                var $imagePreview = $phoneImg.find('.image-preview');
+            $('.file-input').on('change', function(event) {
+                var file = event.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    var $imageUpload = $(this).closest('.image-upload');
+                    var $phoneImg = $imageUpload.next('.phone-img');
+                    var $imagePreview = $phoneImg.find('.image-preview');
 
-                reader.onload = function(e) {
-                    $imagePreview.attr('src', e.target.result);
-                    $imageUpload.addClass('d-none');
-                    $phoneImg.removeClass('d-none');
+                    reader.onload = function(e) {
+                        $imagePreview.attr('src', e.target.result);
+                        $imageUpload.addClass('d-none');
+                        $phoneImg.removeClass('d-none');
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
-            }
+            });
+
+            $('.remove-product').on('click', function() {
+                var $phoneImg = $(this).closest('.phone-img');
+                var $imageUpload = $phoneImg.prev('.image-upload');
+                var $fileInput = $imageUpload.find('.file-input');
+
+                $fileInput.val('');
+                $phoneImg.addClass('d-none');
+                $imageUpload.removeClass('d-none');
+            });
         });
 
-        $('.remove-product').on('click', function() {
-            var $phoneImg = $(this).closest('.phone-img');
-            var $imageUpload = $phoneImg.prev('.image-upload');
-            var $fileInput = $imageUpload.find('.file-input');
 
-            $fileInput.val('');
-            $phoneImg.addClass('d-none');
-            $imageUpload.removeClass('d-none');
+        $('#storeForm').submit(function(e) {
+            e.preventDefault();
+            let SubmitBtn = $('#submit_btn');
+            SubmitBtn.prop('disabled', true);
+            let formData = new FormData(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+
+            }).done(function(response) {
+                if (response.type == 'success') {
+                    $('#add-brand').modal('hide');
+                    toastr.success(response.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(response.message);
+                }
+            }).fail(function(xhr) {
+                SubmitBtn.prop('disabled', false);
+                $('#submit_btn').attr('disabled', false);
+                let response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $.each(response.errors, function(key, value) {
+                        toastr.error(value);
+                    });
+                }
+            });
         });
-    });
-</script>
+    </script>
 @endpush

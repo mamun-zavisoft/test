@@ -34,7 +34,10 @@ class Product extends Model implements Mediable
     public function setThumbnailAttribute($file)
     {
         if ($file) {
-            $this->deleteMedia('thumbnail');
+            $existingMedia = $this->media()->where('collection_name', 'thumbnail')->first();
+            if ($existingMedia) {
+                $this->deleteMedia($existingMedia->id);
+            }
 
             $this->addMedia($file, 'thumbnail', []);
         }
@@ -48,7 +51,6 @@ class Product extends Model implements Mediable
     public function setImagesAttribute($file)
     {
         if ($file) {
-            $this->deleteMedia('images');
 
             $this->addMedia($file, 'images', []);
         }

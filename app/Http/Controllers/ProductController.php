@@ -43,6 +43,7 @@ class ProductController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        // dd($request->all());
         try {
             $product = Product::create([
                 'name' => $request->name,
