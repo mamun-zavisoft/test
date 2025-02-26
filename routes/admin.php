@@ -10,6 +10,7 @@ use App\Http\Controllers\RackController;
 use App\Http\Controllers\ServiceChartController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\ZoneController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/drawers', DrawerController::class);
     Route::resource('/purchases', PurchaseController::class);
     Route::resource('/accounts', AccountController::class);
+    Route::resource('/vehicles', VehiclesController::class);
 
     // single action routes
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');
