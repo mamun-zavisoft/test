@@ -9,6 +9,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\ServiceChartController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StockPurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\ZoneController;
@@ -26,9 +27,11 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/purchases', PurchaseController::class);
     Route::resource('/accounts', AccountController::class);
     Route::resource('/vehicles', VehiclesController::class);
-
+    
     // single action routes
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');
+    Route::put('/purchases/statusChange/{id}', [PurchaseController::class, 'statusChange'])->name('purchases.statusChange');
+    Route::get('/stock-purchases/{id}', [StockPurchaseController::class, 'create'])->name('stock-purchases.create');
 
     Route::controller(SettingController::class)->group(function () {
         Route::delete('/media/{modelName}/{id}', 'destroyMedia')->name('media.destroy');

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PurchaseRequest;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Models\Supplier;
 use App\Services\PurchaseService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
@@ -43,21 +46,21 @@ class PurchaseController extends Controller
         }
     }
 
-    /**
-     * Calculate the paid status based on grand total and paid amount.
-     *
-     * @param float $grandTotal
-     * @param float $paidAmount
-     * @return string
-     */
-    private function calculatePaidStatus($grandTotal, $paidAmount)
+    public function statusChange(Request $request, $id)
     {
-        if ($paidAmount == 0) {
-            return 'full_due';
-        } elseif ($paidAmount < $grandTotal) {
-            return 'partial_paid';
-        } else {
-            return 'full_paid';
+        $request->validate([
+            'status' => 'required|in:pending,received',
+        ]);
+        try {
+            $purchase = Purchase::findOrFail($id);
+
+            $purchase->update(['status' => $request->status]);
+
+            return redirect()->route('admin.purchases.index')->with('success', 'Purchase status updated successfully.');
+        } catch (ModelNotFoundException) {
+            return redirect()->route('admin.purchases.index')->with('error', 'Purchase not found.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.purchases.index')->with('error', $e->getMessage());
         }
     }
 }
