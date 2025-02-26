@@ -9,11 +9,6 @@
                 @csrf
                 <div class="page-wrapper-new p-0">
                     <div class="content shadow">
-                        {{-- <div class="modal-header border-0 custom-modal-header">
-                            <div class="page-title">
-                                <h4>Add Purchase</h4>
-                            </div>
-                        </div> --}}
                         <div class="modal-body custom-modal-body">
                             <div class="row">
                                 <div class="col-lg-3 col-md-6 col-sm-12">
@@ -21,11 +16,11 @@
                                         <label>Supplier Name</label>
                                         <div class="row">
                                             <div class="col-lg-10 col-sm-10 col-10">
-                                                <select class="select">
-                                                    <option>Select Customer</option>
-                                                    <option>Apex Computers</option>
-                                                    <option>Dazzle Shoes</option>
-                                                    <option>Best Accessories</option>
+                                                <select class="select" name="supplier_id">
+                                                    <option value="">Select</option>
+                                                    @foreach ($suppliers as $supplier)
+                                                        <option value="{{ $supplier->id }}"> {{ $supplier->name }} </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-lg-2 col-sm-2 col-2 ps-0">
@@ -103,7 +98,7 @@
                                     <div class="col-lg-3 col-md-6 col-sm-12">
                                         <div class="input-blocks">
                                             <label>Status</label>
-                                            <select class="select">
+                                            <select class="select" name="status">
                                                 <option value="">Choose</option>
                                                 <option value="received">Received</option>
                                                 <option value="pending">Pending</option>
@@ -111,8 +106,29 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- show total amount in ledger type view total next line, discount then charge then next line grand total (not in input field, but in span with id ) --}}
-                                
+                                <div class="row">
+                                    <div class="col-lg-6 ms-auto">
+                                        <div class="total-order w-100 max-widthauto m-auto mb-4">
+                                            <ul>
+                                                <li>
+                                                    <h4>Grand Total</h4>
+                                                    <h5 id="grand_total">0</h5>
+                                                    <input type="hidden" name="grand_total">
+                                                </li>
+                                                <li>
+                                                    <h4>Paid</h4>
+                                                    <h5 id="paid_amount">0</h5>
+                                                    <input type="hidden" name="paid_amount">
+                                                </li>
+                                                <li>
+                                                    <h4>Due</h4>
+                                                    <h5 id="due_amount">0</h5>
+                                                    <input type="hidden" name="due_amount">
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
 
 
                                 <div class="col-lg-12">
@@ -125,7 +141,7 @@
                                     <div class="modal-footer-btn">
                                         <button type="button" class="btn btn-cancel me-2"
                                             data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-submit">Submit</button>
+                                        <button type="submit" class="btn btn-submit" id="submit_btn">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -139,11 +155,6 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
-
-        });
-
-
         function handleSearch() {
             let search = $(this).val();
             $('#myOptions').html('<div class="spinner-border" role="status">' +
@@ -196,7 +207,7 @@
                     <td>
                         <div class="productimgname">
                             <a href="javascript:void(0);" class="product-img stock-img">
-                                <img src="${img}" alt="${title}" onerror="this.onerror=null; this.src='{{ asset('assets/images/no_photo.webp') }}';">
+                                <img src="${img}" alt="${title}" onerror="this.onerror=null; this.src='{{ asset('build/img/no-image.svg') }}';">
                             </a>
                             <a href="javascript:void(0);">${title}</a>
                         </div>
@@ -221,8 +232,111 @@
             subtotal_amount += purchase_price;
             // remove searched text from input field
             $('#product_search').val('');
+            $('#myOptions').hide();
 
-            // updateCartAction()
+            updateCartAction()
         })
+
+        $('#storeForm').submit(function(e) {
+            e.preventDefault();
+            let SubmitBtn = $('#submit_btn');
+            SubmitBtn.prop('disabled', true);
+            let formData = new FormData(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+
+            }).done(function(response) {
+                if (response.type == 'success') {
+                    $('#add-brand').modal('hide');
+                    toastr.success(response.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    SubmitBtn.prop('disabled', false);
+                    toastr.error(response.message);
+                }
+            }).fail(function(xhr) {
+                SubmitBtn.prop('disabled', false);
+                $('#submit_btn').attr('disabled', false);
+                let response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $.each(response.errors, function(key, value) {
+                        toastr.error(value);
+                    });
+                }
+                if (response && response.message) {
+                    toastr.error(response.message);
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            updateCartAction();
+        });
+
+        $(document).on('input', '.quntity-input', function() {
+            let id = $(this).data('id');
+            let quantity = parseInt($(this).val());
+            let purchasePrice = parseFloat($(this).data('price'));
+
+            if (isNaN(quantity) || quantity < 1) {
+                quantity = 1;
+                $(this).val(quantity);
+            }
+
+            let totalCost = quantity * purchasePrice;
+            $(this).closest('tr').find('td').eq(4).text(totalCost.toFixed(2));
+
+            updateCartAction();
+        });
+
+        $(document).on('click', '.cart-item-action', function() {
+            let id = $(this).data('id');
+            $(`.item${id}`).remove();
+            updateCartAction();
+        });
+
+        $(document).on('input', 'input[name="discount_amount"], input[name="shipping_charge"]', function() {
+            updateCartAction();
+        });
+
+        function updateCartAction() {
+            let subtotal = 0;
+            $('#cart-list-items tr').each(function() {
+                let quantity = parseInt($(this).find('.quntity-input').val());
+                let purchasePrice = parseFloat($(this).find('.quntity-input').data('price'));
+                subtotal += quantity * purchasePrice;
+            });
+
+            let discountAmount = parseFloat($('input[name="discount_amount"]').val()) || 0;
+            let shippingCharge = parseFloat($('input[name="shipping_charge"]').val()) || 0;
+
+            let grandTotal = (subtotal - discountAmount) + shippingCharge;
+
+            if (grandTotal < 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Total amount cannot be negative!',
+                });
+                grandTotal = 0;
+            }
+
+            $('#grand_total').text(grandTotal.toFixed(2));
+            $('input[name="grand_total"]').val(grandTotal.toFixed(2));
+
+            // Update paid and due amounts if needed
+            let paidAmount = parseFloat($('#paid_amount').text()) || 0;
+            let dueAmount = grandTotal - paidAmount;
+
+            $('#due_amount').text(dueAmount.toFixed(2));
+            $('input[name="due_amount"]').val(dueAmount.toFixed(2));
+        }
     </script>
 @endpush

@@ -367,6 +367,14 @@
     font-size: $font-size-base;
    
 }
+.badge-linewarning,.badges-warning {
+    color: $warning;
+    @include margin-padding(null, 5px 10px);
+    @include rounded(8px);
+    border: 1px solid $warning;
+    font-size: $font-size-base;
+   
+}
 .badge-linedanger,.badge-linedangered {
     color: $danger;
     @include margin-padding(null, 5px 10px);

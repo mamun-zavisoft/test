@@ -22195,6 +22195,14 @@ body.mini-sidebar.expand-menu .sidebar .sidebar-menu > ul > li.submenu-open ul l
   font-size: 14px;
 }
 
+.badge-linewarning, .badges-warning {
+  color: #FF9900;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid #FF9900;
+  font-size: 14px;
+}
+
 .badge-linedanger, .badge-linedangered {
   color: #FF0000;
   padding: 5px 10px;
