@@ -39,6 +39,10 @@
                                 href="{{ route('admin.accounts.index') }}">
                                 <i data-feather="credit-card"></i><span>Accounts</span></a>
                         </li>
+                        <li class="{{ Request::is('vehicles*') ? 'active' : '' }}"><a
+                                href="{{ route('admin.vehicles.index') }}">
+                                <i data-feather="truck"></i><span>Vehicles</span></a>
+                        </li>
 
                     </ul>
                 </li>

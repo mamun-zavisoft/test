@@ -111,6 +111,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($purchases as $purchase)
                                 <tr>
                                     <td>
                                         <label class="checkboxs">
@@ -118,14 +119,28 @@
                                             <span class="checkmarks"></span>
                                         </label>
                                     </td>
-                                    <td>Apex Computers</td>
-                                    <td>PT001 </td>
-                                    <td>19 Jan 2023</td>
-                                    <td><span class="badges status-badge">Received</span></td>
-                                    <td>$550</td>
-                                    <td>$550</td>
-                                    <td>$0.00</td>
-                                    <td><span class="badge-linesuccess">Paid</span></td>
+                                    <td>{{ $purchase->supplier?->name }}</td>
+                                    <td>{{ $purchase->reference_no }}</td>
+                                    <td>{{ $purchase->date }}</td>
+                                    <td>
+                                        @if ($purchase->status == 'pending')
+                                            <span class="badges status-badge bg-warning">Pending</span>
+                                        @elseif ($purchase->status == 'received')
+                                            <span class="badges status-badge bg-success">Received</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $purchase->grand_total }}</td>
+                                    <td>{{ $purchase->paid_amount }}</td>
+                                    <td>{{ $purchase->due_amount }}</td>
+                                    <td>
+                                        @if ($purchase->grand_total == $purchase->paid_amount)
+                                            <span class="badge-linesuccess">Paid</span>
+                                        @elseif (true)
+                                            <span class="badge-linewarning">Partial</span>
+                                        @else
+                                            <span class="badge-linedanger">Unpaid</span>
+                                        @endif
+                                    </td>
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
                                             <a class="me-2 p-2" href="javascript:void(0);">
@@ -140,268 +155,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>Beats Headphones</td>
-                                    <td>PT002 </td>
-                                    <td>27 Jan 2023</td>
-                                    <td><span class="badges status-badge">Received</span></td>
-                                    <td>$370</td>
-                                    <td>$370</td>
-                                    <td>$0.00</td>
-                                    <td><span class="badge-linesuccess">Paid</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>Dazzle Shoes</td>
-                                    <td>PT003 </td>
-                                    <td>08 Feb 2023</td>
-                                    <td><span class="badges status-badge ordered">Ordered</span></td>
-                                    <td>$400</td>
-                                    <td>$400</td>
-                                    <td>$200</td>
-                                    <td><span class="badges-warning">Partial</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>Best Accessories</td>
-                                    <td>PT004 </td>
-                                    <td>16 Feb 2023</td>
-                                    <td><span class="badges unstatus-badge">Pending</span></td>
-                                    <td>$560</td>
-                                    <td>$0.00</td>
-                                    <td>$560</td>
-                                    <td><span class="badge badge-linedangered">Unpaid</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>A-Z Store</td>
-                                    <td>PT005</td>
-                                    <td>12 Mar 2023</td>
-                                    <td><span class="badges unstatus-badge">Pending</span></td>
-                                    <td>$240</td>
-                                    <td>$0.00</td>
-                                    <td>$240</td>
-                                    <td><span class="badge badge-linedangered">Unpaid</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>Hatimi Hardwares</td>
-                                    <td>PT006</td>
-                                    <td>24 Mar 2023</td>
-                                    <td><span class="badges status-badge">Received</span></td>
-                                    <td>$170</td>
-                                    <td>$170</td>
-                                    <td>$0.00</td>
-                                    <td><span class="badge-linesuccess">Paid</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>Aesthetic Bags</td>
-                                    <td>PT007</td>
-                                    <td>06 Apr 2023</td>
-                                    <td><span class="badges unstatus-badge">Pending</span></td>
-                                    <td>$230</td>
-                                    <td>$0.00</td>
-                                    <td>$230</td>
-                                    <td><span class="badge badge-linedangered">Unpaid</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>Alpha Mobiles</td>
-                                    <td>PT008</td>
-                                    <td>14 Apr 2023</td>
-                                    <td><span class="badges status-badge ordered">Ordered</span></td>
-                                    <td>$300</td>
-                                    <td>$150</td>
-                                    <td>$300</td>
-                                    <td><span class="badges-warning">Partial</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>Sigma Chairs</td>
-                                    <td>PT009</td>
-                                    <td>02 May 2023</td>
-                                    <td><span class="badges unstatus-badge">Pending</span></td>
-                                    <td>$620</td>
-                                    <td>$0.00</td>
-                                    <td>$620</td>
-                                    <td><span class="badge badge-linedangered">Unpaid</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>Zenith Bags</td>
-                                    <td>PT010</td>
-                                    <td>23 May 2023</td>
-                                    <td><span class="badges status-badge">Received</span></td>
-                                    <td>$200</td>
-                                    <td>$200</td>
-                                    <td>$0.00</td>
-                                    <td><span class="badge-linesuccess">Paid</span></td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="action-eye"></i>
-                                            </a>
-                                            <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="confirm-text p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

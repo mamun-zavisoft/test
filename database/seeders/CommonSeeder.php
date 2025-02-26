@@ -1,0 +1,58 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Drawer;
+use App\Models\Product;
+use App\Models\Rack;
+use App\Models\Supplier;
+use App\Models\User;
+use App\Models\Zone;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
+class CommonSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $zone = Zone::create(['name' => 'Dhaka', 'phone' => '01412345678', 'location' => 'Dhaka, Bangladesh']);
+        $category = Category::create(['name' => 'Engine Oil']);
+        $brand = Brand::create(['name' => 'Hyundai']);
+        $RepsolBrand = Brand::create(['name' => 'Repsol']);
+        Supplier::create(['name' => 'Supplier 1', 'zone_id' => $zone->id, 'phone' => '01512345678']);
+        $rack = Rack::create(['name' => 'Rack-1', 'zone_id' => $zone->id]);
+        for($i = 1; $i <= 4; $i++) {
+            Drawer::create(['name' => 'Drawer-'.$i, 'rack_id' => $rack->id]);
+        }
+        Product::create([
+            'name' => 'Repsol Engine Oil',
+            'category_id' => $category->id,
+            'brand_id' => $brand->id,
+            'purchase_price' => 1200,
+            'sale_price' => 1800,
+            'total_available_qty' => 0
+        ]);
+        Product::create([
+            'name' => 'Hyundai Engine Oil',
+            'category_id' => $category->id,
+            'brand_id' => $RepsolBrand->id,
+            'purchase_price' => 1000,
+            'sale_price' => 1500,
+            'total_available_qty' => 0
+        ]);
+        User::create([
+            'name' => 'Manager',
+            'email' => 'superadmin@test.com',
+            'phone' => '01712345678',
+            'password' => Hash::make('12345678'),
+            'role' => 3,
+            'zone_id' => $zone->id
+        ]);
+    }
+}
