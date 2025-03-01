@@ -18,7 +18,7 @@ class ServiceController extends Controller
 
     public function index()
     {
-        $services = Service::get();
+        $services = Service::with('vehicle')->get();
         return view('backend.services.index', compact('services'));
     }
     /**

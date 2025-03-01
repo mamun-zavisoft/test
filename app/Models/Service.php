@@ -12,4 +12,9 @@ class Service extends Model
     {
         return $this->hasMany(ServiceDetail::class);
     }
+
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
 }
