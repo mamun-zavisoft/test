@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Sale;
+use App\Models\SaleDetail;
 use App\Models\Service;
 use App\Models\ServiceChart;
 use App\Models\ServiceDetail;
@@ -78,6 +80,18 @@ class ServiceController extends Controller
 
             // Process parts if any
             if ($request->any_parts_purchase && !empty($request->parts)) {
+
+                $sale = Sale::create([
+                    'type' => $request->service_type,
+                    'due_amount' => $request->total_amount, 
+                    'pay_amount' => 0, // Initially no payment
+                    'total_amount' => $request->total_amount,
+                    'payment_status' => Sale::$FULL_DUE,
+                    'note' => $request->note,
+                ]);
+
+                $service->update(['sale_id' => $sale->id]);
+
                 foreach ($request->parts as $part) {
                     // Validate part availability
                     $isAvailable = $this->validatePartAvailability(
@@ -106,17 +120,19 @@ class ServiceController extends Controller
                         ->limit($part['quantity'])
                         ->get();
 
-                    // Update each stock_history entry with sale_id = 1 (as requested)
                     foreach ($availableHistories as $history) {
                         DB::table('stock_histories')
                             ->where('id', $history->id)
-                            ->update(['sale_id' => 1]); // Using static sale_id = 1 as requested
+                            ->update(['sale_id' => $sale->id]); 
                     }
 
-                    // Create service part record if needed
-                    // You might have a separate table for tracking which parts were used in a service
-                    // If so, add code to create that record here
+                    $sale->SaleDetails()->create([
+                        'product_id' => $part['product_id'],
+                        'unit_price' => $part['unit_sale_price'],
+                        'qty' => $part['quantity'],
+                    ]);
                 }
+
             }
 
             DB::commit();

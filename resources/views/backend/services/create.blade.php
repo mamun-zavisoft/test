@@ -195,7 +195,7 @@
                 <div class="input-group">
                     <span class="input-group-text">৳</span>
                     <input type="text" class="form-control part-price" name="parts[__index__][price]" readonly>
-                    <input type="hidden" name="parts[__index__][stock_purchase_id]" class="stock-purchase-id">
+                    <input type="hidden" name="parts[__index__][unit_sale_price]" class="unit-sale-price">
                 </div>
             </div>
             <div class="col-md-1">
@@ -431,9 +431,9 @@
                             row.find('.part-price')
                                 .val(parseFloat(salePrice).toFixed(2))
                                 .data('unit-price', parseFloat(salePrice));
-                            // Set the latest purchase ID if provided in the API response
-                            if (response.stock.stock_purchase_id) {
-                                row.find('.stock-purchase-id').val(response.stock.stock_purchase_id);
+                            // Set the sale price if provided in the API response
+                            if (response.stock.sale_price) {
+                                row.find('.unit-sale-price').val(response.stock.sale_price);
                             }
 
                             // Recalculate totals
@@ -551,7 +551,7 @@
                     let quantity = parseInt($(this).find('.part-quantity').val()) || 0;
 
                     if (!isNaN(price) && !isNaN(quantity)) {
-                        partsTotal += price * quantity;
+                        partsTotal += price //* quantity;
                     }
                 });
 
