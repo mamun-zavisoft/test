@@ -124,9 +124,13 @@
                                     <td>{{ $purchase->date }}</td>
                                     <td>
                                         @if ($purchase->status == 'pending')
-                                            <span class="badges status-badge bg-warning">Pending</span>
+                                            <span class="badges status-badge bg-warning" data-bs-target="#status-change" data-bs-toggle="modal">Pending</span>
                                         @elseif ($purchase->status == 'received')
-                                            <span class="badges status-badge bg-success">Received</span>
+                                            <a href="{{ route('admin.stock-purchases.create', $purchase) }}">
+                                                <span class="badges status-badge bg-info">Store in Drawer</span>
+                                            </a>
+                                        @elseif ($purchase->status == 'stored')
+                                            <span class="badges status-badge bg-success">Stored</span>
                                         @endif
                                     </td>
                                     <td>{{ $purchase->grand_total }}</td>
@@ -155,6 +159,44 @@
                                         </div>
                                     </td>
                                 </tr>
+
+                                {{-- status change modal  --}}
+                                <div class="modal fade" id="status-change">
+                                    <div class="modal-dialog modal-dialog-centered custom-modal-two">
+                                        <div class="modal-content">
+                                            <div class="page-wrapper-new p-0">
+                                                <div class="content">
+                                                    <div class="modal-header border-0 custom-modal-header">
+                                                        <div class="page-title">
+                                                            <h4>Status Change</h4>
+                                                        </div>
+                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body custom-modal-body new-employee-field">
+                                                        <form action="{{ route('admin.purchases.statusChange', $purchase) }}" method="POST"
+                                                            enctype="multipart/form-data" id="storeForm">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <select class="select" name="status">
+                                                                <option value="">Choose Status</option>
+                                                                <option value="pending">Pending</option>
+                                                                <option value="received">Received</option>
+                                                            </select>
+
+                                                            <div class="modal-footer-btn">
+                                                                <button type="button" class="btn btn-cancel me-2"
+                                                                    data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @endforeach
                             </tbody>
                         </table>
@@ -166,160 +208,4 @@
         </div>
     </div>
 
-    <div class="modal fade" id="add-purchase">
-		<div class="modal-dialog purchase modal-dialog-centered stock-adjust-modal">
-			<div class="modal-content">
-				<div class="page-wrapper-new p-0">
-					<div class="content">
-						<div class="modal-header border-0 custom-modal-header">
-							<div class="page-title">
-								<h4>Add Purchase</h4>
-							</div>
-							<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body custom-modal-body">
-							<form action="purchase-list">
-								<div class="row">
-									<div class="col-lg-3 col-md-6 col-sm-12">
-										<div class="input-blocks add-product">
-											<label>Supplier Name</label>
-											<div class="row">
-												<div class="col-lg-10 col-sm-10 col-10">
-													<select class="select">
-														<option>Select Customer</option>
-														<option>Apex Computers</option>
-														<option>Dazzle Shoes</option>
-														<option>Best Accessories</option>
-													</select>
-												</div>
-												<div class="col-lg-2 col-sm-2 col-2 ps-0">
-													<div class="add-icon tab">
-														<a href="javascript:void(0);"><i data-feather="plus-circle" class="feather-plus-circles"></i></a>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-lg-3 col-md-6 col-sm-12">
-										<div class="input-blocks">
-											<label>Purchase Date</label>
-
-											<div class="input-groupicon calender-input">
-												<i data-feather="calendar" class="info-img"></i>
-												<input type="text" class="datetimepicker" placeholder="Choose">
-											</div>
-										</div>
-									</div>
-									<div class="col-lg-3 col-md-6 col-sm-12">
-										<div class="input-blocks">
-											<label>Product Name</label>
-											<select class="select">
-												<option>Choose</option>
-												<option>Shoe</option>
-												<option>Mobile</option>
-
-											</select>
-										</div>
-									</div>
-									<div class="col-lg-3 col-md-6 col-sm-12">
-										<div class="input-blocks">
-											<label>Reference No</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-12">
-										<div class="input-blocks">
-											<label>Product Name</label>
-											<input type="text" placeholder="Please type product code and select">
-										</div>
-									</div>
-									<div class="col-lg-12">
-										<div class="modal-body-table">
-											<div class="table-responsive">
-												<table class="table  datanew">
-													<thead>
-														<tr>
-															<th>Product</th>
-															<th>Qty</th>
-															<th>Purchase Price($)</th>
-															<th>Discount($)</th>
-															<th>Tax(%)</th>
-															<th>Tax Amount($)</th>
-															<th>Unit Cost($)</th>
-															<th>Total Cost(%)</th>
-														</tr>
-													</thead>
-
-													<tbody>
-														<tr>
-															<td class="p-5"></td>
-															<td class="p-5"></td>
-															<td class="p-5"></td>
-															<td class="p-5"></td>
-															<td class="p-5"></td>
-															<td class="p-5"></td>
-															<td class="p-5"></td>
-															<td class="p-5"></td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-
-									</div>
-									<div class="row">
-										<div class="col-lg-3 col-md-6 col-sm-12">
-											<div class="input-blocks">
-												<label>Order Tax</label>
-												<input type="text" value="0">
-											</div>
-										</div>
-										<div class="col-lg-3 col-md-6 col-sm-12">
-											<div class="input-blocks">
-												<label>Discount</label>
-												<input type="text" value="0">
-											</div>
-										</div>
-										<div class="col-lg-3 col-md-6 col-sm-12">
-											<div class="input-blocks">
-												<label>Shipping</label>
-												<input type="text" value="0">
-											</div>
-										</div>
-										<div class="col-lg-3 col-md-6 col-sm-12">
-											<div class="input-blocks">
-												<label>Status</label>
-												<select class="select">
-													<option>Choose</option>
-													<option>Received</option>
-													<option>Pending</option>
-												</select>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="col-lg-12">
-									<div class="input-blocks summer-description-box">
-										<label>Notes</label>
-										<div id="summernote"></div>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="modal-footer-btn">
-										<button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
-										<button type="submit" class="btn btn-submit">Submit</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 @endsection

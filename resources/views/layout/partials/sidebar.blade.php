@@ -57,6 +57,17 @@
                         </li>
                     </ul>
                 </li>
+                {{-- Services/Sales --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Sales</h6>
+                    <ul>
+                        <li class="{{ Request::is('services*') ? 'active' : '' }}"><a
+                                href="{{ route('admin.services.index') }}"><i
+                                    data-feather="shopping-cart"></i><span>Services</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 {{-- peoples --}}
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Peoples</h6>

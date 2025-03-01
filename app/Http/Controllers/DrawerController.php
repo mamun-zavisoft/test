@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Drawer;
 use App\Models\Rack;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class DrawerController extends Controller
 {
@@ -72,5 +76,17 @@ class DrawerController extends Controller
 
         $drawer->delete();
         return redirect()->back()->with('success', 'Drawer deleted successfully!');
+    }
+
+    public function fetchDrawersByRack($rackId) {
+        try {
+            $rack = Rack::findOrFail($rackId);
+
+            return response()->json(['data' => $rack->drawers, 'type' => 'success'], 200);
+        } catch(ModelNotFoundException) {
+            return response()->json(['message' => 'Rack not found', 'type' => 'error'], 404);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'type' => 'error'], 500);
+        }
     }
 }

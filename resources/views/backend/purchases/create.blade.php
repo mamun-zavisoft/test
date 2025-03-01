@@ -252,10 +252,9 @@
 
             }).done(function(response) {
                 if (response.type == 'success') {
-                    $('#add-brand').modal('hide');
                     toastr.success(response.message);
                     setTimeout(() => {
-                        location.reload();
+                        response.redirectUrl ? window.location.href = response.redirectUrl : `{{ route('admin.purchases.index') }}`; ;
                     }, 1000);
                 } else {
                     SubmitBtn.prop('disabled', false);

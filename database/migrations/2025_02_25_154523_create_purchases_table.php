@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('paid_status', ['full_due', 'partial_paid', 'full_paid'])->default('full_due');
             $table->date('date')->default(now());
             $table->string('reference_no')->nullable();
-            $table->enum('status', ['pending', 'received'])->default('pending');
+            $table->enum('status', ['pending', 'received', 'to_be_stored', 'stored'])->default('pending');
             $table->text('note')->nullable();
             $table->timestamps();
         });
