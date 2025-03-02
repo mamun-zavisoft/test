@@ -73,6 +73,11 @@ class DrawerController extends Controller
 
     public function destroy(Drawer $drawer)
     {
+        $drawerCount = $drawer->productCount($drawer->id);
+
+        if ($drawerCount > 0) {
+            return redirect()->back()->with('error', 'Drawer has ' . $drawerCount . ' products, cannot delete!');
+        }
 
         $drawer->delete();
         return redirect()->back()->with('success', 'Drawer deleted successfully!');

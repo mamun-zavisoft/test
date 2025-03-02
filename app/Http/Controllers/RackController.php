@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Rack;
 use App\Models\Zone;
 use App\Actions\FetchRack;
+use App\Models\Drawer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -74,6 +75,11 @@ class RackController extends Controller
 
     public function destroy(Rack $rack)
     {
+        $drawerCount = Drawer::where('rack_id', $rack->id)->count();
+
+        if ($drawerCount > 0) {
+            return redirect()->back()->with('error', 'Rack has drawers, cannot delete!');
+        }
 
         $rack->delete();
         return redirect()->back()->with('success', 'Rack deleted successfully!');

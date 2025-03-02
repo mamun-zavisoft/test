@@ -57,7 +57,7 @@
                             <div class="col-md-12">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="partsCheckbox"
-                                        name="any_parts_purchase" value="1">
+                                        name="any_parts_purchase" >
                                     <label class="form-check-label" for="partsCheckbox">
                                         Include Parts in Service
                                     </label>
@@ -163,8 +163,11 @@
                 <select name="parts[__index__][product_id]" class="form-control part-select" required>
                     <option value="">Select Part</option>
                     @foreach ($products as $product)
-                        <option value="{{ $product->id }}" data-total-stock="{{ $product->total_available_qty }}">
-                            {{ $product->name }} (Total Stock: {{ $product->total_available_qty }})
+                    @php
+                        $totalStock = $product->getTotalAvailableQuantity();
+                    @endphp
+                        <option value="{{ $product->id }}" data-total-stock="{{ $totalStock }}">
+                            {{ $product->name }} (Total Stock: {{ $totalStock }})
                         </option>
                     @endforeach
                 </select>
@@ -192,7 +195,7 @@
                 <div class="input-group">
                     <span class="input-group-text">৳</span>
                     <input type="text" class="form-control part-price" name="parts[__index__][price]" readonly>
-                    <input type="hidden" name="parts[__index__][stock_purchase_id]" class="stock-purchase-id">
+                    <input type="hidden" name="parts[__index__][unit_sale_price]" class="unit-sale-price">
                 </div>
             </div>
             <div class="col-md-1">
@@ -208,352 +211,398 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-    // Initialize select2
-    $('.select2').select2();
-    
-    // Variables for calculations
-    let serviceTotal = 0;
-    let partsTotal = 0;
-    let discount = 0;
-    let grandTotal = 0;
-    let partRowIndex = 0;
-    
-    // Toggle parts section
-    $('#partsCheckbox').change(function() {
-        if($(this).is(':checked')) {
-            $('#partsSection').removeClass('d-none');
-            // Add first row if none exists
-            if($('.part-row').length === 0) {
-                addPartRow();
-            }
-        } else {
-            $('#partsSection').addClass('d-none');
-            // Clear parts for calculation
-            partsTotal = 0;
-            updateTotals();
-        }
-    });
-    
-    // Add part row
-    $('#addPart').click(function() {
-        addPartRow();
-    });
-    
-    // Remove part row
-    $(document).on('click', '.remove-part', function() {
-        $(this).closest('.part-row').remove();
-        calculatePartsTotals();
-    });
-    
-    // Calculate service price when selection changes
-    $('#serviceChartSelect').change(function() {
-        calculateServiceTotal();
-    });
-    
-    // Product selection changed
-    $(document).on('change', '.part-select', function() {
-        let row = $(this).closest('.part-row');
-        let productId = $(this).val();
-        
-        // Reset dependent fields
-        row.find('.rack-select').html('<option value="">Select Rack</option>').prop('disabled', true);
-        row.find('.drawer-select').html('<option value="">Select Drawer</option>').prop('disabled', true);
-        row.find('.part-quantity').val(1).prop('disabled', true);
-        row.find('.stock-info').text('Available: 0');
-        row.find('.part-price').val('0.00');
-        
-        if (productId) {
-            // Enable rack dropdown and load racks for this product
-            row.find('.rack-select').prop('disabled', false);
-            loadRacksForProduct(productId, row);
-        }
-        
-        calculatePartsTotals();
-    });
-    
-    // Rack selection changed
-    $(document).on('change', '.rack-select', function() {
-        let row = $(this).closest('.part-row');
-        let rackId = $(this).val();
-        let productId = row.find('.part-select').val();
-        
-        // Reset dependent fields
-        row.find('.drawer-select').html('<option value="">Select Drawer</option>').prop('disabled', true);
-        row.find('.part-quantity').val(1).prop('disabled', true);
-        row.find('.stock-info').text('Available: 0');
-        
-        if (rackId && productId) {
-            // Enable drawer dropdown and load drawers for this rack and product
-            row.find('.drawer-select').prop('disabled', false);
-            loadDrawersForRack(productId, rackId, row);
-        }
-        
-        calculatePartsTotals();
-    });
-    
-    // Drawer selection changed
-    $(document).on('change', '.drawer-select', function() {
-        let row = $(this).closest('.part-row');
-        let drawerId = $(this).val();
-        let productId = row.find('.part-select').val();
-        let rackId = row.find('.rack-select').val();
-        
-        if (drawerId && rackId && productId) {
-            // Get stock information for this drawer
-            getStockInfo(productId, rackId, drawerId, row);
-        } else {
-            row.find('.part-quantity').val(1).prop('disabled', true);
-            row.find('.stock-info').text('Available: 0');
-        }
-        
-        calculatePartsTotals();
-    });
-    
-    // Recalculate on quantity change
-    $(document).on('input', '.part-quantity', function() {
-        let row = $(this).closest('.part-row');
-        let quantity = parseInt($(this).val()) || 0;
-        let maxStock = parseInt(row.find('.part-quantity').attr('max')) || 0;
-        
-        // Validate against stock
-        if(quantity > maxStock) {
-            $(this).val(maxStock);
-            toastr.error(`Maximum available quantity is ${maxStock}`);
-            quantity = maxStock;
-        }
-        
-        // Update row price
-        let unitPrice = parseFloat(row.find('.part-price').data('unit-price')) || 0;
-        row.find('.part-price').val((unitPrice * quantity).toFixed(2));
-        
-        calculatePartsTotals();
-    });
-    
-    // Update discount calculations and validate maximum discount
-    $('#discount').on('input', function() {
-        let inputDiscount = parseFloat($(this).val()) || 0;
-        let totalBeforeDiscount = serviceTotal + partsTotal;
-        
-        // Ensure discount isn't more than total amount
-        if (inputDiscount > totalBeforeDiscount) {
-            inputDiscount = totalBeforeDiscount;
-            $(this).val(totalBeforeDiscount);
-            toastr.warning('Discount cannot be more than the total amount');
-        }
-        
-        discount = inputDiscount;
-        updateTotals();
-    });
-    
-    // Function to add a new part row
-    function addPartRow() {
-        let template = $('#partRowTemplate').html();
-        template = template.replace(/__index__/g, partRowIndex++);
-        
-        $('#partsContainer').append(template);
-        $('.part-select').select2();
-        $('.rack-select').select2();
-        $('.drawer-select').select2();
-    }
-    
-    // Load racks that contain the selected product
-    function loadRacksForProduct(productId, row) {
-        $.ajax({
-            url: route('admin.stock.get-racks-for-product', productId),
-            type: 'GET',
-            success: function(response) {
-                let rackSelect = row.find('.rack-select');
-                rackSelect.html('<option value="">Select Rack</option>');
-                
-                if (response.racks && response.racks.length > 0) {
-                    $.each(response.racks, function(index, rack) {
-                        rackSelect.append(`<option value="${rack.id}">${rack.name} (${rack.product_count})</option>`);
-                    });
-                }
-            },
-            error: function() {
-                toastr.error('Failed to load racks');
-            }
-        });
-    }
-    
-    // Load drawers for the selected rack that contain the product
-    function loadDrawersForRack(productId, rackId, row) {
-        $.ajax({
-            url: route('admin.stock.get-drawers-for-rack', [productId, rackId]),
-            type: 'GET',
-            success: function(response) {
-                let drawerSelect = row.find('.drawer-select');
-                drawerSelect.html('<option value="">Select Drawer</option>');
-                
-                if (response.drawers && response.drawers.length > 0) {
-                    $.each(response.drawers, function(index, drawer) {
-                        drawerSelect.append(`<option value="${drawer.id}">${drawer.name} (${drawer.product_count})</option>`);
-                    });
-                }
-            },
-            error: function() {
-                toastr.error('Failed to load drawers');
-            }
-        });
-    }
-    
-    // Get stock information for a specific product in a drawer
-    function getStockInfo(productId, rackId, drawerId, row) {
-        $.ajax({
-            url: route('admin.stock.get-stock-info', [productId, rackId, drawerId]),
-            type: 'GET',
-            success: function(response) {
-                if (response.stock) {
-                    let availableQty = response.stock.available_qty || 0;
-                    let unitPrice = response.stock.sell_price || 0;
-                    let stockPurchaseId = response.stock.stock_purchase_id || 0;
-                    
-                    // Update UI with stock info
-                    row.find('.part-quantity')
-                        .prop('disabled', false)
-                        .attr('max', availableQty)
-                        .val(1);
-                    
-                    row.find('.stock-info').text(`Available: ${availableQty}`);
-                    row.find('.part-price')
-                        .val(unitPrice.toFixed(2))
-                        .data('unit-price', unitPrice);
-                    
-                    row.find('.stock-purchase-id').val(stockPurchaseId);
-                    
-                    // Recalculate totals
-                    calculatePartsTotals();
+            // Initialize select2
+            $('.select2').select2();
+
+            // Variables for calculations
+            let serviceTotal = 0;
+            let partsTotal = 0;
+            let discount = 0;
+            let grandTotal = 0;
+            let partRowIndex = 0;
+
+            // Toggle parts section
+            $('#partsCheckbox').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#partsSection').removeClass('d-none');
+                    // Add first row if none exists
+                    if ($('.part-row').length === 0) {
+                        addPartRow();
+                    }
                 } else {
-                    row.find('.part-quantity').prop('disabled', true);
-                    row.find('.stock-info').text('No stock available');
-                }
-            },
-            error: function() {
-                toastr.error('Failed to get stock information');
-            }
-        });
-    }
-    
-    // Calculate service total
-    function calculateServiceTotal() {
-        serviceTotal = 0;
-        $('#serviceChartSelect option:selected').each(function() {
-            serviceTotal += parseFloat($(this).data('price')) || 0;
-        });
-        
-        $('#serviceCharges').text(serviceTotal.toFixed(2));
-        updateTotals();
-        
-        // Revalidate discount after service total changes
-        validateDiscount();
-    }
-    
-    // Calculate parts totals
-    function calculatePartsTotals() {
-        partsTotal = 0;
-        
-        $('.part-row').each(function() {
-            let quantity = parseInt($(this).find('.part-quantity').val()) || 0;
-            let price = parseFloat($(this).find('.part-price').val()) || 0;
-            
-            partsTotal += price; // Price already includes quantity
-        });
-        
-        $('#partsTotal').text(partsTotal.toFixed(2));
-        updateTotals();
-        
-        // Revalidate discount after parts total changes
-        validateDiscount();
-    }
-    
-    // Validate that discount doesn't exceed total
-    function validateDiscount() {
-        let totalBeforeDiscount = serviceTotal + partsTotal;
-        let currentDiscount = parseFloat($('#discount').val()) || 0;
-        
-        if (currentDiscount > totalBeforeDiscount) {
-            $('#discount').val(totalBeforeDiscount);
-            discount = totalBeforeDiscount;
-            toastr.warning('Discount has been adjusted to match the total amount');
-        }
-    }
-    
-    // Update all totals
-    function updateTotals() {
-        let totalBeforeDiscount = serviceTotal + partsTotal;
-        let discountAmount = Math.min(discount, totalBeforeDiscount);
-        grandTotal = totalBeforeDiscount - discountAmount;
-        
-        $('#discountAmount').text(discountAmount.toFixed(2));
-        $('#grandTotal').text(grandTotal.toFixed(2));
-        
-        // Update hidden inputs for form submission
-        $('#grandTotalInput').val(grandTotal);
-        $('#totalAmountInput').val(totalBeforeDiscount);
-    }
-    
-    // Form validation before submit
-    $('#serviceForm').submit(function(e) {
-        e.preventDefault();
-        
-        // Validate service selection
-        if($('#serviceChartSelect').val() === null || $('#serviceChartSelect').val().length === 0) {
-            toastr.error('Please select at least one service');
-            return false;
-        }
-        
-        // Validate parts if parts checkbox is checked
-        if($('#partsCheckbox').is(':checked')) {
-            let valid = true;
-            
-            if($('.part-row').length === 0) {
-                toastr.error('Please add at least one part');
-                return false;
-            }
-            
-            $('.part-row').each(function() {
-                let productId = $(this).find('.part-select').val();
-                let rackId = $(this).find('.rack-select').val();
-                let drawerId = $(this).find('.drawer-select').val();
-                let quantity = parseInt($(this).find('.part-quantity').val()) || 0;
-                
-                if(productId === '' || rackId === '' || drawerId === '' || quantity <= 0) {
-                    valid = false;
+                    $('#partsSection').addClass('d-none');
+                    // Clear parts for calculation
+                    partsTotal = 0;
+                    updateTotals();
                 }
             });
-            
-            if(!valid) {
-                toastr.error('Please complete all part information');
-                return false;
+
+            // Add part row
+            $('#addPart').click(function() {
+                addPartRow();
+            });
+
+            // Remove part row
+            $(document).on('click', '.remove-part', function() {
+                $(this).closest('.part-row').remove();
+                calculatePartsTotals();
+            });
+
+            // Calculate service price when selection changes
+            $('#serviceChartSelect').change(function() {
+                calculateServiceTotal();
+            });
+
+            // Product selection changed
+            $(document).on('change', '.part-select', function() {
+                let row = $(this).closest('.part-row');
+                let productId = $(this).val();
+
+                // Reset dependent fields
+                row.find('.rack-select').html('<option value="">Select Rack</option>').prop('disabled',
+                    true);
+                row.find('.drawer-select').html('<option value="">Select Drawer</option>').prop('disabled',
+                    true);
+                row.find('.part-quantity').val(1).prop('disabled', true);
+                row.find('.stock-info').text('Available: 0');
+                row.find('.part-price').val('0.00');
+                row.find('.stock-purchase-id').val('');
+
+                if (productId) {
+                    // Enable rack dropdown and load racks for this product
+                    row.find('.rack-select').prop('disabled', false);
+                    loadRacksForProduct(productId, row);
+                }
+
+                calculatePartsTotals();
+            });
+
+            // Rack selection changed
+            $(document).on('change', '.rack-select', function() {
+                let row = $(this).closest('.part-row');
+                let rackId = $(this).val();
+                let productId = row.find('.part-select').val();
+
+                // Reset dependent fields
+                row.find('.drawer-select').html('<option value="">Select Drawer</option>').prop('disabled',
+                    true);
+                row.find('.part-quantity').val(1).prop('disabled', true);
+                row.find('.stock-info').text('Available: 0');
+                row.find('.part-price').val('0.00');
+                row.find('.stock-purchase-id').val('');
+
+                if (rackId && productId) {
+                    // Enable drawer dropdown and load drawers for this rack and product
+                    row.find('.drawer-select').prop('disabled', false);
+                    loadDrawersForRack(productId, rackId, row);
+                }
+
+                calculatePartsTotals();
+            });
+
+            // Drawer selection changed
+            $(document).on('change', '.drawer-select', function() {
+                let row = $(this).closest('.part-row');
+                let drawerId = $(this).val();
+                let productId = row.find('.part-select').val();
+                let rackId = row.find('.rack-select').val();
+
+                // Reset quantity and price fields
+                row.find('.part-quantity').val(1).prop('disabled', true);
+                row.find('.stock-info').text('Available: 0');
+                row.find('.part-price').val('0.00');
+                row.find('.stock-purchase-id').val('');
+
+                if (drawerId && rackId && productId) {
+                    // Get stock information for this drawer
+                    getStockInfo(productId, rackId, drawerId, row);
+                }
+
+                calculatePartsTotals();
+            });
+
+            // Recalculate on quantity change
+            $(document).on('input', '.part-quantity', function() {
+                let row = $(this).closest('.part-row');
+                let quantity = parseInt($(this).val()) || 0;
+                let maxStock = parseInt(row.find('.part-quantity').attr('max')) || 0;
+
+                // Validate against stock
+                if (quantity > maxStock) {
+                    $(this).val(maxStock);
+                    toastr.error(`Maximum available quantity is ${maxStock}`);
+                    quantity = maxStock;
+                }
+
+                // Update row price
+                let unitPrice = parseFloat(row.find('.part-price').data('unit-price')) || 0;
+                row.find('.part-price').val((unitPrice * quantity).toFixed(2));
+
+                calculatePartsTotals();
+            });
+
+            // Function to add a new part row
+            function addPartRow() {
+                let template = $('#partRowTemplate').html();
+                template = template.replace(/__index__/g, partRowIndex++);
+
+                $('#partsContainer').append(template);
+
+                // Initialize select2 on new selects
+                $('#partsContainer .part-row:last-child .part-select').select2();
+                $('#partsContainer .part-row:last-child .rack-select').select2();
+                $('#partsContainer .part-row:last-child .drawer-select').select2();
             }
-        }
-        
-        // Submit form via AJAX
-        let formData = $(this).serialize();
-        
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                toastr.success('Service created successfully');
-                setTimeout(function() {
-                    window.location.href = response.redirect || "{{ route('admin.services.index') }}";
-                }, 1000);
-            },
-            error: function(xhr) {
-                let response = xhr.responseJSON;
-                if(response && response.errors) {
-                    $.each(response.errors, function(key, value) {
-                        toastr.error(value);
+
+            // Load racks that contain the selected product
+            function loadRacksForProduct(productId, row) {
+                let url = "{{ route('admin.stock.get-racks-for-product', '') }}/" + productId;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        let rackSelect = row.find('.rack-select');
+                        rackSelect.html('<option value="">Select Rack</option>');
+
+                        if (response.racks && response.racks.length > 0) {
+                            $.each(response.racks, function(index, rack) {
+                                rackSelect.append(
+                                    `<option value="${rack.id}">${rack.name} (${rack.product_count})</option>`
+                                );
+                            });
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Failed to load racks');
+                    }
+                });
+            }
+
+            // Load drawers for the selected rack that contain the product
+            function loadDrawersForRack(productId, rackId, row) {
+                let url = "{{ route('admin.stock.get-drawers-for-rack', [':productId', ':rackId']) }}"
+                    .replace(':productId', productId)
+                    .replace(':rackId', rackId);
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        let drawerSelect = row.find('.drawer-select');
+                        drawerSelect.html('<option value="">Select Drawer</option>');
+
+                        if (response.drawers && response.drawers.length > 0) {
+                            $.each(response.drawers, function(index, drawer) {
+                                drawerSelect.append(
+                                    `<option value="${drawer.id}">${drawer.name} (${drawer.product_count})</option>`
+                                );
+                            });
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Failed to load drawers');
+                    }
+                });
+            }
+
+            // Get stock information for a specific product in a drawer
+            function getStockInfo(productId, rackId, drawerId, row) {
+                let url = "{{ route('admin.stock.get-stock-info', [':productId', ':rackId', ':drawerId']) }}"
+                    .replace(':productId', productId)
+                    .replace(':rackId', rackId)
+                    .replace(':drawerId', drawerId);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.stock) {
+                            let availableQty = response.stock.available_qty || 0;
+                            let salePrice = response.stock.sale_price || 0;
+                            console.log(salePrice);
+                            
+
+                            // Update UI with stock info
+                            row.find('.part-quantity')
+                                .prop('disabled', false)
+                                .attr('max', availableQty)
+                                .val(1);
+
+                            row.find('.stock-info').text(`Available: ${availableQty}`);
+                            row.find('.part-price')
+                                .val(parseFloat(salePrice).toFixed(2))
+                                .data('unit-price', parseFloat(salePrice));
+                            // Set the sale price if provided in the API response
+                            if (response.stock.sale_price) {
+                                row.find('.unit-sale-price').val(response.stock.sale_price);
+                            }
+
+                            // Recalculate totals
+                            calculatePartsTotals();
+                        } else {
+                            row.find('.part-quantity').prop('disabled', true);
+                            row.find('.stock-info').text('No stock available');
+                            row.find('.part-price').val('0.00');
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Failed to get stock information');
+                    }
+                });
+            }
+
+            // Form validation before submit
+            $('#serviceForm').submit(function(e) {
+                e.preventDefault();
+
+                // Validate service selection
+                if ($('#serviceChartSelect').val() === null || $('#serviceChartSelect').val().length ===
+                    0) {
+                    toastr.error('Please select at least one service');
+                    return false;
+                }
+
+                // Validate parts if parts checkbox is checked
+                if ($('#partsCheckbox').is(':checked')) {
+                    let valid = true;
+                    let uniqueCombinations = new Set();
+
+                    if ($('.part-row').length === 0) {
+                        toastr.error('Please add at least one part');
+                        return false;
+                    }
+
+                    $('.part-row').each(function() {
+                        let productId = $(this).find('.part-select').val();
+                        let rackId = $(this).find('.rack-select').val();
+                        let drawerId = $(this).find('.drawer-select').val();
+                        let quantity = parseInt($(this).find('.part-quantity').val()) || 0;
+
+                        if (productId === '' || rackId === '' || drawerId === '' || quantity <= 0) {
+                            valid = false;
+                            return false; // Break the loop
+                        }
+
+                        // Create a unique identifier for this combination
+                        let combination = `${productId}-${rackId}-${drawerId}`;
+
+                        // Check if this exact combination has already been added
+                        if (uniqueCombinations.has(combination)) {
+                            toastr.error(
+                                'Duplicate product-rack-drawer combination detected. Please use different locations.'
+                            );
+                            valid = false;
+                            return false; // Break the loop
+                        }
+
+                        uniqueCombinations.add(combination);
                     });
-                } else {
-                    toastr.error('An error occurred. Please try again.');
+
+                    if (!valid) {
+                        return false;
+                    }
+                }
+
+                // Submit form via AJAX
+                let formData = $(this).serialize();
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        toastr.success(response.message);
+                        setTimeout(function() {
+                            window.location.href = response.redirectUrl ||
+                                "{{ route('admin.services.index') }}";
+                        }, 1000);
+                    },
+                    error: function(xhr) {
+                        let response = xhr.responseJSON;
+                        if (response && response.errors) {
+                            $.each(response.errors, function(key, value) {
+                                toastr.error(value);
+                            });
+                        } else if (response && response.message) {
+                            toastr.error(response.message);
+                        }else {
+                            toastr.error('An error occurred. Please try again.');
+                        }
+                    }
+                });
+            });
+
+            // Other existing calculation functions
+            function calculateServiceTotal() {
+                serviceTotal = 0;
+                $('#serviceChartSelect option:selected').each(function() {
+                    serviceTotal += parseFloat($(this).data('price')) || 0;
+                });
+
+                $('#serviceCharges').text(serviceTotal.toFixed(2));
+                updateTotals();
+
+                // Revalidate discount after service total changes
+                validateDiscount();
+            }
+
+            function calculatePartsTotals() {
+                partsTotal = 0;
+
+                $('.part-row').each(function() {
+                    let price = parseFloat($(this).find('.part-price').val()) || 0;
+                    let quantity = parseInt($(this).find('.part-quantity').val()) || 0;
+
+                    if (!isNaN(price) && !isNaN(quantity)) {
+                        partsTotal += price //* quantity;
+                    }
+                });
+
+                $('#partsTotal').text(partsTotal.toFixed(2));
+                updateTotals();
+
+                // Revalidate discount after parts total changes
+                validateDiscount();
+            }
+
+            function validateDiscount() {
+                let totalBeforeDiscount = serviceTotal + partsTotal;
+                let currentDiscount = parseFloat($('#discount').val()) || 0;
+
+                if (currentDiscount > totalBeforeDiscount) {
+                    $('#discount').val(totalBeforeDiscount);
+                    discount = totalBeforeDiscount;
+                    toastr.warning('Discount has been adjusted to match the total amount');
                 }
             }
+
+            function updateTotals() {
+                let totalBeforeDiscount = serviceTotal + partsTotal;
+                let discountAmount = Math.min(discount, totalBeforeDiscount);
+                grandTotal = totalBeforeDiscount - discountAmount;
+
+                $('#discountAmount').text(discountAmount.toFixed(2));
+                $('#grandTotal').text(grandTotal.toFixed(2));
+
+                // Update hidden inputs for form submission
+                $('#grandTotalInput').val(grandTotal);
+                $('#totalAmountInput').val(totalBeforeDiscount);
+            }
+
+            // Initialize discount input event
+            $('#discount').on('input', function() {
+                let inputDiscount = parseFloat($(this).val()) || 0;
+                let totalBeforeDiscount = serviceTotal + partsTotal;
+
+                // Ensure discount isn't more than total amount
+                if (inputDiscount > totalBeforeDiscount) {
+                    inputDiscount = totalBeforeDiscount;
+                    $(this).val(totalBeforeDiscount);
+                    toastr.warning('Discount cannot be more than the total amount');
+                }
+
+                discount = inputDiscount;
+                updateTotals();
+            });
         });
-    });
-});
     </script>
 @endpush

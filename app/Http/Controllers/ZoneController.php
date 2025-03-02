@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Actions\FetchZone;
+use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Support\Facades\DB;
 
@@ -78,6 +79,11 @@ class ZoneController extends Controller
 
     public function destroy(Zone $zone)
     {
+        $userCount = User::where('zone_id', $zone->id)->count();
+
+        if ($userCount > 0) {
+            return redirect()->back()->with('error', 'Zone has users, cannot delete!');
+        }
         $zone->delete();
         return redirect()->back()->with('success', 'Zone deleted successfully!');
     }

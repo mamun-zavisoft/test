@@ -32,7 +32,7 @@
                                     <th>Product</th>
                                     <th>Category</th>
                                     <th>Brand</th>
-                                    <th>Price</th>
+                                    <th>Sale Price</th>
                                     <th>Qty</th>
                                     <th class="no-sort">Action</th>
                                 </tr>
@@ -57,8 +57,8 @@
                                         </td>
                                         <td>{{ $product->category?->name }}</td>
                                         <td>{{ $product->brand?->name }}</td>
-                                        <td>{{ $product->sale_price }}</td>
-                                        <td>{{ $product->total_available_qty }}</td>
+                                        <td>৳ {{ $product->sale_price }}</td>
+                                        <td>{{ $product->total_available_quantity }}</td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
                                                 <a class="me-2 edit-icon  p-2" href="{{ url('product-details') }}">

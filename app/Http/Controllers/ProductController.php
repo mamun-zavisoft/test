@@ -129,13 +129,12 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // if ($category->products()->exists()) {
-        //     return response()->json(['message' => 'Category has products, cannot delete!'], 422);
-        // }
+        if ($product->getTotalAvailableQuantity() > 0) {
+            return redirect()->back()->with('error', 'Product has stock, cannot be deleted');
+        }
         $product->delete();
 
         return redirect()->back()->with('success', 'Product deleted successfully!');
-        // return response()->json(['message' => 'Brand deleted successfully!']);
     }
 
     public function search(Request $request)

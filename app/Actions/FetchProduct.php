@@ -12,7 +12,7 @@ class FetchProduct
         $perPage = $request->input('per_page', 10);
 
         return Product::query()
-            ->with('media')
+            ->with('media', 'category:id,name', 'brand:id,name')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })

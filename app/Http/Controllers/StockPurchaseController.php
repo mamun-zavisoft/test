@@ -106,16 +106,16 @@ class StockPurchaseController extends Controller
                 // Process each storage location for this product
                 foreach ($productData['locations'] as $location) {
                     // Create stock purchase record
+                    $product = Product::find($location['product_id']);
                     $stockPurchase = new StockPurchase([
                         'product_id' => $location['product_id'],
                         'purchase_id' => $purchase->id,
                         'rack_id' => $location['rack_id'],
                         'drawer_id' => $location['drawer_id'],
                         'purchase_price' => $purchaseDetail->price,
-                        'sale_price' => $purchaseDetail->sale_price ?? 0,
+                        'sale_price' => $purchaseDetail->sale_price ?? $product->sale_price,
                         'qty' => $location['quantity']
                     ]);
-                    $product = Product::find($location['product_id']);
                     $product->total_available_qty += $location['quantity'];
                     $product->save();
                     

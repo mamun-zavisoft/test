@@ -10,6 +10,7 @@ use App\Http\Controllers\RackController;
 use App\Http\Controllers\ServiceChartController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockPurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\VehiclesController;
@@ -39,6 +40,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
 
     // ajax call routes
     Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');
+
     
     // system general settings
     Route::controller(SettingController::class)->group(function () {
