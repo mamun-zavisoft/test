@@ -112,8 +112,8 @@ class StockPurchaseController extends Controller
                         'purchase_id' => $purchase->id,
                         'rack_id' => $location['rack_id'],
                         'drawer_id' => $location['drawer_id'],
-                        'purchase_price' => $purchaseDetail->price,
-                        'sale_price' => $purchaseDetail->sale_price ?? $product->sale_price,
+                        'purchase_price' => $product->purchase_price,
+                        'sale_price' => $product->sale_price,
                         'qty' => $location['quantity']
                     ]);
                     $product->total_available_qty += $location['quantity'];

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sales', function (Blueprint $table) {
+        Schema::create('payment_details', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['self', 'external']);
-            $table->bigInteger('grand_total');
-            $table->bigInteger('paid_amount')->default(0);  
-            $table->decimal('due_amount', 14, 2)->default(0);
-            $table->enum('paid_status', ['full_due', 'partial_paid', 'full_paid', 'in_house'])->default('full_due');
+            $table->foreignId('payment_id')->constrained();
+            $table->foreignId('account_id')->nullable()->constrained();
+            $table->decimal('amount', 15, 2);
+            $table->string('payment_method')->nullable(); // e.g., Cash, Bank Transfer
+            $table->date('date')->nullable()->default(now());
             $table->text('note')->nullable();
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sales');
+        Schema::dropIfExists('payment_details');
     }
 };

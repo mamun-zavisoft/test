@@ -36,7 +36,7 @@ class AccountController extends Controller
             $account = Account::create([
                 'name' => $request->name,
                 'type' => $request->type,
-                'balance' => 0
+                'balance' => $request->balance,
             ]);
 
             DB::commit();

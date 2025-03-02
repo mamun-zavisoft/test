@@ -7,8 +7,10 @@ use App\Models\Category;
 use App\Models\Drawer;
 use App\Models\Product;
 use App\Models\Rack;
+use App\Models\ServiceChart;
 use App\Models\Supplier;
 use App\Models\User;
+use App\Models\Vehicle;
 use App\Models\Zone;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -53,6 +55,26 @@ class CommonSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'role' => 3,
             'zone_id' => $zone->id
+        ]);
+        Vehicle::create([
+            'owner_type' => 1,
+            'license_plate' => 'Vehicle 1',
+            'zone_id' => $zone->id,
+            'status' => 1,
+        ]);
+        ServiceChart::insert([
+            [
+                'name' => 'Car Wash',
+                'price' => '200',
+                'code' => 'CW200',
+                'description' => 'Car Wash',
+            ],
+            [
+                'name' => 'Oil Change',
+                'price' => '500',
+                'code' => 'OC500',
+                'description' => 'Oil Change',
+            ]
         ]);
     }
 }

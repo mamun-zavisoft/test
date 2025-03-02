@@ -29,4 +29,9 @@ class Purchase extends Model
             'product_id'             // Local key on the intermediate model
         );
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }

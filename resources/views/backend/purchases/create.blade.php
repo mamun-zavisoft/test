@@ -107,6 +107,48 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="payment_type" class="form-label">Payment Type</label>
+                                        <select class="select" id="payment_type" name="payment_type" required>
+                                            <option value="">Select Payment Type
+                                            </option>
+                                            <option value="partial_paid">Partial Paid
+                                            </option>
+                                            <option value="full_paid">Full Paid
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="payment_type" class="form-label">Accounts</label>
+                                        <select class="select" id="payment_account" name="account_id" required>
+                                            <option value="">Select Account
+                                            </option>
+                                            @foreach ($accounts as $account)
+                                                <option value="{{ $account->id }}">
+                                                    {{ $account->name }}({{ number_format($account->balance) }} ৳)</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3 amount-field" style="display: none;">
+                                        <label for="amount" class="form-label">Amount</label>
+                                        <input type="number" class="form-control" id="amount" name="amount"
+                                            placeholder="Enter amount">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="payment_date" class="form-label">Payment Date</label>
+                                        <input type="date" class="form-control" id="payment_date" name="payment_date"
+                                            value="{{ date('Y-m-d') }}" required>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="note" class="form-label">Note</label>
+                                        <input type="text" class="form-control" id="note" name="note"
+                                            placeholder="Payment note (optional)">
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-lg-6 ms-auto">
                                         <div class="total-order w-100 max-widthauto m-auto mb-4">
                                             <ul>
@@ -254,7 +296,8 @@
                 if (response.type == 'success') {
                     toastr.success(response.message);
                     setTimeout(() => {
-                        response.redirectUrl ? window.location.href = response.redirectUrl : `{{ route('admin.purchases.index') }}`; ;
+                        response.redirectUrl ? window.location.href = response.redirectUrl :
+                            `{{ route('admin.purchases.index') }}`;;
                     }, 1000);
                 } else {
                     SubmitBtn.prop('disabled', false);
@@ -330,12 +373,53 @@
             $('#grand_total').text(grandTotal.toFixed(2));
             $('input[name="grand_total"]').val(grandTotal.toFixed(2));
 
-            // Update paid and due amounts if needed
-            let paidAmount = parseFloat($('#paid_amount').text()) || 0;
+            // Calculate paid amount based on payment type
+            let paidAmount = 0;
+            let paymentType = $('#payment_type').val();
+
+            if (paymentType === 'full_paid') {
+                paidAmount = grandTotal;
+            } else if (paymentType === 'partial_paid') {
+                paidAmount = parseFloat($('#amount').val()) || 0;
+            }
+
+            // Update paid amount display and input
+            $('#paid_amount').text(paidAmount.toFixed(2));
+            $('input[name="paid_amount"]').val(paidAmount.toFixed(2));
+
+            // Calculate and update due amount
             let dueAmount = grandTotal - paidAmount;
 
             $('#due_amount').text(dueAmount.toFixed(2));
             $('input[name="due_amount"]').val(dueAmount.toFixed(2));
         }
+
+        // Add event listeners for payment fields
+        $('#payment_type').on('change', function() {
+            if ($(this).val() === 'partial_paid') {
+                $('.amount-field').show();
+                $('#amount').attr('required', true);
+            } else if ($(this).val() === 'full_paid') {
+                $('.amount-field').hide();
+                $('#amount').attr('required', false);
+                // Set amount to grand total for calculation purposes
+                $('#amount').val($('#grand_total').text());
+            } else {
+                // For empty selection
+                $('.amount-field').hide();
+                $('#amount').attr('required', false);
+                $('#amount').val(0);
+            }
+            updateCartAction(); // Update totals when payment type changes
+        });
+
+        $('#amount').on('input', function() {
+            updateCartAction();
+        });
+
+        // Make sure to call updateCartAction when payment account changes
+        $('#payment_account').on('change', function() {
+            updateCartAction();
+        });
     </script>
 @endpush

@@ -57,7 +57,7 @@
                             <div class="col-md-12">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="partsCheckbox"
-                                        name="any_parts_purchase" >
+                                        name="any_parts_purchase" value="1">
                                     <label class="form-check-label" for="partsCheckbox">
                                         Include Parts in Service
                                     </label>
