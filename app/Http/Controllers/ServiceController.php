@@ -84,9 +84,9 @@ class ServiceController extends Controller
                 $sale = Sale::create([
                     'type' => $request->service_type,
                     'due_amount' => $request->total_amount, 
-                    'pay_amount' => 0, // Initially no payment
-                    'total_amount' => $request->total_amount,
-                    'payment_status' => Sale::$FULL_DUE,
+                    'paid_amount' => $request->paid_amount ?? 0,
+                    'grand_total' => $request->total_amount,
+                    'paid_status' => Sale::$FULL_DUE,
                     'note' => $request->note,
                 ]);
 

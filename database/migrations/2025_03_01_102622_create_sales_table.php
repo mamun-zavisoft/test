@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->enum('type', ['self', 'external']);
-            $table->bigInteger('due_amount')->default(0);
-            $table->bigInteger('pay_amount')->default(0);
-            $table->bigInteger('total_amount');
-            $table->enum('payment_status', [1, 2, 3, 4])->comment('1=Due,2=Partial Paid,3=Full paid,4=In-house');
+            $table->bigInteger('grand_total');
+            $table->bigInteger('paid_amount')->default(0);  
+            $table->decimal('due_amount', 14, 2)->default(0);
+            $table->enum('paid_status', ['full_due', 'partial_paid', 'full_paid', 'in_house'])->default('full_due');
             $table->text('note')->nullable();
             $table->timestamps();
         });
