@@ -365,7 +365,7 @@
 
                 // For full payment, set amount to due amount
                 if ($('#payment_type').val() === 'full_paid') {
-                    formData.append('amount', '{{ $purchase->due_amount }}');
+                    
                 }
 
                 $.ajax({

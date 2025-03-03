@@ -113,7 +113,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Edit Brand -->
+                                    <!-- Edit Account -->
                                 @endforeach
 
                             </tbody>
@@ -121,11 +121,11 @@
                     </div>
                 </div>
             </div>
-            <!-- /product list -->
+            <!-- /Account list -->
         </div>
     </div>
 
-    <!-- Add Brand -->
+    <!-- Add Account -->
     <div class="modal fade" id="add-account">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
             <div class="modal-content">

@@ -82,4 +82,5 @@ class VehiclesController extends Controller
         return redirect()->back()->with('success', 'Vehicle deleted successfully!');
     }
 
+
 }

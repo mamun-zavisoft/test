@@ -12,4 +12,9 @@ class ServiceDetail extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    public function serviceChart()
+    {
+        return $this->belongsTo(ServiceChart::class);
+    }
 }
