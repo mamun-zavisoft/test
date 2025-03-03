@@ -32,6 +32,12 @@ class PurchaseRequest extends FormRequest
             'product_id.*' => 'required|exists:products,id',
             'qty' => 'required|array',
             'qty.*' => 'required|integer|min:1',
+            // validation for payment
+            'payment_type' => 'required|in:full_due,partial_paid,full_paid',
+            'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
+            'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
+            'payment_date' => 'nullable|date|before_or_equal:today|required_if:payment_type,partial_paid,full_paid',
+            'note' => 'nullable|string',
         ];
     }
 }

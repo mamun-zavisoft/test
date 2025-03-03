@@ -198,35 +198,28 @@
                                                             <div class="mt-4">
                                                                 <h5 class="mb-3">Payments</h5>
                                                                 <div class="d-flex fw-bold border-bottom pb-2">
-                                                                    <div class="flex-grow-1" style="width: 150px;">Payment
-                                                                        Type</div>
-                                                                    <div class="text-center" style="width: 110px;">Amount
-                                                                    </div>
-                                                                    <div class="text-center" style="width: 110px;">Date
-                                                                    </div>
-                                                                    <div class="text-center" style="width: 110px;">Note
-                                                                    </div>
+                                                                    <div class="flex-grow-1" style="width: 150px;">Payment Type</div>
+                                                                    <div class="text-center" style="width: 110px;">Amount</div>
+                                                                    <div class="text-center" style="width: 110px;">Date</div>
+                                                                    <div class="text-center" style="width: 110px;">Note</div>
                                                                 </div>
-                                                            </div>
-
-                                                            <div class="d-flex py-2 border-bottom">
+                                                            
                                                                 @forelse ($purchase?->payment?->paymentDetails as $paymentDetail)
-                                                                    <div class="flex-grow-1" style="width: 150px;">test
-                                                                    </div>
-                                                                    <div class="text-center" style="width: 110px;">
-                                                                        {{ $paymentDetail?->amount }}</div>
-                                                                    <div class="text-center" style="width: 110px;">
-                                                                        {{ $paymentDetail?->date }}</div>
-                                                                    <div class="text-center" style="width: 110px;">
-                                                                        {{ $paymentDetail?->note ?? 'N/A' }}</div>
+                                                                <div class="d-flex py-2 border-bottom">
+                                                                    <div class="flex-grow-1" style="width: 150px;">{{ $paymentDetail?->account?->name }}</div>
+                                                                    <div class="text-center" style="width: 110px;">{{ $paymentDetail?->amount }}</div>
+                                                                    <div class="text-center" style="width: 110px;">{{ $paymentDetail?->date }}</div>
+                                                                    <div class="text-center" style="width: 110px;">{{ $paymentDetail?->note ?? 'N/A' }}</div>
+                                                                </div>
                                                                 @empty
+                                                                <div class="py-2">
                                                                     <p class="text-muted">No payment found</p>
+                                                                </div>
                                                                 @endforelse
                                                             </div>
+
                                                             <div class="text-end mt-3">
-                                                                <button type="button" class="btn btn-primary"
-                                                                    id="add-payment-btn">Add
-                                                                    Payment</button>
+                                                                <button type="button" class="btn btn-primary add-payment-btn">Add Payment</button>
                                                                 <button type="button" class="btn btn-primary"
                                                                     style="display: none;" id="close-btn">Close Form
                                                                 </button>
@@ -240,7 +233,7 @@
                                                                         <div class="col-md-6 mb-3">
                                                                             <label for="payment_type"
                                                                                 class="form-label">Payment Type</label>
-                                                                            <select class="select" id="payment_type"
+                                                                            <select class="form-select payment_type"
                                                                                 name="payment_type" required>
                                                                                 <option value="">Select Payment Type
                                                                                 </option>
@@ -253,7 +246,7 @@
                                                                         <div class="col-md-6 mb-3">
                                                                             <label for="payment_type"
                                                                                 class="form-label">Accounts</label>
-                                                                            <select class="select" id="payment_account"
+                                                                            <select class="form-select" id="payment_account"
                                                                                 name="account_id" required>
                                                                                 <option value="">Select Account
                                                                                 </option>
@@ -290,8 +283,8 @@
 
                                                                         <div class="col-12 text-end">
                                                                             <button type="button"
-                                                                                class="btn btn-secondary me-2"
-                                                                                id="cancel-payment-btn">Cancel</button>
+                                                                                class="btn btn-secondary me-2 cancel-payment-btn"
+                                                                               >Cancel</button>
                                                                             <button type="submit" class="btn btn-success"
                                                                                 id="submit_btn">Submit
                                                                                 Payment</button>
@@ -322,37 +315,35 @@
     <script>
         $(document).ready(function() {
             // Show payment form when Add Payment button is clicked
-            $('#add-payment-btn').on('click', function() {
-                $('.payment-form-container').show();
-                $(this).hide();
-                $('#close-btn').show();
-            });
+            // $('.add-payment-btn').on('click', function() {
+            //     $('.payment-form-container').show();
+            //     $(this).hide();
+            //     $('#close-btn').show();
+            // });
 
-            $('#close-btn').on('click', function() {
-                $(this).hide();
-                $('.payment-form-container').hide();
-                $('#add-payment-btn').show();
-            })
+            // $('#close-btn').on('click', function() {
+            //     $(this).hide();
+            //     $('.payment-form-container').hide();
+            //     $('.add-payment-btn').show();
+            // })
 
-            // Hide payment form when Cancel button is clicked
-            $('#cancel-payment-btn').on('click', function() {
-                $('.payment-form-container').hide();
-                $('#add-payment-btn').show();
-                // Reset form
-                $('.editForm')[0].reset();
-                $('.amount-field').hide();
-            });
+            // // Hide payment form when Cancel button is clicked
+            // $('.cancel-payment-btn').on('click', function() {
+            //     $('.payment-form-container').hide();
+            //     $('.add-payment-btn').show();
+            //     $('.amount-field').hide();
+            // });
 
-            // Show/hide amount field based on payment type selection
-            $('#payment_type').on('change', function() {
-                if ($(this).val() === 'partial_paid') {
-                    $('.amount-field').show();
-                    $('#amount').attr('required', true);
-                } else {
-                    $('.amount-field').hide();
-                    $('#amount').attr('required', false);
-                }
-            });
+            // // Show/hide amount field based on payment type selection
+            // $('.payment_type').on('change', function() {
+            //     if ($(this).val() === 'partial_paid') {
+            //         $('.amount-field').show();
+            //         $('.amount').attr('required', true);
+            //     } else {
+            //         $('.amount-field').hide();
+            //         $('.amount').attr('required', false);
+            //     }
+            // });
 
             // Form submission with AJAX
             $('.payment-form').submit(function(e) {
@@ -364,7 +355,7 @@
                 let formData = new FormData(this);
 
                 // For full payment, set amount to due amount
-                if ($('#payment_type').val() === 'full_paid') {
+                if ($('.payment_type').val() === 'full_paid') {
                     formData.append('amount', '{{ $purchase->due_amount }}');
                 }
 

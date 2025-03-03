@@ -110,17 +110,15 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="payment_type" class="form-label">Payment Type</label>
                                         <select class="select" id="payment_type" name="payment_type" required>
-                                            <option value="">Select Payment Type
-                                            </option>
-                                            <option value="partial_paid">Partial Paid
-                                            </option>
-                                            <option value="full_paid">Full Paid
-                                            </option>
+                                            <option value="">Select Payment Type</option>
+                                            <option value="full_due" selected>Full Due</option>
+                                            <option value="partial_paid">Partial Paid</option>
+                                            <option value="full_paid">Full Paid</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="payment_type" class="form-label">Accounts</label>
-                                        <select class="select" id="payment_account" name="account_id" required>
+                                        <select class="select" id="payment_account" name="account_id">
                                             <option value="">Select Account
                                             </option>
                                             @foreach ($accounts as $account)

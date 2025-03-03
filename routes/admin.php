@@ -16,6 +16,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\ZoneController;
 use App\Models\Drawer;
+use App\Models\Purchase;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->name('admin.')->group(function () {
@@ -40,6 +41,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
 
     // ajax call routes
     Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');
+    Route::get('/purchase/view/payments/{id}', [PurchaseController::class, 'view_payments'])->name('order.view.payments');
 
     
     // system general settings

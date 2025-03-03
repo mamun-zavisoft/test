@@ -41,13 +41,26 @@ class PurchaseController extends Controller
     public function store(PurchaseRequest $request)
     {
         try {
-            $this->purchaseService->createPurchase($request->validated());
+            DB::beginTransaction();
+
+            $purchaseData = $request->validated();
+            $purchaseData['paid_amount'] = 0;
+            $purchaseData['payment_type'] = 'full_due';
+
+            $purchase = $this->purchaseService->createPurchase($purchaseData);
+
+            if ($request->payment_type != 'full_due') {
+                $this->payment($request, $purchase);
+            }
+
+            DB::commit();
             return response()->json([
                 'message' => 'Purchase created successfully.',
                 'type' => 'success',
                 'redirectUrl' =>  route('admin.purchases.index'),
             ], 201);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -69,22 +82,60 @@ class PurchaseController extends Controller
         }
     }
 
-    public function payment(Request $request, $id)
+    public function payment(Request $request, $purchase)
     {
-        $request->validate([
-            'payment_type' => 'required|in:partial_paid,full_paid',
-            'account_id' => 'required|exists:accounts,id',
-            'amount' => 'nullable|numeric|min:1',
-            'payment_date' => 'nullable|date|before_or_equal:today',
-            'note' => 'nullable|string',
-        ]);
+        if (! $purchase instanceof Purchase) {
+            $request->validate([
+                'payment_type' => 'required|in:full_due,partial_paid,full_paid',
+                'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
+                'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
+                'payment_date' => 'nullable|date|before_or_equal:today',
+                'note' => 'nullable|string',
+            ],[
+                'account_id.required_if' => 'The account field is required when payment type is partial paid or full paid.',
+                'amount.required_if' => 'The amount field is required when payment type is partial paid or full paid.',
+            ]);
+            $purchase = Purchase::findOrFail($purchase);
+        }
 
-        $purchase = Purchase::findOrFail($id);
-        $account = Account::findOrFail($request->account_id);
         try {
+            DB::beginTransaction();
+
+            // If payment type is full_due
+            if ($request->payment_type == 'full_due') {
+                $purchase->update([
+                    'due_amount' => $purchase->grand_total,
+                    'paid_amount' => 0,
+                    'paid_status' => 'full_due',
+                ]);
+
+                $payment = $purchase->payment;
+                if ($payment) {
+                    $payment->update([
+                        'due_amount' => $purchase->grand_total,
+                        'paid_amount' => 0,
+                        'paid_status' => 'full_due',
+                    ]);
+                }
+
+                DB::commit();
+                return response()->json([
+                    'message' => 'Purchase recorded as full due successfully.',
+                    'type' => 'success',
+                    'redirectUrl' => route('admin.purchases.index'),
+                ]);
+            }
+
+            // For partial_paid or full_paid
+            $account = Account::findOrFail($request->account_id);
+            if (!$account) {
+                return response()->json(['message' => 'Account not found', 'type' => 'error'], 422);
+            }
+
             if ($request->amount > $account->balance) {
                 return response()->json(['message' => 'Payment amount cannot be greater than account balance ' . $account->balance, 'type' => 'error'], 422);
             }
+
             if ($request->payment_type == 'partial_paid' && $request->amount > $purchase->due_amount) {
                 return response()->json(['message' => 'Payment amount cannot be greater than due amount ' . $purchase->due_amount, 'type' => 'error'], 422);
             }
@@ -94,16 +145,22 @@ class PurchaseController extends Controller
 
             $paid_status = $total_paid_amount < $purchase->grand_total ? 'partial_paid' : 'full_paid';
 
-            DB::beginTransaction();
+            // Update purchase record
             $purchase->update([
                 'due_amount' => $latest_due_amount,
                 'paid_amount' => $total_paid_amount,
                 'paid_status' => $paid_status,
             ]);
-            
+
+            // Update account balance
             $account->balance = $account->balance - $request->amount;
             $account->save();
 
+            if($request->payment_type == 'full_paid') {
+                $amount = $purchase->grand_total - $purchase->paid_amount;
+            }
+
+            // Update payment record and add payment detail
             $payment = $purchase->payment;
             if ($payment) {
                 $payment->update([
@@ -114,7 +171,7 @@ class PurchaseController extends Controller
 
                 $payment->paymentDetails()->create([
                     'account_id' => $request->account_id,
-                    'amount' => $request->amount,
+                    'amount' => $request->amount ?? $amount,
                     'date' => $request->payment_date,
                     'note' => $request->note,
                 ]);

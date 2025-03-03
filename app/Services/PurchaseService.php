@@ -23,16 +23,16 @@ class PurchaseService
         try {
             $grandTotal = $this->calculateGrandTotal($data);
 
-            // Create Purchase Record
+            // Create Purchase Record with initial zero payment
             $purchase = Purchase::create([
                 'zone_id' => auth()->user()?->zone_id,
                 'supplier_id' => $data['supplier_id'] ?? null,
                 'discount_amount' => $data['discount_amount'] ?? 0,
                 'shipping_charge' => $data['shipping_charge'] ?? 0,
                 'grand_total' => $grandTotal,
-                'paid_amount' => $data['paid_amount'] ?? 0,
-                'due_amount' => $grandTotal - ($data['paid_amount'] ?? 0),
-                'paid_status' => $this->calculatePaidStatus($grandTotal, $data['paid_amount'] ?? 0),
+                'paid_amount' => 0,
+                'due_amount' => $grandTotal,
+                'paid_status' => 'full_due',
                 'date' => $data['date'] ?? now(),
                 'reference_no' => $data['reference_no'] ?? null,
                 'note' => $data['note'] ?? null,
@@ -40,6 +40,14 @@ class PurchaseService
 
             // Create Purchase Details
             $this->createPurchaseDetails($purchase, $data);
+
+            $purchase->payment()->create([
+                'transaction_type' => 'purchase',
+                'grand_total' => $grandTotal,
+                'due_amount' => $grandTotal,
+                'paid_amount' => 0,
+                'paid_status' => 'full_due',
+            ]);
 
             DB::commit();
             return $purchase;
