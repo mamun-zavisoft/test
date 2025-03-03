@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
@@ -29,8 +30,9 @@ class ServiceController extends Controller
         $vehicles = Vehicle::get();
         $serviceCharts = ServiceChart::all();
         $products = Product::get();
+        $accounts = Account::select('id', 'name', 'balance')->get();
 
-        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products'));
+        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products', 'accounts'));
     }
 
     /**

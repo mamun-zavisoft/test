@@ -82,6 +82,34 @@
                         </div>
 
                         <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Notes</label>
+                                    <textarea name="note" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 ms-auto">
+                                <div class="total-order w-100 max-widthauto m-auto mb-4">
+                                    <ul>
+                                        <li>
+                                            <h4>Paid</h4>
+                                            <h5 id="paid_amount">0</h5>
+                                            <input type="hidden" name="paid_amount">
+                                        </li>
+                                        <li>
+                                            <h4>Due</h4>
+                                            <h5 id="due_amount">0</h5>
+                                            <input type="hidden" name="due_amount">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Payment Type</label>
@@ -102,16 +130,60 @@
                                         min="0">
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label>Notes</label>
-                                    <textarea name="note" class="form-control" rows="3"></textarea>
+                            <!-- Payment Section - Initially Hidden -->
+                            <div id="paymentSection" class="col-md-12 mt-3 d-none">
+                                <div class="card bg-light">
+                                    <div class="card-header">
+                                        <h5>Payment Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="payment_type" class="form-label">Payment Type</label>
+                                                <select class="form-control select2" id="payment_type" name="payment_type">
+                                                    <option value="">Select Payment Type</option>
+                                                    <option value="full_due" selected>Full Due</option>
+                                                    <option value="partial_paid">Partial Paid</option>
+                                                    <option value="full_paid">Full Paid</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="payment_account" class="form-label">Accounts</label>
+                                                <select class="form-control select2" id="payment_account" name="account_id">
+                                                    <option value="">Select Account</option>
+                                                    @foreach ($accounts as $account)
+                                                        <option value="{{ $account->id }}">
+                                                            {{ $account->name }}({{ number_format($account->balance) }} ৳)
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3 amount-field" style="display: none;">
+                                                <label for="amount" class="form-label">Amount</label>
+                                                <input type="number" class="form-control" id="payment_amount"
+                                                    name="amount" placeholder="Enter amount">
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="payment_date" class="form-label">Payment Date</label>
+                                                <input type="date" class="form-control" id="payment_date"
+                                                    name="payment_date" value="{{ date('Y-m-d') }}">
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="payment_note" class="form-label">Note</label>
+                                                <input type="text" class="form-control" id="payment_note"
+                                                    name="payment_note" placeholder="Payment note (optional)">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        
 
                         <div class="card bg-light mb-4">
                             <div class="card-body">
@@ -163,9 +235,9 @@
                 <select name="parts[__index__][product_id]" class="form-control part-select" required>
                     <option value="">Select Part</option>
                     @foreach ($products as $product)
-                    @php
-                        $totalStock = $product->getTotalAvailableQuantity();
-                    @endphp
+                        @php
+                            $totalStock = $product->getTotalAvailableQuantity();
+                        @endphp
                         <option value="{{ $product->id }}" data-total-stock="{{ $totalStock }}">
                             {{ $product->name }} (Total Stock: {{ $totalStock }})
                         </option>
@@ -419,7 +491,7 @@
                             let availableQty = response.stock.available_qty || 0;
                             let salePrice = response.stock.sale_price || 0;
                             console.log(salePrice);
-                            
+
 
                             // Update UI with stock info
                             row.find('.part-quantity')
@@ -524,7 +596,7 @@
                             });
                         } else if (response && response.message) {
                             toastr.error(response.message);
-                        }else {
+                        } else {
                             toastr.error('An error occurred. Please try again.');
                         }
                     }
@@ -602,6 +674,115 @@
 
                 discount = inputDiscount;
                 updateTotals();
+            });
+
+            // Handle service type selection (show/hide payment section)
+            $('select[name="service_type"]').change(function() {
+                if ($(this).val() === 'external') {
+                    $('#paymentSection').removeClass('d-none');
+                    // Initialize select2 on payment dropdowns
+                    $('#payment_type, #payment_account').select2();
+                } else {
+                    $('#paymentSection').addClass('d-none');
+                    // Reset payment fields when hiding
+                    $('#payment_type').val('full_due');
+                    $('#payment_account').val('');
+                    $('#payment_amount').val('');
+                    $('.amount-field').hide();
+                }
+            });
+
+            // Handle payment type selection
+            $('#payment_type').change(function() {
+                if ($(this).val() === 'partial_paid') {
+                    $('.amount-field').show();
+                    // Set maximum amount to grand total
+                    $('#payment_amount').attr('max', grandTotal);
+                } else if ($(this).val() === 'full_paid') {
+                    $('.amount-field').hide();
+                    // Set payment amount to grand total for calculation purposes
+                    $('#payment_amount').val(grandTotal);
+                } else {
+                    // For full_due
+                    $('.amount-field').hide();
+                    $('#payment_amount').val(0);
+                }
+            });
+
+            // Update payment amount max when grand total changes
+            function updatePaymentFields() {
+                // Set maximum payment amount to new grand total
+                if ($('#payment_type').val() === 'partial_paid') {
+                    let currentAmount = parseFloat($('#payment_amount').val()) || 0;
+                    $('#payment_amount').attr('max', grandTotal);
+
+                    // If current amount exceeds new grand total, adjust it
+                    if (currentAmount > grandTotal) {
+                        $('#payment_amount').val(grandTotal);
+                        toastr.warning('Payment amount has been adjusted to match the grand total');
+                    }
+                } else if ($('#payment_type').val() === 'full_paid') {
+                    $('#payment_amount').val(grandTotal);
+                }
+            }
+
+            // Add payment field update to the updateTotals function
+            const originalUpdateTotals = updateTotals;
+            updateTotals = function() {
+                // Call the original function first
+                originalUpdateTotals();
+
+                // Then update payment fields
+                updatePaymentFields();
+            };
+
+            // Handle payment amount changes
+            $('#payment_amount').on('input', function() {
+                let inputAmount = parseFloat($(this).val()) || 0;
+
+                // Ensure payment amount isn't more than grand total
+                if (inputAmount > grandTotal) {
+                    inputAmount = grandTotal;
+                    $(this).val(grandTotal);
+                    toastr.warning('Payment amount cannot be more than the grand total');
+                }
+            });
+
+            // Validate payment fields before form submission
+            const originalFormSubmit = $('#serviceForm').submit;
+            $('#serviceForm').submit(function(e) {
+                // Check payment validation only if external type is selected
+                if ($('select[name="service_type"]').val() === 'external') {
+                    // Validate payment type is selected
+                    if ($('#payment_type').val() === '') {
+                        toastr.error('Please select a payment type');
+                        return false;
+                    }
+
+                    // Validate account is selected for partial_paid and full_paid
+                    if (($('#payment_type').val() === 'partial_paid' || $('#payment_type').val() ===
+                            'full_paid') &&
+                        $('#payment_account').val() === '') {
+                        toastr.error('Please select an account for the payment');
+                        return false;
+                    }
+
+                    // Validate amount for partial payment
+                    if ($('#payment_type').val() === 'partial_paid') {
+                        let amount = parseFloat($('#payment_amount').val()) || 0;
+                        if (amount <= 0) {
+                            toastr.error('Please enter a valid payment amount');
+                            return false;
+                        }
+                        if (amount > grandTotal) {
+                            $('#payment_amount').val(grandTotal);
+                            toastr.warning('Payment amount adjusted to match grand total');
+                        }
+                    }
+                }
+
+                // Continue with original validation
+                return true;
             });
         });
     </script>
