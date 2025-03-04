@@ -21,8 +21,9 @@ class ServiceController extends Controller
         $services = Service::with('vehicle')->get();
         $serviceCharts = ServiceChart::select('id','name','price','code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
+        $products = Product::with('category', 'brand')->get();
 
-        return view('backend.services.index', compact('services','serviceCharts','serviceDetails'));
+        return view('backend.services.index', compact('services','serviceCharts','serviceDetails', 'products'));
     }
     /**
      * Display the service creation form

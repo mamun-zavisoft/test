@@ -25,7 +25,7 @@
                                 <tr>
                                     <th class="no-sort">SL</th>
                                     <th>Owner Type</th>
-                                    <th>License Plate</th>
+                                    <th>Vehicle Number</th>
                                     <th>Zone</th>
                                     <th>Status</th>
                                     <th>Created On</th>
@@ -94,7 +94,7 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">License Plate*</label>
+                                                                    <label class="form-label">Vehicle Register Number*</label>
                                                                     <input type="text" class="form-control"
                                                                     value="{{ $vehicle->license_plate }}" name="license_plate">
                                                                 </div>
@@ -158,7 +158,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">License Plate*</label>
+                                    <label class="form-label">Vehicle Register Number*</label>
                                     <input type="text" name="license_plate" class="form-control">
                                 </div>
                                 <div class="mb-3">

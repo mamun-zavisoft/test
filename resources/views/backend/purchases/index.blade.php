@@ -85,7 +85,8 @@
                                         </td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
-                                                <a class="me-2 p-2" href="javascript:void(0);">
+                                                <a class="me-2 p-2" href="javascript:void(0);" data-bs-toggle="modal"
+                                                data-bs-target="#purchase-{{ $purchase->id }}">
                                                     <i data-feather="eye" class="action-eye"></i>
                                                 </a>
                                                 <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
@@ -164,6 +165,123 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="modal fade" id="purchase-{{ $purchase->id }}">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 90%; width: 90%;">
+                                            <div class="modal-content" style="max-height: 90vh; display: flex; flex-direction: column;">
+                                                <div class="modal-header border-0 custom-modal-header">
+                                                    <div class="page-title">
+                                                        <h4>Purchase Details</h4>
+                                                    </div>
+                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body custom-modal-body new-employee-field" style="flex-grow: 1; overflow-y: auto;">
+                                                    
+                                                    <!-- Supplier Info -->
+                                                    <div class="row mb-4">
+                                                        <div class="col-md-8">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title font-weight-bold mb-3">Supplier Info</h5>
+                                                                    <p class="mb-1">Supplier Name: {{ $purchase->supplier?->name }}</p>
+                                                                    <p class="mb-1">Supplier Number: {{ $purchase->supplier?->phone }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title font-weight-bold mb-3">Invoice Info</h5>
+                                                                    <div class="d-flex justify-content-between mb-1">
+                                                                        <span>Reference:</span>
+                                                                        <span class="fw-bolder">{{ $purchase->reference_no }}</span>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between mb-1">
+                                                                        <span>Payment Status:</span>
+                                                                        <span class="fw-bolder text-{{ $purchase->paid_status == 'full_paid' ? 'success' : 'warning' }}">{{ $purchase->paid_status }}</span>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <span>Status:</span>
+                                                                        <span class="fw-bolder text-{{ $purchase->status == 'pending' ? 'warning' : 'success' }}">
+                                                                            {{ $purchase->status }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Purchase Details -->
+                                                    <div class="card mb-4">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title font-weight-bold mb-4">Purchase Details</h5>
+
+                                                            <!-- Table Head -->
+                                                            <div class="d-flex fw-bold border-bottom pb-2">
+                                                                <div class="p-2" style="flex: 1;">Product Name</div>
+                                                                <div class="p-2" style="flex: 1;">Quantity</div>
+                                                                <div class="p-2" style="flex: 1;">Purchase Price</div>
+                                                                <div class="p-2" style="flex: 1;">Sale Price</div>
+                                                                <div class="p-2" style="flex: 1;">Total Price</div>
+                                                                <div class="p-2" style="flex: 1;">Status</div>
+                                                            </div>
+
+                                                            <!-- Table Body -->
+                                                            @foreach($purchase->purchaseDetails as $data)
+                                                                <div class="d-flex border-bottom py-2">
+                                                                    <div class="p-2" style="flex: 1;">{{ $data->product?->name }}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ $data->quantity }}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ $data->product->purchase_price }}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ $data->product->sale_price }}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ $data->quantity * $data->product->purchase_price }}</div>
+                                                                    <div class="p-2 fw-bolder text-{{ $data->product->status == 1 ? 'success' : 'warning' }}" style="flex: 1;">
+                                                                        {{ $data->product->status == 1 ? 'Active' : 'InActive' }}
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Total Section -->
+                                                    <div class="row justify-content-end mt-4">
+                                                        <div class="col-md-5">
+                                                            <div class="bg-light p-3 rounded">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <span class="font-weight-bold">Grand Total</span>
+                                                                    <span class="font-weight-bold">{{ $purchase->grand_total }}</span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between">
+                                                                    <span>Shipping Charge</span>
+                                                                    <span>{{ $purchase->shipping_charge }}</span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between mb-2">
+                                                                    <span>Discount</span>
+                                                                    <span>{{ $purchase->discount_amount }}</span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between mb-2">
+                                                                    <span>Total Price</span>
+                                                                    <span>{{ ($purchase->grand_total + $purchase->shipping_charge) - $purchase->discount_amount }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Footer Actions -->
+                                                <div class="modal-footer d-flex justify-content-end">
+                                                    <button class="btn btn-secondary me-2" onclick="window.print()">
+                                                        <i class="fa fa-print me-1"></i> Print
+                                                    </button>
+                                                    <button class="btn btn-primary">
+                                                        <i class="fa fa-download me-1"></i> Download PDF
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 @endforeach
                             </tbody>
                         </table>

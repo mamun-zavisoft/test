@@ -34,7 +34,6 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/accounts', AccountController::class);
     Route::resource('/vehicles', VehiclesController::class);
     Route::resource('/services', ServiceController::class);
-    Route::resource('/purchase-details', PurchasesDetailController::class);
      
     // single action routes
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');
