@@ -23,12 +23,13 @@
                         <table class="table  datanew list">
                             <thead>
                                 <tr>
-                                    <th class="no-sort">
+                                    {{-- <th class="no-sort">
                                         <label class="checkboxs">
                                             <input type="checkbox" id="select-all">
                                             <span class="checkmarks"></span>
                                         </label>
-                                    </th>
+                                    </th> --}}
+                                    <th>Invoice No</th>
                                     <th>Supplier Name</th>
                                     <th>Reference</th>
                                     <th>Date</th>
@@ -43,12 +44,13 @@
                             <tbody>
                                 @foreach ($purchases as $purchase)
                                     <tr>
-                                        <td>
+                                        {{-- <td>
                                             <label class="checkboxs">
                                                 <input type="checkbox">
                                                 <span class="checkmarks"></span>
                                             </label>
-                                        </td>
+                                        </td> --}}
+                                        <td class="fw-bold">#{{ $purchase->transaction_id }}</td>
                                         <td>{{ $purchase->supplier?->name }}</td>
                                         <td>{{ $purchase->reference_no }}</td>
                                         <td>{{ $purchase->date }}</td>
@@ -139,36 +141,36 @@
                                         </div>
                                     </div>
 
-                                    {{-- paid status modal --}}
-                                    <div class="modal fade" id="payment_modal">
-                                        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-                                            <div class="modal-content" style="width: auto; padding-bottom: 50px;">
-                                                <div class="page-wrapper-new p-0">
-                                                    <div class="content">
-                                                        <div class="modal-header border-0 custom-modal-header">
-                                                            <div class="page-title">
-                                                                <h4>Purchase Payments</h4>
-                                                            </div>
-                                                            <button type="button" class="close" data-bs-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body custom-modal-body new-employee-field"
-                                                            id="view_payments">
-                                                            {{-- dynamically show payments --}}
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                        {{-- paid status modal --}}
+                        <div class="modal fade" id="payment_modal">
+                            <div class="modal-dialog modal-dialog-centered custom-modal-two">
+                                <div class="modal-content" style="width: auto; padding-bottom: 50px;">
+                                    <div class="page-wrapper-new p-0">
+                                        <div class="content">
+                                            <div class="modal-header border-0 custom-modal-header">
+                                                <div class="page-title">
+                                                    <h4>Purchase Payments</h4>
+                                                </div>
+                                                <button type="button" class="close" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body custom-modal-body new-employee-field"
+                                                id="view_payments">
+                                                {{-- dynamically show payments --}}
+                                            </div>
+                                        </div>
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
             <!-- /purchase list -->
@@ -178,11 +180,7 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-           
-
             $('.payment_view').click(function(e) {
-                console.log('clicked');
-
                 let url = $(this).data('url');
                 let spiner =
                     `<div class="d-flex justify-content-center">   <div class="spinner-border" role="status">     <span class="visually-hidden">Loading...</span>   </div> </div>`
@@ -191,13 +189,10 @@
                     url: url,
                     type: 'GET',
                     success: function(res) {
-                        // console.log(res);
                         $('#view_payments').html(res);
                     }
                 })
-            })
-
-            
+            }) 
         });
     </script>
 @endpush

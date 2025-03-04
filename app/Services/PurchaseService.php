@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Controllers\PurchaseController;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseDetail;
@@ -19,12 +20,12 @@ class PurchaseService
 
     public function createPurchase(array $data)
     {
-        DB::beginTransaction();
         try {
             $grandTotal = $this->calculateGrandTotal($data);
 
             // Create Purchase Record with initial zero payment
             $purchase = Purchase::create([
+                'transaction_id' => PurchaseController::transactionIdGenerate(),
                 'zone_id' => auth()->user()?->zone_id,
                 'supplier_id' => $data['supplier_id'] ?? null,
                 'discount_amount' => $data['discount_amount'] ?? 0,
@@ -49,10 +50,8 @@ class PurchaseService
                 'paid_status' => 'full_due',
             ]);
 
-            DB::commit();
             return $purchase;
         } catch (Exception $e) {
-            DB::rollBack();
             throw $e;
         }
     }
@@ -77,17 +76,6 @@ class PurchaseService
         }
 
         return $grandTotal;
-    }
-
-    private function calculatePaidStatus($grandTotal, $paidAmount): string
-    {
-        if ($paidAmount == 0) {
-            return 'full_due';
-        } elseif ($paidAmount < $grandTotal) {
-            return 'partial_paid';
-        } else {
-            return 'full_paid';
-        }
     }
 
     private function createPurchaseDetails(Purchase $purchase, array $data)

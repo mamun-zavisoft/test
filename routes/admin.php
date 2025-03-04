@@ -18,6 +18,7 @@ use App\Http\Controllers\ZoneController;
 use App\Models\Drawer;
 use App\Models\Purchase;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Architecture\Services\ServiceContainer;
 
 Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/brands', BrandController::class);
@@ -42,6 +43,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     // ajax call routes
     Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');
     Route::get('/purchase/view/payments/{id}', [PurchaseController::class, 'view_payments'])->name('purchase.view.payments');
+    Route::get('/service/view/payments/{id}', [ServiceController::class, 'view_payments'])->name('service.view.payments');
 
     
     // system general settings

@@ -371,6 +371,14 @@
             $('#grand_total').text(grandTotal.toFixed(2));
             $('input[name="grand_total"]').val(grandTotal.toFixed(2));
 
+            $('#amount').attr('max', grandTotal.toFixed(2));
+
+            // If current amount is greater than grand total, adjust it
+            let currentAmount = parseFloat($('#amount').val()) || 0;
+            if (currentAmount > grandTotal) {
+                $('#amount').val(grandTotal.toFixed(2));
+            }
+
             // Calculate paid amount based on payment type
             let paidAmount = 0;
             let paymentType = $('#payment_type').val();

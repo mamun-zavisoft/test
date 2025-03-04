@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
@@ -29,8 +30,9 @@ class ServiceController extends Controller
         $vehicles = Vehicle::get();
         $serviceCharts = ServiceChart::all();
         $products = Product::get();
+        $accounts = Account::select('id', 'name', 'balance')->get();
 
-        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products'));
+        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products', 'accounts'));
     }
 
     /**
@@ -38,9 +40,6 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        // Begin transaction to ensure data integrity
-        DB::beginTransaction();
-
         try {
             // Validate the request data
             $validated = $request->validate([
@@ -54,17 +53,28 @@ class ServiceController extends Controller
                 'note' => 'nullable|string',
                 'grand_total' => 'required|numeric',
                 'total_amount' => 'required|numeric',
+                
+                // payment validation
+                'payment_type' => 'nullable|in:full_due,partial_paid,full_paid|required_if:service_type,external',
+                'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
+                'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
             ]);
+            
+            DB::beginTransaction();
 
             // Create service record
             $service = Service::create([
+                'transaction_id' => PurchaseController::transactionIdGenerate(),
                 'service_type' => $request->service_type,
                 'vehicle_id' => $request->vehicle_id,
                 'payment_type_id' => $request->payment_type_id,
-                'discount' => $request->discount ?? 0,
-                'note' => $request->note,
-                'grand_total' => $request->grand_total,
                 'total_amount' => $request->total_amount,
+                'discount' => $request->discount ?? 0,
+                'grand_total' => $request->grand_total,
+                'paid_amount' => $request->amount ?? 0,
+                'due_amount' => $request->grand_total - $request->amount ?? 0,
+                'paid_status' => $request->service_type == 'self' ? 'in_house': $this->calculatePaidStatus($request->grand_total, $request->amount),
+                'note' => $request->note,
                 'any_parts_purchase' => $request->any_parts_purchase ?? false,
             ]);
 
@@ -78,15 +88,23 @@ class ServiceController extends Controller
                 ]);
             }
 
+            // account amount increment
+            if($request->account_id && $request->amount > 0){
+                $account = Account::findOrFail($request->account_id);
+                $account->balance += $request->amount;
+                $account->save();
+            }
+
             // Process parts if any
             if ($request->any_parts_purchase && !empty($request->parts)) {
 
                 $sale = Sale::create([
+                    'transaction_id' => PurchaseController::transactionIdGenerate(),
                     'type' => $request->service_type,
-                    'due_amount' => $request->total_amount, 
+                    'grand_total' => $request->grand_total,
                     'paid_amount' => $request->paid_amount ?? 0,
-                    'grand_total' => $request->total_amount,
-                    'paid_status' => Sale::$FULL_DUE,
+                    'due_amount' => $request->grand_total - $request->amount ?? 0, 
+                    'paid_status' => $request->service_type == 'self' ? 'in_house': $this->calculatePaidStatus($request->grand_total, $request->amount),
                     'note' => $request->note,
                 ]);
 
@@ -178,5 +196,25 @@ class ServiceController extends Controller
             'is_available' => $availableQty >= $requestedQty,
             'available_qty' => $availableQty
         ];
+    }
+    /**
+     * Calculate the paid status based on grand total and paid amount
+     */
+    private function calculatePaidStatus($grandTotal, $paidAmount): string
+    {
+        if ($paidAmount == 0) {
+            return 'full_due';
+        } elseif ($paidAmount < $grandTotal) {
+            return 'partial_paid';
+        } else {
+            return 'full_paid';
+        }
+    }
+
+    public function view_payments($id)
+    {
+        $service = Service::find($id);
+        $accounts = Account::select('id', 'name', 'balance')->get();
+        return view('backend.services.view_payments', compact('service', 'accounts'));
     }
 }

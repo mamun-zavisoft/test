@@ -63,12 +63,11 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        // if ($category->products()->exists()) {
-        //     return response()->json(['message' => 'Category has products, cannot delete!'], 422);
-        // }
+        if ($category->products()->exists()) {
+            return redirect()->back()->with('error', 'Category has products, cannot delete!');
+        }
         $category->delete();
         return redirect()->back()->with('success', 'Category deleted successfully!');
-        // return response()->json(['message' => 'Brand deleted successfully!']);
     }
 }
 
