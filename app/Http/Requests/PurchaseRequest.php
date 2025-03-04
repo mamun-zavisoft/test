@@ -28,6 +28,7 @@ class PurchaseRequest extends FormRequest
             'paid_amount' => 'nullable|numeric|min:0',
             'reference_no' => 'nullable|string|max:255',
             'note' => 'nullable|string',
+            'status' => 'required|in:pending,received',
             'product_id' => 'required|array',
             'product_id.*' => 'required|exists:products,id',
             'qty' => 'required|array',

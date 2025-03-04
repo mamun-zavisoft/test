@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->enum('transaction_type', ['purchase', 'sale']);
+            $table->enum('transaction_type', ['purchase', 'sale', 'service']);
             $table->foreignId('purchase_id')->nullable()->constrained();
             $table->foreignId('sale_id')->nullable()->constrained(); 
+            $table->foreignId('service_id')->nullable()->constrained(); 
             $table->decimal('grand_total', 15, 2);
             $table->decimal('due_amount', 15, 2)->default(0);
             $table->decimal('paid_amount', 15, 2)->default(0);

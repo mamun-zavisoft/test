@@ -141,6 +141,7 @@
             $('.payment-form-container').hide();
             $('.add-payment-btn').show();
             $('.amount-field').hide();
+            $('#close-btn').hide();
         });
 
         // Show/hide amount field based on payment type selection

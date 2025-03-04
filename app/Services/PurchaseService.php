@@ -28,6 +28,7 @@ class PurchaseService
                 'transaction_id' => PurchaseController::transactionIdGenerate(),
                 'zone_id' => auth()->user()?->zone_id,
                 'supplier_id' => $data['supplier_id'] ?? null,
+                'status' => $data['status'] ?? 'pending',
                 'discount_amount' => $data['discount_amount'] ?? 0,
                 'shipping_charge' => $data['shipping_charge'] ?? 0,
                 'grand_total' => $grandTotal,

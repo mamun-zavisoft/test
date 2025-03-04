@@ -63,7 +63,7 @@
                                         <td>{{ $service->paid_amount }}</td>
                                         <td>{{ $service->due_amount }}</td>
                                         <td>
-                                            {{-- @if ($service->paid_status == 'full_due')
+                                            @if ($service->paid_status == 'full_due')
                                                 <span class="badge-linedanger payment_view"
                                                     data-url="{{ route('admin.service.view.payments', $service->id) }}"
                                                     data-bs-target="#payment_modal" data-bs-toggle="modal">Due</span>
@@ -76,8 +76,7 @@
                                                 <span class="badge-linesuccess">Paid</span>
                                             @else
                                                 <span class="badge-linedanger">Not Defined</span>
-                                            @endif --}}
-                                            <span class="badge-linedanger">Due</span>
+                                            @endif
                                         </td>
                                         <td>{{ $service->created_at?->format('d M Y') }}</td>
                                         <td class="action-table-data">
