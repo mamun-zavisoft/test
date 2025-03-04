@@ -28,4 +28,9 @@ class Category extends Model implements Mediable
     {
         return $this->getFirstUrl('image');
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

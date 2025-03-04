@@ -33,7 +33,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="storage-locations">
+                                        <div class="storage-locations p-2">
                                             <div class="row storage-row mb-3">
                                                 <input type="hidden"
                                                     name="products[{{ $product->id }}][locations][0][product_id]"
@@ -42,7 +42,7 @@
                                                 <div class="col-md-4">
                                                     <label>Rack</label>
                                                     <select name="products[{{ $product->id }}][locations][0][rack_id]"
-                                                        class="form-control rack-select" required>
+                                                        class="select rack-select" required>
                                                         <option value="">Choose Rack</option>
                                                         @foreach ($racks as $rack)
                                                             <option value="{{ $rack->id }}">{{ $rack->name }}
@@ -54,7 +54,7 @@
                                                 <div class="col-md-4">
                                                     <label>Drawer</label>
                                                     <select name="products[{{ $product->id }}][locations][0][drawer_id]"
-                                                        class="form-control drawer-select" required>
+                                                        class="select drawer-select" required>
                                                         <option value="">Choose Drawer</option>
                                                     </select>
                                                 </div>

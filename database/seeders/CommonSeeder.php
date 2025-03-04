@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Account;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Drawer;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Models\Rack;
 use App\Models\ServiceChart;
 use App\Models\Supplier;
@@ -27,10 +29,10 @@ class CommonSeeder extends Seeder
         $category = Category::create(['name' => 'Engine Oil']);
         $brand = Brand::create(['name' => 'Hyundai']);
         $RepsolBrand = Brand::create(['name' => 'Repsol']);
-        Supplier::create(['name' => 'Supplier 1', 'zone_id' => $zone->id, 'phone' => '01512345678']);
+        $supplier =Supplier::create(['name' => 'Supplier 1', 'zone_id' => $zone->id, 'phone' => '01512345678']);
         $rack = Rack::create(['name' => 'Rack-1', 'zone_id' => $zone->id]);
-        for($i = 1; $i <= 4; $i++) {
-            Drawer::create(['name' => 'Drawer-'.$i, 'rack_id' => $rack->id]);
+        for ($i = 1; $i <= 4; $i++) {
+            Drawer::create(['name' => 'Drawer-' . $i, 'rack_id' => $rack->id]);
         }
         Product::create([
             'name' => 'Repsol Engine Oil',
@@ -58,7 +60,13 @@ class CommonSeeder extends Seeder
         ]);
         Vehicle::create([
             'owner_type' => 1,
-            'license_plate' => 'Vehicle 1',
+            'license_plate' => 'Dhaka-839574',
+            'zone_id' => $zone->id,
+            'status' => 1,
+        ]);
+        Vehicle::create([
+            'owner_type' => 2,
+            'license_plate' => 'Dhaka-934759',
             'zone_id' => $zone->id,
             'status' => 1,
         ]);
@@ -75,6 +83,11 @@ class CommonSeeder extends Seeder
                 'code' => 'OC500',
                 'description' => 'Oil Change',
             ]
+        ]);
+        Account::create([
+            'name'      => 'City Bank',
+            'type'      => 2,
+            'balance'   => 50000,
         ]);
     }
 }

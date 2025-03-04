@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->string('transaction_id')->nullable()->index();
             $table->enum('type', ['self', 'external']);
             $table->bigInteger('grand_total');
             $table->bigInteger('paid_amount')->default(0);  

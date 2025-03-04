@@ -91,7 +91,7 @@ class PurchaseController extends Controller
                 'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
                 'payment_date' => 'nullable|date|before_or_equal:today',
                 'note' => 'nullable|string',
-            ],[
+            ], [
                 'account_id.required_if' => 'The account field is required when payment type is partial paid or full paid.',
                 'amount.required_if' => 'The amount field is required when payment type is partial paid or full paid.',
             ]);
@@ -156,7 +156,7 @@ class PurchaseController extends Controller
             $account->balance = $account->balance - $request->amount;
             $account->save();
 
-            if($request->payment_type == 'full_paid') {
+            if ($request->payment_type == 'full_paid') {
                 $amount = $purchase->grand_total - $purchase->paid_amount;
             }
 
@@ -190,9 +190,19 @@ class PurchaseController extends Controller
         }
     }
 
-    public function view_payments($id){
+    public function view_payments($id)
+    {
         $purchase = Purchase::find($id);
         $accounts = Account::select('id', 'name', 'balance')->get();
         return view('backend.purchases.view_payments', compact('purchase', 'accounts'));
+    }
+
+    public static function transactionIdGenerate()
+    {
+        $prefix = "INV";
+
+        $uniqueNumber = substr(time(), -5) . rand(10, 99);
+
+        return $prefix . '-' . $uniqueNumber;
     }
 }

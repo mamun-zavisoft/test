@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
+            $table->string('transaction_id')->nullable()->index();
             $table->foreignId('zone_id')->constrained();
             $table->foreignId('supplier_id')->nullable()->constrained();
             $table->decimal('discount_amount', 10, 2)->default(0);
