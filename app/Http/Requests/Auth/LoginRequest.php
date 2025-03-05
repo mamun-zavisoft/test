@@ -27,7 +27,15 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'identifier' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (!filter_var($value, FILTER_VALIDATE_EMAIL) && !preg_match('/^01[3-9]\d{8}$/', $value)) {
+                        $fail('The identifier must be a valid email or Bangladeshi phone number.');
+                    }
+                },
+            ],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,11 +49,25 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $credentials = $this->only('password');
+        $identifier = $this->input('identifier');
+
+        // Check if identifier is an email or phone number
+        if (filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $identifier;
+        } elseif (preg_match('/^01[3-9]\d{8}$/', $identifier)) { // Bangladeshi phone number format
+            $credentials['phone'] = $identifier;
+        } else {
+            throw ValidationException::withMessages([
+                'identifier' => 'Invalid email or phone number format.',
+            ]);
+        }
+
+        if (!Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'identifier' => trans('auth.failed'),
             ]);
         }
 
@@ -59,7 +81,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -68,7 +90,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'identifier' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -80,6 +102,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('identifier')) . '|' . $this->ip());
     }
 }

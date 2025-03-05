@@ -19,12 +19,12 @@
                                 <h4>Access the Dreamspos panel using your email and passcode.</h4>
                             </div>
                             <div class="form-login">
-                                <label class="form-label">Email Address</label>
+                                <label class="form-label">Email or Phone</label>
                                 <div class="form-addons">
-                                    <input type="text" class="form-control" name="email">
+                                    <input type="text" class="form-control" name="identifier" value="{{ old('identifier') }}">
                                     <img src="{{ URL::asset('/build/img/icons/mail.svg') }}" alt="img">
                                 </div>
-                                @error('email')
+                                @error('identifier')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -42,15 +42,15 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="custom-control custom-checkbox">
-                                            <label class="checkboxs ps-4 mb-0 pb-0 line-height-1">
+                                            {{-- <label class="checkboxs ps-4 mb-0 pb-0 line-height-1">
                                                 <input type="checkbox">
                                                 <span class="checkmarks"></span>Remember me
-                                            </label>
+                                            </label> --}}
                                         </div>
                                     </div>
-                                    <div class="col-6 text-end">
+                                    {{-- <div class="col-6 text-end">
                                         <a class="forgot-link" href="{{ url('forgot-password-3') }}">Forgot Password?</a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="form-login">
@@ -60,10 +60,10 @@
                                 <h4>New on our platform?<a href="{{ route('register') }}" class="hover-a"> Create an
                                         account</a></h4>
                             </div>
-                            <div class="form-setlogin or-text">
+                            {{-- <div class="form-setlogin or-text">
                                 <h4>OR</h4>
-                            </div>
-                            <div class="form-sociallink">
+                            </div> --}}
+                            {{-- <div class="form-sociallink">
                                 <ul class="d-flex">
                                     <li>
                                         <a href="javascript:void(0);" class="facebook-logo">
@@ -82,13 +82,13 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
                     </form>
 
                 </div>
                 <div class="my-4 d-flex justify-content-center align-items-center copyright-text">
-                    <p>Copyright &copy; 2023 DreamsPOS. All rights reserved</p>
+                    <p>Copyright &copy; <?php echo date('Y'); ?> Fast Auto Clinic. All rights reserved</p>
                 </div>
             </div>
         </div>

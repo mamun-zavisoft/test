@@ -18,7 +18,7 @@
                             <h4>Create New Account</h4>
                         </div>
                         <div class="form-login">
-                            <label>Name</label>
+                            <label>Name*</label>
                             <div class="form-addons">
                                 <input type="text" class="form-control" name="name">
                                 <img src="{{ URL::asset('/build/img/icons/user-icon.svg') }}" alt="img">
@@ -38,7 +38,7 @@
                             @enderror
                         </div>
                         <div class="form-login">
-                            <label>Phone</label>
+                            <label>Phone*</label>
                             <div class="form-addons">
                                 <input type="text" class="form-control" name="phone">
                                 <span class="fas toggle-password fa-phone"></span>
@@ -48,7 +48,7 @@
                             @enderror
                         </div>
                         <div class="form-login">
-                            <label>Password</label>
+                            <label>Password*</label>
                             <div class="pass-group">
                                 <input type="password" class="pass-input" name="password">
                                 <span class="fas toggle-password fa-eye-slash"></span>
@@ -58,7 +58,7 @@
                             @enderror
                         </div>
                         <div class="form-login">
-                            <label>Confirm Password</label>
+                            <label>Confirm Password*</label>
                             <div class="pass-group">
                                 <input type="password" class="pass-inputs" name="password_confirmation">
                                 <span class="fas toggle-passwords fa-eye-slash"></span>
@@ -72,11 +72,11 @@
                                 <div class="col-sm-8">
                                     <div class="custom-control custom-checkbox justify-content-start">
                                         <div class="custom-control custom-checkbox">
-                                            <label class="checkboxs ps-4 mb-0 pb-0 line-height-1">
+                                            {{-- <label class="checkboxs ps-4 mb-0 pb-0 line-height-1">
                                                 <input type="checkbox" name="terms">
                                                 <span class="checkmarks"></span>I agree to the <a href="#"
                                                     class="hover-a">Terms & Privacy</a>
-                                            </label>
+                                            </label> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -89,9 +89,9 @@
                             <h4>Already have an account ? <a href="{{ route('login') }}" class="hover-a">Sign In
                                     Instead</a></h4>
                         </div>
-                        <div class="form-setlogin or-text">
+                        {{-- <div class="form-setlogin or-text">
                             <h4>OR</h4>
-                        </div>
+                        </div> --}}
                         <div class="form-sociallink">
                             <ul class="d-flex">
                                 <li>
