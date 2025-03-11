@@ -27,18 +27,23 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-    
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+
+        $user->fill($request->validated());
 
         if ($request->filled('new_password')) {
-            if (!Hash::check($request->old_password, $request->user()->password)) {
+            if (!Hash::check($request->old_password, $user->password)) {
                 return back()->with('error', 'Old Password is incorrect');
             }
-            $request->user()->password = Hash::make($request->new_password);
+            $user->password = Hash::make($request->new_password);
         }
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($request->hasFile('image')) {
+            $user->image = $request->file('image');
+        }
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
         $request->user()->save();

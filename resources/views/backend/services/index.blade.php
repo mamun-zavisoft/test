@@ -92,8 +92,10 @@
                                         </td>
                                     </tr>
                                     <div class="modal fade" id="service-{{ $service->id }}">
-                                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                                        <div class="modal-dialog modal-dialog-centered" style="max-width: 90%; width: 1400px;">
                                             <div class="modal-content">
+                                                <!-- Modal Header -->
+                                                <div class="modal-header border-0 custom-modal-header">
                                                 <div class="modal-header border-0 custom-modal-header justify-content-between">
                                                     <div class="page-title">
                                                         <h4>Service Details</h4>
@@ -102,7 +104,9 @@
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                <div class="modal-body custom-modal-body" style="max-height: 80vh; overflow-y: auto;">
+                                                
+                                                <!-- Modal Body -->
+                                                <div class="modal-body custom-modal-body" style="max-height: 90vh; overflow-y: auto;">
                                                     <!-- Top Section: Vehicle and Invoice Info -->
                                                     <div class="row mb-4">
                                                         <div class="col-md-8">
@@ -124,19 +128,18 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
                                                         <div class="col-md-4">
-                                                        <div class="card h-100">
-                                                            <div class="card-body">
-                                                                <h5 class="card-title fw-bold mb-3">Service Info</h5>
-                                                                <div class="row mb-2">
-                                                                    <div class="col-md-5 fw-bold">Invoice NO:</div>
-                                                                    <div class="col-md-7">{{  $service->transaction_id }}</div>
-                                                                </div>
-                                                                <div class="row mb-2">
-                                                                    <div class="col-md-5 fw-bold">Service Type:</div>
-                                                                    <div class="col-md-7">
-                                                                        <span class="text-{{ $service->service_type == 1 ? 'success' : 'warning' }}">
+                                                            <div class="card h-100">
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title fw-bold mb-3">Service Info</h5>
+                                                                    <div class="row mb-2">
+                                                                        <div class="col-md-5 fw-bold">Invoice NO:</div>
+                                                                        <div class="col-md-7">{{ $service->transaction_id }}</div>
+                                                                    </div>
+                                                                    <div class="row mb-2">
+                                                                        <div class="col-md-5 fw-bold">Service Type:</div>
+                                                                        <div class="col-md-7">
+                                                                            <span class="text-{{ $service->service_type == 1 ? 'success' : 'warning' }}">
                                                                                 {{ $service->service_type == 1 ? 'Self' : 'External' }}
                                                                         </span>
                                                                     </div>
@@ -178,16 +181,16 @@
                                                             <div class="p-2" style="flex: 1;">Code</div>
                                                         </div>
 
-                                                        <!-- Table Body -->
-                                                        @foreach($service->serviceDetails as $data)
-                                                            <div class="d-flex border-bottom py-2" style="display: flex; flex-wrap: wrap;">
-                                                                <div class="p-2" style="flex: 1;">{{ $data->serviceChart?->name }}</div>
-                                                                <div class="p-2" style="flex: 1;">{{ number_format($data->serviceChart?->price )}}</div>
-                                                                <div class="p-2" style="flex: 1;">{{ $data->serviceChart?->code }}</div>
-                                                            </div>
-                                                        @endforeach
+                                                            <!-- Table Body -->
+                                                            @foreach($service->serviceDetails as $data)
+                                                                <div class="d-flex border-bottom py-2" style="display: flex; flex-wrap: wrap;">
+                                                                    <div class="p-2" style="flex: 1;">{{ $data->serviceChart?->name }}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ number_format($data->serviceChart?->price )}}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ $data->serviceChart?->code }}</div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
-                                                </div>
 
                                                 <!-- Products Used Section -->
                                                 @if($service->sale)
@@ -204,54 +207,49 @@
                                                                 <div class="p-2" style="flex: 1;">Total Price</div>
                                                             </div>
 
-                                                            <!-- Table Body -->
-                                                            @foreach($service->sale?->saleDetails as $saleDetail)
-                                                                <div class="d-flex border-bottom py-2" style="display: flex; flex-wrap: wrap;">
-                                                                    <div class="p-2" style="flex: 2;">{{ $saleDetail?->product?->name }}</div>
-                                                                    <div class="p-2" style="flex: 1;">{{ number_format($saleDetail?->unit_price) }}</div>
-                                                                    <div class="p-2" style="flex: 1;">{{ $saleDetail?->qty }}</div>
-                                                                    <div class="p-2" style="flex: 1;">{{ number_format($saleDetail?->qty * $saleDetail->unit_price) }}</div>
-                                                                </div>
-                                                            @endforeach
+                                                                <!-- Table Body -->
+                                                                @foreach($service->sale?->saleDetails as $saleDetail)
+                                                                    <div class="d-flex border-bottom py-2" style="display: flex; flex-wrap: wrap;">
+                                                                        <div class="p-2" style="flex: 2;">{{ $saleDetail?->product?->name }}</div>
+                                                                        <div class="p-2" style="flex: 1;">{{ number_format($saleDetail?->unit_price) }}</div>
+                                                                        <div class="p-2" style="flex: 1;">{{ $saleDetail?->qty }}</div>
+                                                                        <div class="p-2" style="flex: 1;">{{ number_format($saleDetail?->qty * $saleDetail->unit_price) }}</div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                @endif
-                                                    
-                                                <!-- Billing Summary Section -->
-                                                <div class="card mb-4">
-                                                    <div class="card-header bg-light">
-                                                        <h5 class="card-title fw-bold m-0">Billing Summary</h5>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <div class="row justify-content-end">
-                                                            <div class="col-md-6">
-                                                                <div class="d-flex justify-content-between mb-2">
-                                                                    <div class="fw-bold">Service Total:</div>
-                                                                    <div>{{ number_format($service->total_amount) }}</div>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mb-2">
-                                                                    <div class="fw-bold">Discount:</div>
-                                                                    <div class="">
-                                                                        {{ number_format($service->discount) }}                                                                       
+                                                    @endif
+                                                        
+                                                    <!-- Billing Summary Section -->
+                                                    <div class="card mb-4">
+                                                        <div class="card-header bg-light">
+                                                            <h5 class="card-title fw-bold m-0">Billing Summary</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row justify-content-end">
+                                                                <div class="col-md-6">
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <div class="fw-bold">Service Total:</div>
+                                                                        <div>{{ number_format($service->total_amount) }}</div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mb-2">
-                                                                    <div class="fw-bold">Grand Total:</div>
-                                                                    <div class="">
-                                                                        {{ number_format($service->grand_total) }}                                                                       
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <div class="fw-bold">Discount:</div>
+                                                                        <div>{{ number_format($service->discount) }}</div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mb-2">
-                                                                    <div class="fw-bold">Paid:</div>
-                                                                    <div class="">
-                                                                        {{ number_format($service->paid_amount) }}                                                                       
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <div class="fw-bold">Grand Total:</div>
+                                                                        <div>{{ number_format($service->grand_total) }}</div>
                                                                     </div>
-                                                                </div>
-                                                                
-                                                                <hr>
-                                                                <div class="d-flex justify-content-between">
-                                                                    <div class="fw-bold fs-5">Due :</div>
-                                                                    <div class="fw-bold fs-5">{{ number_format($service->due_amount) }}</div>
+                                                                    <div class="d-flex justify-content-between mb-2">
+                                                                        <div class="fw-bold">Paid:</div>
+                                                                        <div>{{ number_format($service->paid_amount) }}</div>
+                                                                    </div>
+                                                                    
+                                                                    <hr>
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <div class="fw-bold fs-5">Due:</div>
+                                                                        <div class="fw-bold fs-5">{{ number_format($service->due_amount) }}</div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

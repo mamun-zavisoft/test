@@ -96,7 +96,7 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">Balance*</label>
+                                                                    <label class="form-label">Balance</label>
                                                                     <input type="text" class="form-control"
                                                                         value="{{ $account->balance }}" name="balance" readonly>
                                                                 </div>

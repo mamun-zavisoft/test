@@ -160,35 +160,63 @@
 
                                                                             <!-- Thumbnail Upload -->
                                                                             <div class="input-blocks">
-                                                                                <div class="phone-img">
+                                                                                <div class="image-upload"
+                                                                                 style="width: 180px; height: 180px;">
+                                                                                    <input type="file"
+                                                                                     class="file-input" name="thumbnail">
+                                                                                    <div class="image-uploads">
+                                                                                        <i data-feather="plus-circle"
+                                                                                         class="plus-down-add me-0"></i>
+                                                                                        <h4>Add Thumbnail *</h4>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="phone-img d-none">
                                                                                     <img class="image-preview"
-                                                                                        src="{{ $product->thumbnail }}"
-                                                                                        alt="Thumbnail">
+                                                                                     src="{{ $product->thumbnail }}" alt="image">
                                                                                     <a href="javascript:void(0);"
-                                                                                        class="remove-product">
-                                                                                        <i data-feather="x"
-                                                                                            class="x-square-add"></i>
+                                                                                     class="remove-product">
+                                                                                        <i data-feather="x" class="x-square-add"></i>
                                                                                     </a>
                                                                                 </div>
                                                                             </div>
-
-
                                                                             <!-- Existing Product Images -->
                                                                             @if ($product->images && count($product->images) > 0)
                                                                                 @foreach ($product->images as $image)
                                                                                     <div class="input-blocks">
+                                                                                        <div class="image-upload">
+                                                                                            <input type="file" class="file-input" name="images[]">
+                                                                                            <div class="image-uploads">
+                                                                                                <i data-feather="plus-circle"
+                                                                                                 class="plus-down-add me-2"></i>
+                                                                                                <h4 class="mb-0">Add Images</h4>
+                                                                                            </div>
+                                                                                        </div>
                                                                                         <div class="phone-img">
-                                                                                            <img class="image-preview"
-                                                                                                src="{{ $image->url }}"
-                                                                                                alt="Product Image">
-                                                                                            <a href="javascript:void(0);"
-                                                                                                class="remove-product"
-                                                                                                data-id="{{ $image->id }}"><i
-                                                                                                    data-feather="x"
-                                                                                                    class="x-square-add"></i></a>
+                                                                                            <img class="image-preview" src="{{ $image->url }}" alt="Product Image">
+                                                                                            <a href="javascript:void(0);" class="remove-product"
+                                                                                             data-id="{{ $image->id }}">
+                                                                                                <i data-feather="x" class="x-square-add"></i>
+                                                                                            </a>
                                                                                         </div>
                                                                                     </div>
                                                                                 @endforeach
+                                                                            @else
+                                                                                <div class="input-blocks">
+                                                                                    <div class="image-upload">
+                                                                                        <input type="file" class="file-input" name="images[]">
+                                                                                        <div class="image-uploads">
+                                                                                            <i data-feather="plus-circle" class="plus-down-add me-2"></i>
+                                                                                            <h4 class="mb-0">Add Images</h4>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="phone-img d-none">
+                                                                                    <img class="image-preview"
+                                                                                        src="" alt="image">
+                                                                                    <a href="javascript:void(0);"><i
+                                                                                            data-feather="x"
+                                                                                            class="x-square-add remove-product"></i></a>
+                                                                                    </div>
+                                                                                </div>
                                                                             @endif
                                                                         </div>
                                                                     </div>
@@ -230,7 +258,7 @@
                 if (file) {
                     var reader = new FileReader();
                     var $imageUpload = $(this).closest('.image-upload');
-                    var $phoneImg = $imageUpload.next('.phone-img');
+                    var $phoneImg = $imageUpload.siblings('.phone-img');
                     var $imagePreview = $phoneImg.find('.image-preview');
 
                     reader.onload = function(e) {
@@ -244,12 +272,26 @@
 
             $('.remove-product').on('click', function() {
                 var $phoneImg = $(this).closest('.phone-img');
-                var $imageUpload = $phoneImg.prev('.image-upload');
+                var $imageUpload = $phoneImg.siblings('.image-upload');
                 var $fileInput = $imageUpload.find('.file-input');
 
                 $fileInput.val('');
                 $phoneImg.addClass('d-none');
                 $imageUpload.removeClass('d-none');
+                $phoneImg.find('.image-preview').attr('src', '');
+                return false;
+            });
+
+            $('.image-preview').each(function () {
+                var $imagePreview = $(this);
+                var src = $imagePreview.attr('src');
+                var $phoneImg = $imagePreview.closest('.phone-img');
+                var $imageUpload = $phoneImg.siblings('.image-upload');
+
+                if (src && src.trim() !== '') {
+                    $phoneImg.removeClass('d-none'); 
+                    $imageUpload.addClass('d-none'); 
+                }
             });
         });
 

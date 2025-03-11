@@ -85,14 +85,14 @@
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                <div class="mb-3">
+                                                                <!-- <div class="mb-3">
                                                                     <label class="form-label">Owner Type*</label>
-                                                                    <select class="select" name="owner_type">
+                                                                    <select class="select" name="owner_type" disabled>
                                                                         <option value="">Choose</option>
                                                                         <option value="1" {{ $vehicle->owner_type == '1' ? 'selected' : '' }}>Self</option>
                                                                         <option value="2" {{ $vehicle->owner_type == '2' ? 'selected' : '' }}>External</option>
                                                                     </select>
-                                                                </div>
+                                                                </div> -->
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Vehicle Register Number*</label>
                                                                     <input type="text" class="form-control"
@@ -145,6 +145,13 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#storeForm')[0].reset()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="text-start ms-3 mb-2">
+                        <small>Self=SteadFast Vehicle & External=OutSide Vehicle</small>
+                    </div>
                         <div class="modal-body custom-modal-body new-employee-field">
                             <form action="{{ route('admin.vehicles.store') }}" method="POST"
                                 id="storeForm">

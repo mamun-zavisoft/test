@@ -16,13 +16,18 @@
                         <div class="profile-head">
 
                         </div>
+
+                        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PATCH')
+
                         <div class="profile-top">
                             <div class="profile-content">
                                 <div class="profile-contentimg">
-                                    <img src="{{ URL::asset('/build/img/customer/customer5.jpg') }}" alt="img"
+                                    <img src="{{ $user->getFirstUrl('images') }}" alt="img"
                                         id="blah">
                                     <div class="profileupload">
-                                        <input type="file" id="imgInp">
+                                        <input type="file" id="imgInp" name="image">
                                         <a href="javascript:void(0);"><img
                                                 src="{{ URL::asset('/build/img/icons/edit-set.svg') }}" alt="img"></a>
                                     </div>
@@ -33,14 +38,11 @@
                                 </div>
                             </div>
                             <!-- <div class="ms-auto">
-                                <a href="javascript:void(0);" class="btn btn-submit me-2">Save</a>
+                                <a href="javascript:void(0);" class="btn btn-submit me-2" data-bs-target="" type="submit">Save</a>
                                 <a href="javascript:void(0);" class="btn btn-cancel">Cancel</a>
                             </div> -->
                         </div>
                     </div>
-                    <form action="{{ route('profile.update') }}" method="POST">
-                        @csrf
-                        @method('PATCH')
                         <div class="row">
                             <div class="col-lg-6 col-sm-12">
                                 <div class="input-blocks">
@@ -66,19 +68,28 @@
                                 <div class="col-lg-6 col-sm-12 mt-4">
                                     <div class="input-blocks">
                                         <label class="form-label">Old Password</label>
-                                        <input type="password" name="old_password">
+                                        <div class="pass-group">
+                                            <input type="password" name="old_password">
+                                            <span class="fas toggle-password fa-eye-slash"></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-sm-12">
                                     <div class="input-blocks">
                                         <label class="form-label">New Password</label>
-                                        <input type="password" name="new_password">
+                                        <div class="pass-group">
+                                            <input type="password" name="new_password">
+                                            <span class="fas toggle-password fa-eye-slash"></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-sm-12">
                                     <div class="input-blocks">
                                         <label class="form-label">Confirm Password</label>
-                                        <input type="password" name="new_password_confirmation">
+                                        <div class="pass-group">
+                                            <input type="password" name="new_password_confirmation">
+                                            <span class="fas toggle-password fa-eye-slash"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

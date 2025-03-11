@@ -9,6 +9,7 @@ use App\Models\Service;
 use App\Models\Purchase;
 use App\Models\PurchaseDetail;
 use App\Models\Product;
+use App\Models\Sale;
 use App\Models\ServiceChart;
 use App\Models\ServiceDetail;
 
@@ -33,11 +34,16 @@ class DashboardController extends Controller
         ->take(5)->get();
         $products  = Product::select('id','name','purchase_price')->get();
         $totalDueAmount = $purchases->sum('due_amount');
+        $totalPurchaseAmount  = $purchases->sum('grand_total');
 
 
         $services = Service::with('serviceDetails')->orderBy('id', 'desc')
                 ->take(5)->get();
-        $serviceCharts = ServiceChart::select('id','name','price')->get();        
+        $serviceCharts = ServiceChart::select('id','name','price')->get();
+        
+        
+        // Sales total amount and total due amount calculation
+        $sales = Sale::selectRaw('SUM(grand_total) as grand_total, SUM(due_amount) as due_amount')->first();
 
 
         return view('index', get_defined_vars());
