@@ -92,8 +92,9 @@
       
         <!-- Notifications -->
         <li class="nav-item dropdown nav-item-box">
-            <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                <i data-feather="bell"></i><span class="badge rounded-pill">2</span>
+            <a href="javascript:void(0);" class="dropdown-toggle nav-link disabled" data-bs-toggle="dropdown"
+            aria-disabled="true">
+                <i data-feather="bell"></i>
             </a>
             <div class="dropdown-menu notifications">
                 <div class="topnav-dropdown-header">
@@ -199,7 +200,7 @@
         <!-- /Notifications -->
 
         <li class="nav-item nav-item-box">
-            <a href="{{ url('general-settings') }}"><i data-feather="settings"></i></a>
+            <a href="javascript:void(0);" class="disabled" aria-disabled="true" tabindex="-1"><i data-feather="settings"></i></a>
         </li>
         <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
@@ -228,15 +229,15 @@
                     <hr class="m-0">
                     <a class="dropdown-item" href="{{ url('profile') }}"> <i class="me-2"
                             data-feather="user"></i> My Profile</a>
-                    <a class="dropdown-item" href="{{ url('general-settings') }}"><i class="me-2"
-                            data-feather="settings"></i>Settings</a>
+                    <!-- <a class="dropdown-item" href="{{ url('general-settings') }}"><i class="me-2"
+                            data-feather="settings"></i>Settings</a> -->
                     <hr class="m-0">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                     <a class="dropdown-item logout pb-0" href="#" onclick="event.preventDefault();
-                                        this.closest('form').submit();"><img
-                            src="#" class="me-2"
-                            alt="img">Logout</a>
+                                        this.closest('form').submit();"><i
+                                        data-feather="log-out">
+                                        </i>Logout</a>
                     </form>
                 </div>
             </div>
