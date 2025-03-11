@@ -46,8 +46,8 @@ class UserController extends Controller
             'email' => 'nullable|email|unique:users,email',
             'phone' => 'required|unique:users,phone',
             'password' => 'required|min:8',
-            'role_id' => auth()->user()->role == User::$SUPER_ADMIN ? 'nullable' : 'required',
-            'zone_id' => auth()->user()->role == User::$SUPER_ADMIN ? 'required' : 'nullable',
+            'role_id' => auth()->user()->role == User::$SUPER_ADMIN ? 'nullable' : 'required|exists:roles,id',
+            'zone_id' => auth()->user()->role == User::$SUPER_ADMIN ? 'required|exists:zones,id' : 'nullable',
         ]);
 
         DB::transaction(function () use ($request) {

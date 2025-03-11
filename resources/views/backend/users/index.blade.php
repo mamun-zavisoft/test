@@ -124,7 +124,6 @@
                                         </td>
                                         <td>{{ $user->phone }}</td>
                                         <td>{{ $user->email }}</td>
-                                        {{-- <td>{{ $user->role == 1 ? "Super Admin" : $user->roles?->pluck('name')?->implode(', ') }}</td> --}}
                                         <td>
                                             @php
                                                 if($user->role == 1){
