@@ -70,6 +70,7 @@
                                                     <i data-feather="edit" class="feather-edit"></i>
                                                 </a>
                                                 <form action="{{ route('admin.products.destroy', $product->id) }}"
+                                                    class="delete-form"
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')
