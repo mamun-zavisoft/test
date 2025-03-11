@@ -21,7 +21,7 @@ class PermissionCheck
             return redirect()->route('login')->with('error', 'You need to log in first.');
         }
 
-        if (auth()->user() && in_array(Auth::user()?->role, [User::$SUPER_ADMIN, User::$ADMIN, User::$MANAGER])) {
+        if (auth()->user() && in_array(Auth::user()?->role, [User::$SUPER_ADMIN, User::$IN_CHARGE])) {
             return $next($request);
         } else {
             if ((auth()->user() && auth()->user()->hasPermission($permissions))) {
