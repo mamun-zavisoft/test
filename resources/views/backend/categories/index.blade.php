@@ -7,20 +7,11 @@
             <!-- /product list -->
             <div class="card table-list-card">
                 <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /Filter -->
+                    <x-filter />
 
                     <!-- /Filter -->
                     <div class="table-responsive">
-                        <table class="table  datanew">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th class="no-sort">SL</th>
@@ -31,7 +22,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach ($categories as $category)
+                                @forelse ($categories as $category)
                                 @php
                                     $image = $category->image;
                                 @endphp
@@ -124,10 +115,15 @@
                                         </div>
                                     </div>
                                     <!-- Edit category -->
-                                @endforeach
+                                @empty
+                                    <tr class="text-center">
+                                        <td colspan="7">No Category Found</td>
+                                    </tr>
+                                @endforelse
 
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$categories" />
                     </div>
                 </div>
             </div>

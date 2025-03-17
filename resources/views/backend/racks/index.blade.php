@@ -8,20 +8,11 @@
             <!-- /Rack list -->
             <div class="card table-list-card">
                 <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /Filter -->
+                    <x-filter />
 
                     <!-- /Filter -->
                     <div class="table-responsive">
-                        <table class="table  datanew">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th class="no-sort">SL</th>
@@ -31,7 +22,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach ($racks as $rack)
+                                @forelse ($racks as $rack)
                                     <tr>
                                         <td>
                                             {{ $loop->iteration + $racks->firstItem() - 1 }}
@@ -211,10 +202,14 @@
                                     </div>
                                     @endforeach
                                     <!-- End Drawer Products Modals -->
-                                @endforeach
-
+                                @empty
+                                    <tr class="text-center">
+                                        <td colspan="7">No Rack Found</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$racks" />
                     </div>
                 </div>
             </div>
