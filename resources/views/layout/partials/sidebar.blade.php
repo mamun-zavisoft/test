@@ -102,9 +102,9 @@
 
                 {{-- setting --}}
                 <li class="submenu-open">
-                    <h6 class="submenu-hdr">Settings</h6>
+                    {{-- <h6 class="submenu-hdr">Settings</h6> --}}
                     <ul>
-                        <li class="submenu">
+                        {{-- <li class="submenu">
                             <a href="javascript:void(0);"
                                 class="{{ Request::is('general-settings', 'security-settings', 'notification', 'connected-apps') ? 'active subdrop' : '' }}"><i
                                     data-feather="settings"></i><span>General
@@ -117,8 +117,8 @@
                                         class="{{ Request::is('security-settings') ? 'active' : '' }}">Security</a>
                                 </li> -->
                                 {{-- add new here --}}
-                            </ul>
-                        </li>
+                            <!-- </ul>
+                        </li>  -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <li class="{{ Request::is('signin') ? 'active' : '' }}">

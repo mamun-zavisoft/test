@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,12 +20,14 @@ class PermissionCheck
         if (! Auth::check()) {
             return redirect()->route('login')->with('error', 'You need to log in first.');
         }
-        // dd($permissions);
 
-        if (auth()->user() && auth()->user()->hasPermission($permissions)) {
+        if (auth()->user() && in_array(Auth::user()?->role, [User::$SUPER_ADMIN, User::$IN_CHARGE])) {
             return $next($request);
+        } else {
+            if ((auth()->user() && auth()->user()->hasPermission($permissions))) {
+                return $next($request);
+            }
         }
-        // dd(5);
 
         return redirect()->route('dashboard')->with('error', 'You do not have permission to access this resource.');
     }

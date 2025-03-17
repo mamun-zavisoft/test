@@ -89,22 +89,20 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-body">
-                                                    <div class="row">
-                                                        @foreach ($permissions as $permission)
-                                                            <div class="col-lg-6">
-                                                                <div class="form-check mb-2">
-                                                                    <input class="form-check-input substituted group_id{{ $groupLoopId }}"
-                                                                        {{ $user->permissions->contains($permission->id) ? 'checked' : '' }}
-                                                                        name="permissions[]" type="checkbox"
-                                                                        value="{{ $permission->name }}" 
-                                                                        id="flexCheckDefault{{ $permission->id }}">
-                                                                    <label class="form-check-label" for="flexCheckDefault{{ $permission->id }}">
-                                                                        {{ $permission->name }}
-                                                                    </label>
-                                                                </div>
+                                                    @foreach ($permissions as $permission)
+                                                        <div class="col-lg-6">
+                                                            <div class="form-check mb-2">
+                                                                <input class="form-check-input substituted group_id{{ $groupLoopId }}"
+                                                                    {{ $user->permissions->contains($permission->id) ? 'checked' : '' }}
+                                                                    name="permissions[]" type="checkbox"
+                                                                    value="{{ $permission->name }}" 
+                                                                    id="flexCheckDefault{{ $permission->id }}">
+                                                                <label class="form-check-label" for="flexCheckDefault{{ $permission->id }}">
+                                                                    {{ $permission->name }}
+                                                                </label>
                                                             </div>
-                                                        @endforeach
-                                                    </div>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
@@ -114,7 +112,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 sticky-footer">
                                 <button type="submit" class="btn btn-submit me-2">Update</button>
                                 <a href="{{ route('users.index') }}" class="btn btn-cancel">Cancel</a>
                             </div>

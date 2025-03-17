@@ -84,12 +84,13 @@
                         <table class="table datanew" id="usersList">
                             <thead>
                                 <tr>
-                                    <th class="no-sort">
+                                    {{-- <th class="no-sort">
                                         <label class="checkboxs">
                                             <input type="checkbox" id="select-all">
                                             <span class="checkmarks"></span>
                                         </label>
-                                    </th>
+                                    </th> --}}
+                                    <th>SL</th>
                                     <th>User Name</th>
                                     <th>Phone</th>
                                     <th>email</th>
@@ -102,16 +103,17 @@
                             <tbody>
                                 @forelse ($users as $user)
                                     <tr>
-                                        <td>
+                                        {{-- <td>
                                             <label class="checkboxs">
                                                 <input type="checkbox">
                                                 <span class="checkmarks"></span>
                                             </label>
-                                        </td>
+                                        </td> --}}
+                                        <td>{{  $loop->iteration + $users->firstItem() - 1 }}</td>
                                         <td>
                                             <div class="userimgname">
                                                 <a href="javascript:void(0);" class="userslist-img bg-img">
-                                                    <img src="{{ URL::asset('/build/img/users/user-23.jpg') }}"
+                                                    <img src="{{ $user->image ?: asset('build/img/no-image.svg') }}"
                                                         alt="product">
                                                 </a>
                                                 <div>
@@ -122,7 +124,18 @@
                                         </td>
                                         <td>{{ $user->phone }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->roles?->pluck('name')?->implode(', ') }}</td>
+                                        <td>
+                                            @php
+                                                if($user->role == 1){
+                                                    $role_name = "Super Admin";
+                                                } elseif ($user->role == 2) {
+                                                    $role_name = "In Charge";
+                                                } else {
+                                                    $role_name = $user->roles?->pluck('name')?->implode(', ');
+                                                }
+                                            @endphp
+                                            {{ $role_name ?? "N/A" }}
+                                        </td>
                                         <td>
                                             @php
                                                 $permissions = $user->permissions
@@ -148,14 +161,16 @@
                                                 <a href="{{ route('users.edit', $user->id) }}" class="me-2 p-2 mb-0">
                                                     <i data-feather="edit" class="feather-edit"></i>
                                                 </a>
-
-                                                <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);">
-                                                    <i data-feather="trash-2" class="feather-trash-2"></i>
-                                                </a>
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline delete-form" style="display: none;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                </form>
+                                                
+                                                @if ($user->role != 1 || auth()->user()->id != $user->id)    
+                                                    <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);">
+                                                        <i data-feather="trash-2" class="feather-trash-2"></i>
+                                                    </a>
+                                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline delete-form" style="display: none;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

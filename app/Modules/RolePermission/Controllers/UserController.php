@@ -4,6 +4,7 @@ namespace App\Modules\RolePermission\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Zone;
 use App\Modules\RolePermission\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -31,20 +32,22 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::get();
+        $zones = Zone::select('id', 'name')->get();
         $groupedPermissions = Permission::select('group_name', 'id', 'name')
             ->orderBy('group_name')->get()->groupBy('group_name');
 
-        return view('backend.users.create', compact('roles', 'groupedPermissions'));
+        return view('backend.users.create', get_defined_vars());
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'nullable|email|unique:users,email',
             'phone' => 'required|unique:users,phone',
             'password' => 'required|min:8',
-            'role_id' => 'required',
+            'role_id' => auth()->user()->role == User::$SUPER_ADMIN ? 'nullable' : 'required|exists:roles,id',
+            'zone_id' => auth()->user()->role == User::$SUPER_ADMIN ? 'required|exists:zones,id' : 'nullable',
         ]);
 
         DB::transaction(function () use ($request) {
@@ -53,16 +56,19 @@ class UserController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
-                'role' => '2', // change accordingly to your default role
+                'role' => auth()->user()->role == User::$SUPER_ADMIN ? User::$IN_CHARGE : User::$FOREMAN,
+                'zone_id' => auth()->user()->role == User::$SUPER_ADMIN ? $request->zone_id : auth()->user()->zone_id,
             ]);
 
-            $role = Role::find($request->role_id);
+            if (auth()->user()->role != User::$SUPER_ADMIN) {
+                $role = Role::find($request->role_id);
 
-            if ($user) {
-                $user->assignRoleToUser($role);
-            }
-            if (isset($request->permissions)) {
-                $user->syncPermissions($request->permissions);
+                if ($user) {
+                    $user->assignRoleToUser($role);
+                }
+                if (isset($request->permissions)) {
+                    $user->syncPermissions($request->permissions);
+                }
             }
 
             return $user->save();
@@ -86,7 +92,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'nullable|email|unique:users,email,' . $id,
             'phone' => 'required|unique:users,phone,' . $id,
             'role_id' => 'required',
         ]);

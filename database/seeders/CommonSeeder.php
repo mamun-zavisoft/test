@@ -51,11 +51,11 @@ class CommonSeeder extends Seeder
             'total_available_qty' => 0
         ]);
         User::create([
-            'name' => 'Manager',
+            'name' => 'Super Admin',
             'email' => 'superadmin@test.com',
             'phone' => '01712345678',
             'password' => Hash::make('12345678'),
-            'role' => 3,
+            'role' => 1,
             'zone_id' => $zone->id
         ]);
         Vehicle::create([

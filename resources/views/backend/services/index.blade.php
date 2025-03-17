@@ -82,12 +82,12 @@
                                                 data-bs-target="#service-{{ $service->id }}">
                                                     <i data-feather="eye" class="action-eye"></i>
                                                 </a>
-                                                <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
+                                                {{-- <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
                                                     <i data-feather="edit" class="feather-edit"></i>
                                                 </a>
                                                 <a class="confirm-text p-2" href="javascript:void(0);">
                                                     <i data-feather="trash-2" class="feather-trash-2"></i>
-                                                </a>
+                                                </a> --}}
                                             </div>
                                         </td>
                                     </tr>

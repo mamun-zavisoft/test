@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label for="email">Email<span class="manitory">*</span></label>
+                                    <label for="email">Email</label>
                                     <input type="email" name="email" class="form-control" value="{{ old('email') }}" id="email" placeholder="Enter email">
                                     @error('email')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -50,19 +50,36 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-12">
-                                <div class="form-group">
-                                    <label for="role">Role<span class="manitory">*</span></label>
-                                    <select id="role" name="role_id" class="select">
-                                        @foreach ($roles as $item)
-                                            <option value="{{ $item->id }}" {{ old('role_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('role_id')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                    @enderror
+                            @if (Auth::user()->role != 1)
+                                <div class="col-lg-3 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="role">Role<span class="manitory">*</span></label>
+                                        <select id="role" name="role_id" class="select">
+                                            @foreach ($roles as $item)
+                                                <option value="{{ $item->id }}" {{ old('role_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('role_id')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
+                            @if (Auth::user()->role == 1)
+                                <div class="col-lg-3 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="zone">Zone<span class="manitory">*</span></label>
+                                        <select id="zone" name="zone_id" class="select">
+                                            @foreach ($zones as $zone)
+                                                <option value="{{ $zone->id }}" {{ old('zone_id') == $zone->id ? 'selected' : '' }}>{{ $zone->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('zone_id')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="card mt-4">
@@ -111,7 +128,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 sticky-footer">
                                 <button type="submit" class="btn btn-submit me-2">Create</button>
                                 <a href="{{ route('users.index') }}" class="btn btn-cancel">Cancel</a>
                             </div>

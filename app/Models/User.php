@@ -36,6 +36,10 @@ class User extends Authenticatable implements Mediable
         'zone_id',
     ];
 
+    public static $SUPER_ADMIN = 1; // Full Access
+    public static $IN_CHARGE = 2; // in-charge: who are in-charge (zone head)
+    public static $FOREMAN = 3; // foreman or users who are under control of in-charge
+    
     /**
      * The attributes that should be hidden for serialization.
      *

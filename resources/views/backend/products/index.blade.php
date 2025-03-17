@@ -65,10 +65,12 @@
                                                 data-bs-target="#products-{{ $product->id }}">
                                                     <i data-feather="eye" class="feather-eye"></i>
                                                 </a>
-                                                <a class="me-2 p-2"
+                                               {{-- @permission('product-update') --}}
+                                               <a class="me-2 p-2"
                                                     href="{{ route('admin.products.edit', $product->id) }}">
                                                     <i data-feather="edit" class="feather-edit"></i>
                                                 </a>
+                                               {{-- @endpermission --}}
                                                 <form action="{{ route('admin.products.destroy', $product->id) }}"
                                                     class="delete-form"
                                                     method="post">
