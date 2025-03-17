@@ -94,7 +94,7 @@
                 <div class="col-xl-7 col-sm-12 col-12 d-flex">
                     <div class="card flex-fill">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">Purchase & Sales</h5>
+                            <h5 class="card-title mb-0">Purchase & Sales<span id="selected-year">{{ $year }}</span></h5>
                             <div class="graph-sets">
                                 <ul class="mb-0">
                                     <li>
@@ -107,24 +107,21 @@
                                 <div class="dropdown dropdown-wraper">
                                     <button class="btn btn-light btn-sm dropdown-toggle" type="button"
                                         id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        2023
+                                        {{ $year }}
                                     </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">2023</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">2022</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item">2021</a>
-                                        </li>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="year-dropdown">
+                                        @for ($y = date('Y'); $y >= date('Y') - 5; $y--)
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item" data-year="{{ $y }}">{{ $y }}</a>
+                                            </li>
+                                        @endfor
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div id="sales_charts"></div>
+                            <canvas id="chart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -181,12 +178,6 @@
                         <table class="table dashboard-expired-products">
                             <thead>
                                 <tr>
-                                    <th class="no-sort">
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </th>
                                     <th>Service</th>
                                     <th>Total Price</th>
                                     <th>Created Date</th>
@@ -195,12 +186,6 @@
                             <tbody>
                                 @foreach ($services as $service)
                                     <tr>
-                                        <td>
-                                            <label class="checkboxs">
-                                                <input type="checkbox">
-                                                <span class="checkmarks"></span>
-                                            </label>
-                                        </td>
                                         <td>
                                             <a href="#service-{{ $service->id }}" data-bs-toggle="modal" style="cursor: pointer; text-decoration: none;" class="service-name">
                                             {{ $service->service_type == 'self' ? 'Self' : 'External' }}
@@ -404,3 +389,77 @@
         </div>
     </div>
 @endsection
+
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    $(document).ready(function() {
+        // Pass the chart data from Blade to JavaScript
+        var chartData = @json($chartData); 
+
+        // Initialize the chart with the data
+        renderChart(chartData);
+
+        $('#year-dropdown').on('click', 'a', function() {
+            var year = $(this).data('year');
+            $('#selected-year').text(year);
+            fetchSalePurchaseData(year);
+        });
+
+        function fetchSalePurchaseData(year) {
+            $.ajax({
+                url: '/',
+                method: 'GET',
+                data: { year: year }, 
+                success: function(response) {
+                    renderChart(response.chartData);  
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error fetching data: ", error);
+                }
+            });
+        }
+
+        // Function to render the chart
+        function renderChart(data) {
+            var ctx = document.getElementById('chart').getContext('2d');
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.month), 
+                    datasets: [{
+                        label: 'Sales',
+                        data: data.map(item => item.sales),
+                        backgroundColor: 'rgba(243, 21, 21, 0.98)',
+                        borderColor: 'rgb(31, 104, 104)',
+                        borderWidth: 1,
+                        // borderRadius: 8 
+                        
+                    },
+                    {
+                        label: 'Purchase',
+                        data: data.map(item => item.purchases),
+                        backgroundColor: 'rgb(13, 230, 78)',
+                        borderColor: 'rgb(90, 25, 219)',
+                        borderWidth: 1,
+                        // borderRadius: 8 
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+@endpush
+    

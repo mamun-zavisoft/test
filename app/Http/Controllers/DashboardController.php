@@ -15,7 +15,7 @@ use App\Models\ServiceDetail;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $totalVehicle = Vehicle::count();  //total vehicle count
         $selfVehicle = Vehicle::where('owner_type', 1)->count();  // only self vehicle count
@@ -46,7 +46,54 @@ class DashboardController extends Controller
         // Sales total amount and total due amount calculation
         $sales = Sale::selectRaw('SUM(grand_total) as grand_total, SUM(due_amount) as due_amount')->first();
 
+        
+        // Filter by year
+        $year = $request->input('year', date('Y'));
+        $chartData = $this->getSalePurchaseData($year);
 
-        return view('index', get_defined_vars());
+
+        return view('index', [
+            'totalVehicle' => $totalVehicle,
+            'selfVehicle' => $selfVehicle,
+            'outsideVehicle' => $outsideVehicle,
+            'totalSupplier' => $totalSupplier,
+            'totalService' => $totalService,
+            'totalDueAmount' => $totalDueAmount,
+            'totalPurchaseAmount' => $totalPurchaseAmount,
+            'totalPurchasePaidAmount' => $totalPurchasePaidAmount,
+            'sales' => $sales,
+            'chartData' => $chartData,
+            'year' => $year,
+            'purchases' => $purchases,
+            'products' => $products,
+            'services' => $services,
+            'serviceCharts' => $serviceCharts
+        ]);
+    }
+
+
+    private function getSalePurchaseData($year){
+
+        $chartData = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $monthName = date('M', mktime(0, 0, 0, $month, 1, $year));
+
+            $sales = Sale::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->sum('grand_total');
+
+            $purchases = Purchase::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->sum('grand_total');
+
+            $chartData[] = [
+                'month' => $monthName,
+                'sales' => (float)$sales,
+                'purchases' => (float)$purchases
+            ];
+        }
+
+        return $chartData;
     }
 }

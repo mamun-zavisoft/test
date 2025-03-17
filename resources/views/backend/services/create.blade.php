@@ -26,7 +26,13 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Vehicle <span class="text-danger">*</span></label>
+                                    <div class="add-newplus">
+                                        <label>Vehicle <span class="text-danger">*</span></label>
+                                        <a href="javascript:void(0);" data-bs-toggle="modal"
+                                            data-bs-target="#add-vehicle" style="margin-left: 320px;"><i data-feather="plus-circle"
+                                                class="plus-down-add"></i><span>Add
+                                                New</span></a>
+                                    </div>                            
                                     <select name="vehicle_id" class="form-control select2 vehicle-search" required>
                                         <option value="">Select Vehicle</option>
                                         {{-- @foreach ($vehicles as $vehicle)
@@ -217,6 +223,64 @@
                         </div>
                     </form>
                 </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Vehicle -->
+     
+    <div class="modal fade" id="add-vehicle">
+        <div class="modal-dialog modal-dialog-centered custom-modal-two">
+            <div class="modal-content">
+                <div class="page-wrapper-new p-0">
+                    <div class="content">
+                        <div class="modal-header border-0 custom-modal-header justify-content-between">
+                            <div class="page-title">
+                                <h4>Create Vehicle</h4>
+                            </div>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#storeForm')[0].reset()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-start ms-3 mb-2">
+                        <small>Self=SteadFast Vehicle & External=OutSide Vehicle</small>
+                    </div>
+                        <div class="modal-body custom-modal-body new-employee-field">
+                            <form action="{{ route('admin.vehicles.store') }}" method="POST"
+                                id="storeForm1">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label">Owner Type*</label>
+                                    <select class="select3 form-control" name="owner_type">
+                                        <option value="">Choose</option>
+                                        <option value="1">Self</option>
+                                        <option value="2">External</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Vehicle Register Number*</label>
+                                    <input type="text" name="license_plate" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Status*</label>
+                                    <select class="select3 form-control" name="status">
+                                        <option value="">Choose</option>
+                                        <option value="1">Active</option>
+                                        <option value="2">In Service</option>
+                                    </select>
+                                </div>
+
+                                <div class="modal-footer-btn">
+                                    <button type="button" class="btn btn-cancel me-2"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-submit" id="submit_btn1">Create Vehicle</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -330,7 +394,7 @@
                     true);
                 row.find('.drawer-select').html('<option value="">Select Drawer</option>').prop('disabled',
                     true);
-                row.find('.part-quantity').val(1).prop('disabled', true);
+                row.find('.part-quantity').val(0).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
                 row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
@@ -354,7 +418,7 @@
                 // Reset dependent fields
                 row.find('.drawer-select').html('<option value="">Select Drawer</option>').prop('disabled',
                     true);
-                row.find('.part-quantity').val(1).prop('disabled', true);
+                row.find('.part-quantity').val(0).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
                 row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
@@ -377,7 +441,7 @@
                 let rackId = row.find('.rack-select').val();
 
                 // Reset quantity and price fields
-                row.find('.part-quantity').val(1).prop('disabled', true);
+                row.find('.part-quantity').val(0).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
                 row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
@@ -495,7 +559,7 @@
                             row.find('.part-quantity')
                                 .prop('disabled', false)
                                 .attr('max', availableQty)
-                                .val(1);
+                                .val(0);
 
                             row.find('.stock-info').text(`Available: ${availableQty}`);
                             row.find('.part-unit-price').text(`Unit Price: ${salePrice}`);
@@ -888,6 +952,42 @@
                     },
                     cache: true
                 }
+            });
+
+            $('#storeForm1').submit(function(e) {
+                e.preventDefault();
+                let SubmitBtn = $('#submit_btn1');
+                SubmitBtn.prop('disabled', true);
+                let formData = new FormData(this);
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+
+                }).done(function(response) {
+                    if (response.type == 'success') {
+                        $('#add-vehicle').modal('hide');
+                        toastr.success(response.message);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        SubmitBtn.prop('disabled', false);
+                        toastr.error(response.message);
+                    }
+                }).fail(function(xhr) {
+                    SubmitBtn.prop('disabled', false);
+                    $('#submit_btn1php').attr('disabled', false);
+                    let response = xhr.responseJSON;
+                    if (response && response.errors) {
+                        $.each(response.errors, function(key, value) {
+                            toastr.error(value);
+                        });
+                    }
+                });
             });
         });
     </script>
