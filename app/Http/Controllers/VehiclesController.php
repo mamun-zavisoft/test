@@ -45,7 +45,7 @@ class VehiclesController extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => 'Vehicle created successfully!', 'type' => 'success'],200);
+            return response()->json(['message' => 'Vehicle created successfully!', 'type' => 'success', 'data' => $vehicle ],200);
         }catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);

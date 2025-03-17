@@ -971,9 +971,25 @@
                     if (response.type == 'success') {
                         $('#add-vehicle').modal('hide');
                         toastr.success(response.message);
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
+                        $('#storeForm1').trigger('reset');
+
+                        if (response && response.type == 'success' && response.data) {
+                            let vehicle = response.data;
+                            let vehicleText = vehicle.license_plate + ' - ' + (vehicle.owner_type == '1' ? 'Self' : 'External');
+                            let vehicleOption = new Option(vehicleText, vehicle.id, true, true);
+
+                            $('.select2[name="vehicle_id"]').append(vehicleOption).trigger('change.select2');
+
+                            if (vehicle.owner_type == '1') {  
+                                $("select[name='service_type']").val('self');
+                            } else if (vehicle.owner_type == '2') {  
+                                $("select[name='service_type']").val('external');
+                            }
+
+                        } else {
+                            toastr.error('Vehicle data not found or error in response.');
+                        }
+
                     } else {
                         SubmitBtn.prop('disabled', false);
                         toastr.error(response.message);
