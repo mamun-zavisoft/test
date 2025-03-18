@@ -6,9 +6,22 @@
 
             <!-- /filter -->
                 <div class="card table-list-card">
-                <x-filter />
-
+                <x-filter>
+                    <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                        <div class="mb-3 add-product">
+                            <div class="add-newplus">
+                                <label class="form-label">Service Type</label>
+                            </div>
+                            <select class="select" name="serviceType">
+                                <option value="">Choose</option>
+                                <option value="self" @selected(request()->serviceType == 'self')>Self</option>
+                                <option value="external" @selected(request()->serviceType == 'external')>External</option>
+                            </select>
+                        </div>
+                    </div>
+                </x-filter>
                     <!-- /Filter -->
+
                     <div class="table-responsive product-list">
                         <table class="table">
                             <thead>

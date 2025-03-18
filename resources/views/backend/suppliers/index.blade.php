@@ -6,7 +6,21 @@
 
             <!-- filter -->
             <div class="card table-list-card">
-            <x-filter />
+            <x-filter>
+                <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                    <div class="mb-3 add-product">
+                        <div class="add-newplus">
+                            <label class="form-label">Zone</label>
+                        </div>
+                        <select class="select" name="zone_id">
+                            <option value="">Choose</option>
+                            @foreach($zones as $zone)    
+                                <option value="{{$zone->id}}" @selected(request()->zone_id == $zone->id)>{{ $zone->name }}</option>
+                            @endforeach    
+                        </select>
+                    </div>
+                </div>
+            </x-filter>
                     <!-- /Filter -->
 
                     <div class="table-responsive">

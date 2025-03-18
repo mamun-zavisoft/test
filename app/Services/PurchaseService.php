@@ -14,6 +14,10 @@ class PurchaseService
     public function getAllPurchases(int $perPage)
     {   
         $search = request()->input('search', '');
+        $supplier_id = request()->input('supplier_id', '');
+        $type = request()->input('status_type', '');
+        $status_type = $type === 'pending' ? 'pending' : 'received';
+
         return Purchase::query()
         ->with('supplier:id,name', 'zone:id,name')
         ->where(function ($query) use ($search) {
@@ -24,6 +28,12 @@ class PurchaseService
                     $query->where('name', 'like', "%{$search}%");
                 });
         })
+        ->when($supplier_id, function ($query) use ($supplier_id) {
+            $query->where('supplier_id', $supplier_id);
+        })
+        // ->when($status_type, function ($query) use ($status_type) {
+        //     $query->where('status', $status_type);
+        // })
             ->orderBy('id', 'desc')
             ->paginate($perPage);
     }

@@ -6,8 +6,21 @@
 
             <!-- filter -->
             <div class="card table-list-card">
-                    <x-filter />
-
+                    <x-filter>
+                        <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                            <div class="mb-3 add-product">
+                                <div class="add-newplus">
+                                    <label class="form-label">Rack</label>
+                                </div>
+                                <select class="select" name="rack_id">
+                                    <option value="">Choose</option>
+                                    @foreach ($racks as $rack)
+                                    <option value="{{ $rack->id }}" @selected($rack->id == request()->rack_id)>{{ $rack->name }}</option>
+                                    @endforeach    
+                                </select>
+                            </div>
+                        </div>
+                    </x-filter>
                     <!-- /Filter -->
 
                     <div class="table-responsive">

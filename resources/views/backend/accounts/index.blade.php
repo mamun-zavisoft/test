@@ -8,7 +8,20 @@
                     <!-- filter -->
            
                     <div class="card table-list-card">
-                    <x-filter />
+                    <x-filter>
+                        <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                            <div class="mb-3 add-product">
+                                <div class="add-newplus">
+                                    <label class="form-label">Account Type</label>
+                                </div>
+                                <select class="select" name="account_type">
+                                    <option value="">Choose</option>
+                                    <option value="cash" @selected(request()->account_type == 'cash')>Cash</option>
+                                    <option value="bank" @selected(request()->account_type == 'bank')>Bank</option>
+                                </select>
+                            </div>
+                        </div>
+                    </x-filter>
 
                     <!-- /Filter -->
                     <div class="table-responsive">

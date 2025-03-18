@@ -10,6 +10,8 @@ class FetchService
 
         $search = request()->input('search', '');
         $perPage = request()->input('per_page', 10);
+        $type = request()->input('serviceType', '');
+        $serviceType = $type === 'self' ? 'self' : 'external';
 
         return Service::query()
             ->with('vehicle:id,license_plate','account:id,type','sale')
@@ -20,6 +22,9 @@ class FetchService
                     ->orWhereHas('vehicle', function ($query) use ($search) {
                         $query->where('license_plate', 'like', "%{$search}%");
                     });
+            })
+            ->when($serviceType, function($query) use($serviceType) {
+                $query->where('service_type', $serviceType);
             })
             ->select('id','vehicle_id','service_type','grand_total','transaction_id','paid_status','any_parts_purchase','payment_type_id','created_at')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
