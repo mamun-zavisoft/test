@@ -27,4 +27,8 @@ class Service extends Model
     {
         return $this->belongsTo(Sale::class);
     }
+
+    public function account(){
+        return $this->belongsTo(Account::class);
+    }
 }

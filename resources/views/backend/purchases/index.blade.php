@@ -5,22 +5,13 @@
             <x-breadcrumb title="Purchase List" sub-title="Manage Your Purchases" button="Add Purchase"
                 button-route="admin.purchases.create" />
 
-            <!-- /purchase list -->
+            <!--  filter -->
             <div class="card table-list-card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
+                    <x-filter />
 
                     <!-- /Filter -->
                     <div class="table-responsive product-list">
-                        <table class="table  datanew list">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Invoice No</th>
@@ -36,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($purchases as $purchase)
+                                @forelse ($purchases as $purchase)
                                     <tr>
                                         <td class="fw-bold">#{{ $purchase->transaction_id }}</td>
                                         <td>{{ $purchase->supplier?->name }}</td>
@@ -246,10 +237,14 @@
                                         </div>
                                     </div>
 
-                                    
-                                @endforeach
+                                @empty
+                                   <tr class="text-center">
+                                    <td colspan="7">No Product Found</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$purchases" />
                     </div>
                         {{-- paid status modal --}}
                         <div class="modal fade" id="payment_modal">

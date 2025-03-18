@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\FetchSale;
 use App\Models\Account;
 use App\Models\Product;
 use App\Models\Sale;
@@ -12,8 +13,7 @@ class SaleController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->per_page ?? 10;
-        $sales = Sale::onlySales()->paginate();
+        $sales = (new FetchSale)->execute($request);
 
         return view('backend.sales.index', compact('sales'));
     }

@@ -5,23 +5,14 @@
         <div class="content">
             <x-breadcrumb-modal title="Account List" sub-title="Manage Account" button="Add Account" modal-id="add-account" />
 
+                    <!-- filter -->
            
-            <div class="card table-list-card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /Filter -->
+                    <div class="card table-list-card">
+                    <x-filter />
 
                     <!-- /Filter -->
                     <div class="table-responsive">
-                        <table class="table  datanew">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th class="no-sort">SL</th>
@@ -33,7 +24,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach ($accounts as $account)
+                                @forelse ($accounts as $account)
                                     <tr>
                                         <td>
                                             {{ $loop->iteration + $accounts->firstItem() - 1 }}
@@ -114,13 +105,17 @@
                                         </div>
                                     </div>
                                     <!-- Edit Account -->
-                                @endforeach
+                                @empty
+                                   <tr class="text-center">
+                                    <td colspan="7">No Account Found</td>
+                                </tr>
+                                @endforelse
 
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$accounts" />
                     </div>
                 </div>
-            </div>
             <!-- /Account list -->
         </div>
     </div>

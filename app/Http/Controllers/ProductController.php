@@ -24,13 +24,14 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = (new FetchProduct)->execute($request);
-
+        $categories = Category::select('id','name')->get();
+        $brands = Brand::select('id','name')->get();
         
         if ($request->ajax()) {
             return view('components.products.table', ['entity' => $products])->render();
         }
 
-        return view('backend.products.index', compact('products'));
+        return view('backend.products.index', compact('products','categories','brands'));
     }
 
     public function create()

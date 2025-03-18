@@ -19,20 +19,12 @@
                 </div>
             @endif
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="javascript:void(0);" class="btn btn-searchset">
-                                    <i data-feather="search" class="feather-search"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+           
+            <div class="card table-list-card">
+                    <x-filter />
 
                     <div class="table-responsive">
-                        <table class="table datanew" id="dTable">
+                        <table class="table" id="dTable">
                             <thead>
                                 <tr>
                                     <th>
@@ -49,7 +41,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($roles as $role)
+                                @forelse ($roles as $role)
                                     <tr>
                                         <td>
                                             <label class="checkboxs">
@@ -85,9 +77,14 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                    @empty
+                                    <tr class="text-center">
+                                    <td colspan="7">No Role Found</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$roles" />
                     </div>
                 </div>
             </div>

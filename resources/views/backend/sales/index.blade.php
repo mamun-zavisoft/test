@@ -5,22 +5,13 @@
             <x-breadcrumb title="Sales List" sub-title="Manage Your Sales" button="Add Sale"
                 button-route="admin.sales.create" />
 
-            <!-- /purchase list -->
-            <div class="card table-list-card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
+            <!-- /filter -->
+                <div class="card table-list-card">
+                <x-filter />
 
                     <!-- /Filter -->
                     <div class="table-responsive product-list">
-                        <table class="table  datanew list">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Invoice No</th>
@@ -31,7 +22,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($sales as $sale)
+                                @forelse ($sales as $sale)
                                     <tr>
                                         <td class="fw-bold">#{{ $sale->transaction_id }}</td>
                                         <td>{{ $sale->phone }}</td>
@@ -155,10 +146,14 @@
                                         </div>
                                     </div>
 
-                                    
-                                @endforeach
+                                    @empty
+                                    <tr class="text-center">
+                                    <td colspan="7">No Sale Found</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$sales" />
                     </div>
                         {{-- paid status modal --}}
                         <div class="modal fade" id="payment_modal">

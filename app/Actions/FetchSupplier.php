@@ -14,7 +14,8 @@ class FetchSupplier
         return Supplier::query()
             ->with('zone')
             ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+                $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%");
             })
             ->select('id', 'zone_id', 'name', 'phone', 'balance')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();

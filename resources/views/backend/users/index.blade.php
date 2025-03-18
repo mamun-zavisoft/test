@@ -7,81 +7,13 @@
             <x-breadcrumb title="User List" sub-title="Manage Your Users" button="Add New User" button-route="users.create" />
 
 
-            <!-- /product list -->
+            <!-- filter -->
             <div class="card table-list-card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-                        <div class="search-path">
-                            <div class="d-flex align-items-center">
-                                <a class="btn btn-filter" id="filter_search">
-                                    <i data-feather="filter" class="filter-icon"></i>
-                                    <span><img src="{{ URL::asset('/build/img/icons/closes.svg') }}" alt="img"></span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="form-sort">
-                            <i data-feather="sliders" class="info-img"></i>
-                            <select class="select">
-                                <option>Sort by Date</option>
-                                <option>Newest</option>
-                                <option>Oldest</option>
-                            </select>
-                        </div>
-                    </div>
+                    <x-filter />
                     <!-- /Filter -->
-                    <div class="card" id="filter_inputs">
-                        <div class="card-body pb-0">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6 col-12">
-                                    <div class="input-blocks">
-                                        <i data-feather="user" class="info-img"></i>
-                                        <select class="select">
-                                            <option>Choose Name</option>
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-sm-6 col-12">
-                                    <div class="input-blocks">
-                                        <i data-feather="stop-circle" class="info-img"></i>
-                                        <select class="select">
-                                            <option>Choose Status</option>
-                                            <option>Active</option>
-                                            <option>Inactive</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-sm-6 col-12">
-                                    <div class="input-blocks">
-                                        <i data-feather="zap" class="info-img"></i>
-                                        <select class="select">
-                                            <option>Choose Role</option>
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-sm-6 col-12">
-                                    <div class="input-blocks">
-                                        <a class="btn btn-filters ms-auto"> <i data-feather="search"
-                                                class="feather-search"></i> Search </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /Filter -->
+
                     <div class="table-responsive">
-                        <table class="table datanew" id="usersList">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     {{-- <th class="no-sort">
@@ -180,6 +112,7 @@
 
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$users" />
                     </div>
                 </div>
             </div>

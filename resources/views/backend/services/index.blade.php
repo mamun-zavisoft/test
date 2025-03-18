@@ -4,21 +4,13 @@
         <div class="content">
             <x-breadcrumb title="Services List" button="Add Service" button-route="admin.services.create" />
 
-            <!-- /service list -->
-            <div class="card table-list-card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-                    </div>
+            <!-- /filter -->
+                <div class="card table-list-card">
+                <x-filter />
 
                     <!-- /Filter -->
                     <div class="table-responsive product-list">
-                        <table class="table  datanew list">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     {{-- <th class="no-sort">
@@ -39,7 +31,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($services as $service)
+                                @forelse ($services as $service)
                                     <tr>
                                         {{-- <td>
                                             <label class="checkboxs">
@@ -276,9 +268,14 @@
                                             </div>
                                         </div>
                                     </div> 
-                                @endforeach
+                                    @empty
+                                   <tr class="text-center">
+                                    <td colspan="7">No Service Found</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$services" />
                     </div>
                         {{-- paid status modal --}}
                         <div class="modal fade" id="payment_modal">

@@ -18,6 +18,11 @@ class Purchase extends Model
         return $this->belongsTo(Supplier::class);
     }
 
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
+
     public function products()
     {
         return $this->hasManyThrough(

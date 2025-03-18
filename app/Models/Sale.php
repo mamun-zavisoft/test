@@ -47,4 +47,9 @@ class Sale extends Model
    {
        return $this->hasManyThrough(Product::class, SaleDetail::class, 'sale_id', 'id', 'id', 'product_id');
    }
+
+   public function account()
+   {
+       return $this->belongsTo(Account::class);
+   }
 }

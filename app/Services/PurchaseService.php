@@ -12,8 +12,18 @@ use Illuminate\Support\Facades\DB;
 class PurchaseService
 {
     public function getAllPurchases(int $perPage)
-    {
-        return Purchase::with('supplier')
+    {   
+        $search = request()->input('search', '');
+        return Purchase::query()
+        ->with('supplier:id,name', 'zone:id,name')
+        ->where(function ($query) use ($search) {
+            $query->where('reference_no', 'like', "%{$search}%")
+                ->orWhere('transaction_id', 'like', "%{$search}%")
+                ->orWhere('date', 'like', "%{$search}%");
+                $query->orWhereHas('supplier', function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%");
+                });
+        })
             ->orderBy('id', 'desc')
             ->paginate($perPage);
     }

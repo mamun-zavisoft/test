@@ -4,23 +4,13 @@
         <div class="content">
             <x-breadcrumb-modal title="Supplier List" sub-title="Manage suppliers" button="Add Supplier" modal-id="add-supplier" />
 
-            <!-- /product list -->
+            <!-- filter -->
             <div class="card table-list-card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
+            <x-filter />
                     <!-- /Filter -->
 
-                    <!-- /Filter -->
                     <div class="table-responsive">
-                        <table class="table  datanew">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th class="no-sort">SL</th>
@@ -32,7 +22,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach ($suppliers as $supplier)
+                                @forelse($suppliers as $supplier)
                                     <tr>
                                         <td>
                                             {{ $loop->iteration + $suppliers->firstItem() - 1 }}
@@ -117,7 +107,11 @@
                                         </div>
                                     </div>
                                     <!-- Edit supplier -->
-                                @endforeach
+                                    @empty
+                                   <tr class="text-center">
+                                    <td colspan="7">No Supplier Found</td>
+                                </tr>
+                                @endforelse
 
                             </tbody>
                         </table>

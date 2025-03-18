@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\FetchDrawer;
 use App\Models\Drawer;
 use App\Models\Rack;
 use Exception;
@@ -15,10 +16,7 @@ class DrawerController extends Controller
 
     public function index(Request $request)
     {
-
-        $perPage = $request->per_page ?? 10;
-
-        $drawers = Drawer::with('rack')->select('id', 'name', 'rack_id')->paginate($perPage);
+        $drawers = (new FetchDrawer)->execute($request);
         $racks = Rack::select('id', 'name')->get();
        
         return view('backend.drawers.index', compact('drawers', 'racks'));

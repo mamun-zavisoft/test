@@ -5,22 +5,40 @@
         <div class="content">
             <x-breadcrumb-modal title="Vehicle List" sub-title="Manage Vehicle" button="Add Vehicle" modal-id="add-vehicle" />
 
-           
+            <!-- Filter -->
             <div class="card table-list-card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
+                    <x-filter>
+                        <div class="col-lg-4 col-sm-3 col-12" style="width: 200px;">
+                            <div class="mb-3 add-product">
+                                <div class="add-newplus">
+                                    <label class="form-label">Owner Type</label>
+                                </div>
+                                <select class="select" name="vehicle_type">
+                                    <option value="">Choose</option>
+                                    <option value="self" @selected(request()->vehicle_type == 'self')>Self</option>
+                                    <option value="external" @selected(request()->vehicle_type == 'external')>External</option>
+                                </select>
                             </div>
                         </div>
+                        <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                            <div class="mb-3 add-product">
+                                <div class="add-newplus">
+                                    <label class="form-label">Zone</label>
+                                </div>
+                                <select class="select" name="zone_id">
+                                    <option value="">Choose</option>
+                                    @foreach($zones as $zone)    
+                                        <option value="{{$zone->id}}" @selected(request()->zone_id == $zone->id)>{{ $zone->name }}</option>
+                                    @endforeach    
+                                </select>
+                            </div>
+                        </div>
+                    </x-filter>
 
-                    </div>
                     <!-- /Filter -->
 
                     <div class="table-responsive">
-                        <table class="table  datanew">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th class="no-sort">SL</th>
@@ -33,7 +51,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach ($vehicles as $vehicle)
+                                @forelse ($vehicles as $vehicle)
                                     <tr>
                                         <td>
                                             {{ $loop->iteration + $vehicles->firstItem() - 1 }}
@@ -123,10 +141,15 @@
                                         </div>
                                     </div>
                                     <!-- Edit Vehicle -->
-                                @endforeach
+                                @empty
+                                   <tr class="text-center">
+                                    <td colspan="7">No Vehicle Found</td>
+                                </tr>
+                                @endforelse
 
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$vehicles" />
                     </div>
                 </div>
             </div>

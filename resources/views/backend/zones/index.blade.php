@@ -5,23 +5,14 @@
         <div class="content">
             <x-breadcrumb-modal title="Zone List" sub-title="Manage Your Zone" button="Add Zone" modal-id="add-zone" />
 
-            <!-- /product list -->
+            <!-- filter -->
             <div class="card table-list-card">
-                <div class="card-body">
-                    <div class="table-top">
-                        <div class="search-set">
-                            <div class="search-input">
-                                <a href="" class="btn btn-searchset"><i data-feather="search"
-                                        class="feather-search"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
+            <x-filter />
                     <!-- /Filter -->
 
                     <!-- /Filter -->
                     <div class="table-responsive">
-                        <table class="table  datanew">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th class="no-sort">SL</th>
@@ -33,7 +24,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach ($zones as $zone)
+                                @forelse ($zones as $zone)
                                     <tr>
                                         <td>
                                             {{ $loop->iteration + $zones->firstItem() - 1 }}
@@ -111,10 +102,15 @@
                                         </div>
                                     </div>
                                     <!-- Edit Brand -->
-                                @endforeach
+                                    @empty
+                                   <tr class="text-center">
+                                    <td colspan="7">No Zone Found</td>
+                                </tr>
+                                @endforelse
 
                             </tbody>
                         </table>
+                        <x-pagination :paginator="$zones" />
                     </div>
                 </div>
             </div>

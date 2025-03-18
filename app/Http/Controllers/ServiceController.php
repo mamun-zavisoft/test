@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\FetchService;
 use App\Models\Account;
 use App\Models\Product;
 use App\Models\Sale;
@@ -18,9 +19,9 @@ use Illuminate\Support\Facades\Validator;
 class ServiceController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::with('vehicle', 'sale')->orderBy('id', 'desc')->get();
+        $services = (new FetchService())->execute(request());
         $serviceCharts = ServiceChart::select('id','name','price','code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
 
