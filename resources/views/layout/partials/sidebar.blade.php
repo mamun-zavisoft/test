@@ -7,7 +7,7 @@
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Inventory</h6>
                     <ul>
-                        <li class="{{ Request::is('dashboard*') ? 'active' : '' }}"><a
+                        <li class="{{ Request::is('/') ? 'active' : '' }}"><a
                                 href="{{ route('dashboard') }}"><i
                                     data-feather="home"></i><span>Dashboard</span></a>
                         </li>

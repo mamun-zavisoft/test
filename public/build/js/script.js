@@ -149,29 +149,6 @@ $(document).ready(function(){
 			}
 		});
 	}
-	// Datatable
-	if($('.datanew').length > 0) {
-		$('.datanew').DataTable({
-			"bFilter": true,
-			"sDom": 'fBtlpi',  
-			"ordering": true,
-			"language": {
-				search: ' ',
-				sLengthMenu: '_MENU_',
-				searchPlaceholder: "Search",
-				info: "_START_ - _END_ of _TOTAL_ items",
-				paginate: {
-					next: ' <i class=" fa fa-angle-right"></i>',
-					previous: '<i class="fa fa-angle-left"></i> '
-				},
-			 },
-			initComplete: (settings, json)=>{
-				$('.dataTables_filter').appendTo('#tableSearch');
-				$('.dataTables_filter').appendTo('.search-input');
-			},	
-		});
-	}
-	
 
 	// image file upload image
 	function readURL(input) {
@@ -189,13 +166,7 @@ $(document).ready(function(){
 	$("#imgInp").change(function(){
 		readURL(this);
 	});
-
-
-	if($('.datatable').length > 0) {
-		$('.datatable').DataTable({
-			"bFilter": false
-		});
-	}
+	
 	// Loader
 	setTimeout(function () {
 		$('#global-loader');

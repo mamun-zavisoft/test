@@ -3,13 +3,13 @@
 
     <!-- Logo -->
     <div class="header-left active">
-        <a href="{{ url('index') }}" class="logo logo-normal">
-            {{-- <img src="{{ URL::asset('build/icons/main_logo.jpg') }}" alt=""> --}}
+        <a href="{{ route('dashboard') }}" class="logo logo-normal">
+            <img src="{{ URL::asset('build/img/logo.png') }}" alt="" class="ms-2 p-2">
         </a>
-        <a href="{{ url('index') }}" class="logo logo-white">
+        <a href="{{ route('dashboard') }}" class="logo logo-white">
             <img src="{{ URL::asset('/build/img/logo-white.png') }}" alt="">
         </a>
-        <a href="{{ url('index') }}" class="logo-small">
+        <a href="{{ route('dashboard') }}" class="logo-small">
             <img src="{{ URL::asset('/build/img/logo-small.png') }}" alt="">
         </a>
         <a id="toggle_btn" href="javascript:void(0);">

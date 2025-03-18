@@ -16,7 +16,7 @@
                         <div class="login-userset">
                             <div class="login-userheading">
                                 <h3>Sign In</h3>
-                                <h4>Access the Dreamspos panel using your email and passcode.</h4>
+                                <h4>Access the Fast Auto Clinic your Phone and passcode.</h4>
                             </div>
                             <div class="form-login">
                                 <label class="form-label">Email or Phone</label>
