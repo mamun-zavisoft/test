@@ -75,7 +75,7 @@
                 @if ($end < $paginator->lastPage() - 1)
                     <li class="page-item disabled">
                         <a class="page-link" href="javascript:void(0);">
-                            <i class="fas fa-ellipsis-h"></i>
+                            <i data-feather="more-horizontal"></i>
                         </a>
                     </li>
                 @endif
