@@ -35,8 +35,22 @@
                                         <td><span class="d-flex"><img src="{{ $image ?: asset('build/img/no-image.svg') }}"
                                                     style="width: 50px; height: 50px;" alt=""></span></td>
                                         <td>{{ $brand->created_at->format('d M Y') }}</td>
-                                        <td><span
-                                                class="badge rounded-pill bg-outline-{{ $brand->status == 1 ? 'success' : 'warning' }}">{{ $brand->status == 1 ? 'Active' : 'Inactive' }}</span>
+                                        <td>
+                                            <div class="toggle-container">
+                                                <form id="status-form" action="" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="status_update" value="1">
+                                                    <input type="hidden" name="status" id="status-input-{{ $brand->id }}" value="{{ $brand->status }}">
+                                                    
+                                                    <label class="toggle-switch">
+                                                        <input type="checkbox" class="status-toggle" 
+                                                            data-id="{{ $brand->id }}" 
+                                                            {{ $brand->status == 1 ? 'checked' : '' }}>
+                                                        <span class="toggle-slider"></span>
+                                                    </label>
+                                                </form>
+                                            </div>
                                         </td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">

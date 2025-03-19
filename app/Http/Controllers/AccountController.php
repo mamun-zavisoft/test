@@ -31,6 +31,10 @@ class AccountController extends Controller
 
             DB::beginTransaction();
 
+            if ($request->balance > 14) {
+                return response()->json(['message' => 'Balance must be less than 14', 'type' => 'error']);
+            }
+
             $account = Account::create([
                 'name' => $request->name,
                 'type' => $request->type,
@@ -73,6 +77,10 @@ class AccountController extends Controller
 
     public function destroy(Account $account)
     {
+        if ($account->paymentDetails->count() > 0) {
+            return redirect()->back()->with('error', 'Account has payment details cannot delete it !');
+        }
+        
         $account->delete();
         return redirect()->back()->with('success', 'Account deleted successfully!');
     }

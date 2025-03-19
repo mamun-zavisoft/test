@@ -45,6 +45,7 @@ class BrandController extends Controller
 
     public function update(Request $request, Brand $brand)
     {
+        
         $request->validate([
             'name' => 'required|string|max:50|unique:brands,name,' . $brand->id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',

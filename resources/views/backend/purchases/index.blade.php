@@ -231,20 +231,24 @@
                                                         <div class="col-md-5">
                                                             <div class="bg-light p-3 rounded">
                                                                 <div class="d-flex justify-content-between">
-                                                                    <span class="font-weight-bold">Total Price</span>
-                                                                    <span class="font-weight-bold">{{ $purchase->grand_total }}</span>
+                                                                    <span class="font-weight-bold">Paid Amount</span>
+                                                                    <span class="font-weight-bold">{{ $purchase->paid_amount }}</span>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between">
+                                                                    <span>Discount</span>
+                                                                    <span>{{ $purchase->discount_amount }}</span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between">
+                                                                    <span>Due Amount</span>
+                                                                    <span>{{ $purchase->due_amount }}</span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between mb-2">
                                                                     <span>Shipping Charge</span>
                                                                     <span>{{ $purchase->shipping_charge }}</span>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between mb-2">
-                                                                    <span>Discount</span>
-                                                                    <span>{{ $purchase->discount_amount }}</span>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mb-2">
                                                                     <span>Grand Total Price</span>
-                                                                    <span>{{ ($purchase->grand_total + $purchase->shipping_charge) - $purchase->discount_amount }}</span>
+                                                                    <span>{{$purchase->grand_total}}</span>
                                                                 </div>
                                                             </div>
                                                         </div>

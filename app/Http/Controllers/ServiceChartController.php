@@ -60,6 +60,10 @@ class ServiceChartController extends Controller
                 'code' => 'required|string|max:50|unique:service_charts,code,' . $serviceChart->id
             ]);
 
+            if ($request->price > 14) {
+                return response()->json(['message' => 'Balance must be less than 14', 'type' => 'error']);
+            }
+
             $serviceChart->update([
                 'name' =>$request->name,
                 'price' => $request->price,
