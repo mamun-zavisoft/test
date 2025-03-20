@@ -76,11 +76,14 @@ class BrandController extends Controller
     }
 
 
-    public function getStatus(Request $request, Brand $brand)
+    public function getStatus(Request $request, $id)
     {
-        $brand->update([
-            'status' => $request->status,
-        ]);
-        return response()->json(['message' => 'Status updated successfully!', 'type' => 'success'],201);
+        try {
+           $brand = Brand::find($id)->update(['status' => $request->status]);
+            
+            return response()->json(['message' => 'Status updated successfully!', 'type' => 'success'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'type' => 'error'], 500);
+        }
     }
 }

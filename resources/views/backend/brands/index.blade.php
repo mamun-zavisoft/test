@@ -39,10 +39,11 @@
                                             <form class="status-form" action="{{ route('admin.brands.status', $brand->id) }}" method="POST" data-id="{{ $brand->id }}">
                                                 @csrf
                                                 @method('PATCH')
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" class="status-checkbox" {{ $brand->status == '1' ? 'checked' : '' }}>
+                                                    <span class="slider"></span>
+                                                </label>
                                                 <input type="hidden" name="status" value="{{ $brand->status }}">
-                                                <button type="submit" class="status-toggle-btn" data-status="{{ $brand->status }}">
-                                                    {{ $brand->status === '1' ? 'Active' : 'InActive' }}
-                                                </button>
                                             </form>
                                         </td>
                                         <td class="action-table-data">
@@ -270,27 +271,29 @@
                 });
             });
 
-           $('.status-toggle-btn').on('click', function(e) {
+            $('.status-checkbox').on('change', function(e) {
             e.preventDefault();
             var form = $(this).closest('form');
-            var status = form.find('input[name="status"]').val() === '1' ? 'active' : 'inactive';
-            form.find('input[name="status"]').val(status);
-            
-            $(this).text(status === '1' ? 'Active' : 'InActive')
-                .attr('data-status', status);
+            var statusLabel = form.find('.status-label');
+            var currentStatus = form.find('input[name="status"]').val();
+            var newStatus = currentStatus === '1' ? '0' : '1';
+                        
+            form.find('input[name="status"]').val(newStatus);
+            statusLabel.text(newStatus === '1' ? 'Active' : 'Inactive');
 
             $.ajax({
                 url: form.attr('action'),
                 method: form.attr('method'),
                 data: form.serialize(),
             }).done(function(response) {
-                if (response.type === 'success') {
+                if (response.type == 'success') {
                     toastr.success(response.message);
                 } else {
                     toastr.error(response.message);
                 }
-            });
-        })
+            })
+        });
+
     });
     </script>
 @endpush
