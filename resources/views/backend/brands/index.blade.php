@@ -36,21 +36,14 @@
                                                     style="width: 50px; height: 50px;" alt=""></span></td>
                                         <td>{{ $brand->created_at->format('d M Y') }}</td>
                                         <td>
-                                            <div class="toggle-container">
-                                                <form id="status-form" action="" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="status_update" value="1">
-                                                    <input type="hidden" name="status" id="status-input-{{ $brand->id }}" value="{{ $brand->status }}">
-                                                    
-                                                    <label class="toggle-switch">
-                                                        <input type="checkbox" class="status-toggle" 
-                                                            data-id="{{ $brand->id }}" 
-                                                            {{ $brand->status == 1 ? 'checked' : '' }}>
-                                                        <span class="toggle-slider"></span>
-                                                    </label>
-                                                </form>
-                                            </div>
+                                            <form class="status-form" action="{{ route('admin.brands.status', $brand->id) }}" method="POST" data-id="{{ $brand->id }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="{{ $brand->status }}">
+                                                <button type="submit" class="status-toggle-btn" data-status="{{ $brand->status }}">
+                                                    {{ $brand->status === '1' ? 'Active' : 'InActive' }}
+                                                </button>
+                                            </form>
                                         </td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
@@ -276,6 +269,28 @@
                     }
                 });
             });
-        });
+
+           $('.status-toggle-btn').on('click', function(e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            var status = form.find('input[name="status"]').val() === '1' ? 'active' : 'inactive';
+            form.find('input[name="status"]').val(status);
+            
+            $(this).text(status === '1' ? 'Active' : 'InActive')
+                .attr('data-status', status);
+
+            $.ajax({
+                url: form.attr('action'),
+                method: form.attr('method'),
+                data: form.serialize(),
+            }).done(function(response) {
+                if (response.type === 'success') {
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            });
+        })
+    });
     </script>
 @endpush

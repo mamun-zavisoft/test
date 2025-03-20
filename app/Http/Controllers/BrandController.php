@@ -74,4 +74,13 @@ class BrandController extends Controller
         return redirect()->back()->with('success', 'Brand deleted successfully!');
         // return response()->json(['message' => 'Brand deleted successfully!']);
     }
+
+
+    public function getStatus(Request $request, Brand $brand)
+    {
+        $brand->update([
+            'status' => $request->status,
+        ]);
+        return response()->json(['message' => 'Status updated successfully!', 'type' => 'success'],201);
+    }
 }
