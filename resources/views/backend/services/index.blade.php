@@ -182,6 +182,7 @@
 
                                                     <!-- Products Used Section -->
                                                     @if($service->sale)
+                                                    {{-- @dd($service->sale) --}}
                                                         <div class="card mb-4">
                                                             <div class="card-header bg-light">
                                                                 <h5 class="card-title fw-bold m-0">Products Used</h5>
@@ -254,11 +255,15 @@
                                                         </div>
                                                     </div>
                                                     @endif
+
+                                                    <div id="print-invoice-template" style="display: none;">
+                                                        @include('backend.services._service_invoice_print')
+                                                    </div>
                                                 </div>
                                                 
                                                 <!-- Modal Footer -->
                                                 <div class="modal-footer justify-content-end">
-                                                    <button type="button" class="btn btn-secondary me-2" onclick="window.print()">
+                                                    <button type="button" class="btn btn-secondary me-2" onclick="printServiceInvoice({{ $service->id }})">
                                                         <i class="fas fa-print me-1"></i> Print
                                                     </button>
                                                     <button type="button" class="btn btn-primary">
@@ -326,5 +331,24 @@
                 })
             })
         });
+        // Replace the current onclick handler with this
+        function printServiceInvoice() {
+    setTimeout(() => {
+        let printContent = document.getElementById('print-invoice-template');
+        if (!printContent) {
+            alert("Print template not found!");
+            return;
+        }
+
+        let originalContent = document.body.innerHTML;
+        document.body.innerHTML = printContent.innerHTML;
+
+        window.print();
+
+        document.body.innerHTML = originalContent;
+        location.reload();
+    }, 300); // Small delay to ensure modal content is loaded
+}
+
     </script>
 @endpush

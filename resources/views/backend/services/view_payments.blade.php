@@ -32,9 +32,6 @@
         </div>
     </div>
 </div>
-@php
-    sleep(0.8);
-@endphp
 <!-- Purchase Details -->
 <div class="mt-4">
     <h5 class="mb-3">Payments</h5>
