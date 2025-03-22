@@ -12,7 +12,7 @@
                             <div class="add-newplus">
                                 <label class="form-label">Service Type</label>
                             </div>
-                            <select class="select" name="serviceType">
+                            <select class="select filter-input" name="serviceType">
                                 <option value="">Choose</option>
                                 <option value="self" @selected(request()->serviceType == 'self')>Self</option>
                                 <option value="external" @selected(request()->serviceType == 'external')>External</option>
@@ -85,14 +85,12 @@
                                             <div class="edit-delete-action">
                                                 <a class="me-2 p-2" href="javascript:void(0);" data-bs-toggle="modal"
                                                 data-bs-target="#service-{{ $service->id }}">
-                                                    <i data-feather="eye" class="action-eye"></i>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye action-eye">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
                                                 </a>
-                                                {{-- <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
-                                                    <i data-feather="edit" class="feather-edit"></i>
-                                                </a>
-                                                <a class="confirm-text p-2" href="javascript:void(0);">
-                                                    <i data-feather="trash-2" class="feather-trash-2"></i>
-                                                </a> --}}
+                                               
                                             </div>
                                         </td>
                                     </tr>

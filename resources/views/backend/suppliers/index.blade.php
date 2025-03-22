@@ -12,7 +12,7 @@
                         <div class="add-newplus">
                             <label class="form-label">Zone</label>
                         </div>
-                        <select class="select" name="zone_id">
+                        <select class="select filter-input" name="zone_id">
                             <option value="">Choose</option>
                             @foreach($zones as $zone)    
                                 <option value="{{$zone->id}}" @selected(request()->zone_id == $zone->id)>{{ $zone->name }}</option>

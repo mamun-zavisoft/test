@@ -13,8 +13,19 @@ class RoleController extends Controller
 {
     public function index()
     {
+        $search = request()->input('search', '');
         $perPage = request('per_page', 10);
-        $roles = Role::with('permissions')->paginate();
+        $roles = Role::query()
+            ->with('permissions')
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('guard_name', 'like', "%{$search}%");
+            })
+            ->paginate($perPage);
+
+        if (request()->ajax()) {
+            return view('components.roles.table', ['entity' => $roles])->render();
+        }
 
         return view('backend.roles.index', compact('roles'));
     }

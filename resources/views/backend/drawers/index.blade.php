@@ -12,7 +12,7 @@
                                 <div class="add-newplus">
                                     <label class="form-label">Rack</label>
                                 </div>
-                                <select class="select" name="rack_id">
+                                <select class="select filter-input" name="rack_id">
                                     <option value="">Choose</option>
                                     @foreach ($racks as $rack)
                                     <option value="{{ $rack->id }}" @selected($rack->id == request()->rack_id)>{{ $rack->name }}</option>

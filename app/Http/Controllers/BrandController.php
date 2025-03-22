@@ -76,7 +76,7 @@ class BrandController extends Controller
     }
 
 
-    public function getStatus(Request $request, $id)
+    public function status_change(Request $request, $id)
     {
         try {
            $brand = Brand::find($id)->update(['status' => $request->status]);

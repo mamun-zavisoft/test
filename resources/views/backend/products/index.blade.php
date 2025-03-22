@@ -13,7 +13,7 @@
                             <div class="add-newplus">
                                 <label class="form-label">Category</label>
                             </div>
-                            <select class="select" name="category_id">
+                            <select class="select filter-input" name="category_id">
                                 <option value="">Choose</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}" @selected($category->id == request()->category_id)>{{ $category->name }}</option>
@@ -26,7 +26,7 @@
                             <div class="add-newplus">
                                 <label class="form-label">Brand</label>
                             </div>
-                            <select class="select" name="brand_id">
+                            <select class="select filter-input" name="brand_id">
                                 <option value="">Choose</option>
                                 @foreach ($brands as $brand)
                                 <option value="{{ $brand->id }}" @selected($brand->id == request()->brand_id)>{{ $brand->name }}</option>

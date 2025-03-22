@@ -23,8 +23,25 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::orderBy('id', 'DESC')->paginate(10);
+        $search = $request->input('search', '');
+        $perPage = $request->input('per_page', 10);
+
+        $users = User::query()
+            ->with('roles')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            })
+            ->orderBy('id', 'desc')
+            ->paginate($perPage);
+
         $roles = Role::select('id', 'name')->get();
+
+
+        if (request()->ajax()) {
+            return view('components.users.table', ['entity' => $users])->render();
+        }
 
         return view('backend.users.index', compact('users', 'roles'));
     }

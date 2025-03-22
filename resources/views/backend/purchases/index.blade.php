@@ -13,7 +13,7 @@
                                 <div class="add-newplus">
                                     <label class="form-label">Supplier</label>
                                 </div>
-                                <select class="select" name="supplier_id">
+                                <select class="select filter-input" name="supplier_id">
                                     <option value="">Choose</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}" @selected(request()->supplier_id == $supplier->id)>{{ $supplier->name }}</option>
@@ -26,7 +26,7 @@
                                 <div class="add-newplus">
                                     <label class="form-label">Status</label>
                                 </div>
-                                <select class="select" name="statusType">
+                                <select class="select filter-input" name="statusType">
                                     <option value="">Choose</option>
                                     <option value="pending" @selected(request()->statusType == 'pending')>Pending</option>
                                     <option value="received" @selected(request()->statusType == 'received')>Received</option>
@@ -95,7 +95,10 @@
                                             <div class="edit-delete-action">
                                                 <a class="me-2 p-2" href="javascript:void(0);" data-bs-toggle="modal"
                                                 data-bs-target="#purchase-{{ $purchase->id }}">
-                                                    <i data-feather="eye" class="action-eye"></i>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye action-eye">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
                                                 </a>
                                                 {{-- <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
                                                     <i data-feather="edit" class="feather-edit"></i>

@@ -7,7 +7,6 @@
         <td>{{ $serviceChart->price }}</td>
         <td>{{ $serviceChart->code }}</td>
         <td>{{ $serviceChart->description }}</td>
-        <td>{{ $serviceChart->created_at?->format('d M Y') }}</td>
         <td class="action-table-data">
             <div class="edit-delete-action">
                 <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-serviceChart-{{ $serviceChart->id }}">

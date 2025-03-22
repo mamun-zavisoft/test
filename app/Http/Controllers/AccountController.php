@@ -32,7 +32,7 @@ class AccountController extends Controller
             DB::beginTransaction();
 
             if ($request->balance > 14) {
-                return response()->json(['message' => 'Balance must be less than 14', 'type' => 'error']);
+                return response()->json(['message' => 'Amount is too high', 'type' => 'error']);
             }
 
             $account = Account::create([
