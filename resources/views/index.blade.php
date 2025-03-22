@@ -141,7 +141,7 @@
                                 <table class="table dashboard-recent-products">
                                     <thead>
                                         <tr>
-                                            <th>Products</th>
+                                            <th>Parts</th>
                                             <th>Price</th>
                                         </tr>
                                     </thead>
@@ -178,9 +178,9 @@
                         <table class="table dashboard-expired-products">
                             <thead>
                                 <tr>
-                                    <th>Service</th>
+                                    <th>Service Type</th>
                                     <th>Total Price</th>
-                                    <th>Created Date</th>
+                                    <th>Given Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -188,9 +188,9 @@
                                     <tr>
                                         <td>
                                             <a href="#service-{{ $service->id }}" data-bs-toggle="modal" style="cursor: pointer; text-decoration: none;" class="service-name">
-                                            {{ $service->service_type == 'self' ? 'Self' : 'External' }}
+                                            {{ $service->service_type == 'self' ? 'Self (SteadFast)' : 'External' }}
                                         </td>
-                                        <td>{{ $service->grand_total }}</td>
+                                        <td>{{ number_format($service->grand_total) }}</td>
                                         <td>{{ $service->created_at?->format('d M Y') }}</td>
                                     </tr>
                                 @endforeach
@@ -396,7 +396,7 @@
 <script>
     $(document).ready(function() {
         // Pass the chart data from Blade to JavaScript
-        var chartData = @json($chartData); 
+        var chartData = @json($chartData);
 
         // Initialize the chart with the data
         renderChart(chartData);
@@ -404,6 +404,7 @@
         $('#year-dropdown').on('click', 'a', function() {
             var year = $(this).data('year');
             $('#selected-year').text(year);
+            
             fetchSalePurchaseData(year);
         });
 
@@ -412,17 +413,24 @@
                 url: '/',
                 method: 'GET',
                 data: { year: year }, 
+                dataType: 'json', // Explicitly request JSON
                 success: function(response) {
-                    renderChart(response.chartData);  
+                    if (response && response.chartData) {
+                        renderChart(response.chartData);
+                    } else {
+                        console.error("Invalid response format:", response);
+                    }
                 },
                 error: function(xhr, status, error) {
-                    console.log("Error fetching data: ", error);
+                    console.error("Error fetching data:", error);
                 }
             });
         }
 
         // Function to render the chart
         function renderChart(data) {
+            // console.log(data);
+            
             var ctx = document.getElementById('chart').getContext('2d');
             if (window.myChart) {
                 window.myChart.destroy();

@@ -22,10 +22,10 @@ class ServiceController extends Controller
     public function index(Request $request)
     {
         $services = (new FetchService())->execute(request());
-        $serviceCharts = ServiceChart::select('id','name','price','code')->get();
+        $serviceCharts = ServiceChart::select('id', 'name', 'price', 'code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
 
-        return view('backend.services.index', compact('services','serviceCharts','serviceDetails'));
+        return view('backend.services.index', compact('services', 'serviceCharts', 'serviceDetails'));
     }
     /**
      * Display the service creation form
@@ -58,7 +58,7 @@ class ServiceController extends Controller
                 'note' => 'nullable|string',
                 'grand_total' => 'required|numeric',
                 'total_amount' => 'required|numeric',
-                
+
                 // payment validation
                 'payment_type' => 'nullable|in:full_due,partial_paid,full_paid|required_if:service_type,external',
                 'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
@@ -71,7 +71,7 @@ class ServiceController extends Controller
             if ($vehicle && $vehicle->owner_type != $owner_type) {
                 return response()->json(['message' => 'Invalid vehicle selection!', 'type' => 'error'], 422);
             }
-            
+
             DB::beginTransaction();
 
             // Create service record
@@ -85,7 +85,7 @@ class ServiceController extends Controller
                 'grand_total' => $request->grand_total,
                 'paid_amount' => $request->amount ?? 0,
                 'due_amount' => $request->grand_total - $request->amount ?? 0,
-                'paid_status' => $request->service_type == 'self' ? 'in_house': $this->calculatePaidStatus($request->grand_total, $request->amount),
+                'paid_status' => $request->service_type == 'self' ? 'in_house' : $this->calculatePaidStatus($request->grand_total, $request->amount),
                 'note' => $request->note,
                 'any_parts_purchase' => $request->any_parts_purchase ?? false,
             ]);
@@ -96,12 +96,12 @@ class ServiceController extends Controller
                 ServiceDetail::create([
                     'service_id' => $service->id,
                     'service_chart_id' => $chartId,
-                    'price' => $chart->price, 
+                    'price' => $chart->price,
                 ]);
             }
 
             // account amount increment
-            if($request->account_id && $request->amount > 0){
+            if ($request->account_id && $request->amount > 0) {
                 $account = Account::findOrFail($request->account_id);
                 $account->balance += $request->amount;
                 $account->save();
@@ -117,9 +117,9 @@ class ServiceController extends Controller
                 'grand_total' => $request->grand_total,
                 'due_amount' => $request->grand_total - $request->amount ?? 0,
                 'paid_amount' => $request->amount ?? $amount,
-                'paid_status' => $request->service_type == 'self' ? 'in_house': $this->calculatePaidStatus($request->grand_total, $request->amount),
+                'paid_status' => $request->service_type == 'self' ? 'in_house' : $this->calculatePaidStatus($request->grand_total, $request->amount),
             ]);
-            if($payment && $request->amount > 0){
+            if ($payment && $request->amount > 0) {
                 $payment->paymentDetails()->create([
                     'account_id' => $request->account_id,
                     'amount' => $request->amount ?? $amount,
@@ -127,7 +127,7 @@ class ServiceController extends Controller
                     'note' => $request->note,
                 ]);
             }
-           
+
             // Process parts if any
             if ($request->any_parts_purchase && !empty($request->parts)) {
 
@@ -136,8 +136,8 @@ class ServiceController extends Controller
                     'type' => $request->service_type,
                     'grand_total' => $request->grand_total,
                     'paid_amount' => $request->paid_amount ?? 0,
-                    'due_amount' => $request->grand_total - $request->amount ?? 0, 
-                    'paid_status' => $request->service_type == 'self' ? 'in_house': $this->calculatePaidStatus($request->grand_total, $request->amount),
+                    'due_amount' => $request->grand_total - $request->amount ?? 0,
+                    'paid_status' => $request->service_type == 'self' ? 'in_house' : $this->calculatePaidStatus($request->grand_total, $request->amount),
                     'note' => $request->note,
                 ]);
 
@@ -174,7 +174,7 @@ class ServiceController extends Controller
                     foreach ($availableHistories as $history) {
                         DB::table('stock_histories')
                             ->where('id', $history->id)
-                            ->update(['sale_id' => $sale->id]); 
+                            ->update(['sale_id' => $sale->id]);
                     }
                     DB::table('products')
                         ->where('id', $part['product_id'])
@@ -186,7 +186,6 @@ class ServiceController extends Controller
                         'qty' => $part['quantity'],
                     ]);
                 }
-
             }
 
             DB::commit();
@@ -269,26 +268,26 @@ class ServiceController extends Controller
         ]);
 
         try {
-            
+
             // If payment type is full_due
             if ($request->payment_type == 'full_due') {
                 return response()->json(['message' => 'Invalid payment type', 'type' => 'error'], 422);
             }
-            
+
             // For partial_paid or full_paid
             $account = Account::find($request->account_id);
             if (!$account) {
                 return response()->json(['message' => 'Account not found', 'type' => 'error'], 422);
             }
-            
+
             if ($request->amount > $account->balance) {
                 return response()->json(['message' => 'Payment amount cannot be greater than account balance ' . $account->balance, 'type' => 'error'], 422);
             }
-            
+
             if ($request->payment_type == 'partial_paid' && $request->amount > $service->due_amount) {
                 return response()->json(['message' => 'Payment amount cannot be greater than due amount ' . $service->due_amount, 'type' => 'error'], 422);
             }
-            
+
             DB::beginTransaction();
             $latest_due_amount = $service->due_amount - $request->amount;
             $total_paid_amount = $service->paid_amount + $request->amount;
@@ -337,6 +336,16 @@ class ServiceController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function printInvoice(Request $request)
+    {
+        try {
+            $service = Service::with('vehicle:id,license_plate','account:id,type','sale')->findOrFail($request->id);
+            return view('backend.services._service_invoice_print', compact('service'));
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 404);
         }
     }
 }

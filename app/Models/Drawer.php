@@ -73,12 +73,18 @@ class Drawer extends Model
      */
     public function getAvailableProductsCountAttribute()
     {
+        // Return the preloaded count if available
+        if (isset($this->attributes['available_products_count'])) {
+            return $this->attributes['available_products_count'];
+        }
+
+        // Fallback to the original query if not preloaded
         return DB::table('stock_purchases as sp')
             ->leftJoin('stock_histories as sh', 'sp.id', '=', 'sh.stock_purchase_id')
             ->where('sp.drawer_id', $this->id)
             ->where(function ($query) {
                 $query->whereNull('sh.id')
-                    ->orWhere('sh.sale_id', null);
+                    ->orWhereNull('sh.sale_id');
             })
             ->count();
     }

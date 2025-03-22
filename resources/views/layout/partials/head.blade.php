@@ -9,10 +9,6 @@
 <!-- animation CSS -->
 {{-- <link rel="stylesheet" href="{{ url('build/css/animate.css') }}"> --}}
 
-{{-- <!-- Fontawesome CSS -->
-<link rel="stylesheet" href="{{ url('build/plugins/fontawesome/css/fontawesome.min.css') }}">
-<link rel="stylesheet" href="{{ url('build/plugins/fontawesome/css/all.min.css') }}"> --}}
-
 {{-- <!-- Datatable CSS -->
 <link rel="stylesheet" href="{{ url('build/css/dataTables.bootstrap5.min.css') }}"> --}}
 
@@ -61,6 +57,9 @@
 <!-- Select2 CSS -->
 <link rel="stylesheet" href="{{ url('build/plugins/select2/css/select2.min.css') }}">
 
+<!-- Fontawesome CSS -->
+<link rel="stylesheet" href="{{ url('build/plugins/fontawesome/css/fontawesome.min.css') }}">
+<link rel="stylesheet" href="{{ url('build/plugins/fontawesome/css/all.min.css') }}">
 
 <!-- Feathericon CSS -->
 <link rel="stylesheet" href="{{ url('build/css/feather.css') }}">
