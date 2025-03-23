@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Vehicle extends Model
 {
     protected $guarded = [];
-
+    
+    public static $COVERED_VAN = 1;
+    public static $MOTORBIKE = 2;
+    public static $PICKUP = 3;
+    public static $TRUCK = 4;
+    public static $TBA = 5;
 
     public function zone()
     {
