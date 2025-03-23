@@ -36,24 +36,31 @@
         $('#reset-filter').on('click', function(e) {
             e.preventDefault();
             $('input[name="search"]').val('');
-            $('.filter-input').val('');
+              $('.filter-input').val('');
             $('.filter-input').trigger('change');
             sendAjaxRequest();
         });
 
-        function sendAjaxRequest() {
+        function sendAjaxRequest(url = formAction) {
             $.ajax({
-                url: formAction,
+                url: url,
                 type: 'GET',
                 data: form.serialize(),
                 success: function(res) {
-                    $('table tbody').html(res);
+                    let response = $(res);
+                    $('#dataTable').html(response);
                 },
                 error: function(xhr, status, error) {
                     console.error("AJAX request failed.", error);
                 }
             });
         }
+
+        $(document).on('click', '#pagination a', function(e) {
+            e.preventDefault();
+            let pageUrl = $(this).attr('href');
+            sendAjaxRequest(pageUrl);
+        });
     });
 </script>
 @endpush
