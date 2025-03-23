@@ -26,12 +26,6 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    {{-- <th class="no-sort">
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </th> --}}
                                     <th>Invoice No</th>
                                     <th>Service Type</th>
                                     <th>Vehicle </th>
@@ -46,12 +40,6 @@
                             <tbody>
                                 @forelse ($services as $service)
                                     <tr>
-                                        {{-- <td>
-                                            <label class="checkboxs">
-                                                <input type="checkbox">
-                                                <span class="checkmarks"></span>
-                                            </label>
-                                        </td> --}}
                                         <td class="fw-bold">#{{ $service->transaction_id }}</td>
                                         <td>{{ $service->service_type == 'self' ? 'Self' : 'External' }}</td>
                                         <td>{{ $service->vehicle?->license_plate }}</td>
@@ -61,7 +49,7 @@
                                             </span>
                                         </td>
                                         <td>Cash</td>
-                                        <td>{{ $service->grand_total }}</td>
+                                        <td>{{ number_format($service->grand_total) }}</td>
                                         <td>
                                             @if ($service->paid_status == 'full_due')
                                                 <span class="badge-linedanger payment_view"
@@ -94,6 +82,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    {{-- detail modal --}}
                                     <div class="modal fade" id="service-{{ $service->id }}">
                                         <div class="modal-dialog modal-dialog-centered" style="max-width: 90%; width: 1400px;">
                                             <div class="modal-content">
@@ -267,14 +256,14 @@
                                                     </div>
                                                     @endif
 
-                                                    <div id="print-invoice-template" style="display: none;">
+                                                    <div id="print-invoice-template-{{ $service->id }}" style="display: none;">
                                                         @include('backend.services._service_invoice_print')
                                                     </div>
                                                 </div>
                                                 
                                                 <!-- Modal Footer -->
                                                 <div class="modal-footer justify-content-end">
-                                                    <button type="button" class="btn btn-secondary me-2" onclick="printServiceInvoice({{ $service->id }})">
+                                                    <button type="button" class="btn btn-secondary me-2" onclick="printInvoice(this, {{ $service->id }})">
                                                         <i class="fas fa-print me-1"></i> Print
                                                     </button>
                                                     <button type="button" class="btn btn-primary">
@@ -342,24 +331,24 @@
                 })
             })
         });
-        // Replace the current onclick handler with this
-        function printServiceInvoice() {
-    setTimeout(() => {
-        let printContent = document.getElementById('print-invoice-template');
-        if (!printContent) {
-            alert("Print template not found!");
-            return;
+        
+        function printInvoice(button, id) {
+            setTimeout(() => {
+                let printContent = document.getElementById('print-invoice-template-' + id);
+                if (!printContent) {
+                    alert("Print template not found!");
+                    return;
+                }
+
+                let originalContent = document.body.innerHTML;
+                document.body.innerHTML = printContent.innerHTML;
+
+                window.print();
+
+                document.body.innerHTML = originalContent;
+                location.reload();
+            }, 300);
         }
-
-        let originalContent = document.body.innerHTML;
-        document.body.innerHTML = printContent.innerHTML;
-
-        window.print();
-
-        document.body.innerHTML = originalContent;
-        location.reload();
-    }, 300); // Small delay to ensure modal content is loaded
-}
 
     </script>
 @endpush

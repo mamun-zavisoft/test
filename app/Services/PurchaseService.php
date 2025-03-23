@@ -70,6 +70,11 @@ class PurchaseService
                 'paid_status' => 'full_due',
             ]);
 
+            if ($purchase->supplier) {
+                $purchase->supplier->balance -= $grandTotal;
+                $purchase->supplier->save();
+            }
+
             return $purchase;
         } catch (Exception $e) {
             throw $e;

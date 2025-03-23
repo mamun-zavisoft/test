@@ -19,7 +19,6 @@ class FetchSale
                         ->orWhere('transaction_id', 'like', "%{$search}%")
                         ->orWhere('phone', 'like', "%{$search}%");
             })
-            ->select('id','account_id','transaction_id','phone','created_at')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
     }
 }

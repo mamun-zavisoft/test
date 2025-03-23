@@ -29,7 +29,7 @@ class CommonSeeder extends Seeder
         $category = Category::create(['name' => 'Engine Oil']);
         $brand = Brand::create(['name' => 'Hyundai']);
         $RepsolBrand = Brand::create(['name' => 'Repsol']);
-        $supplier =Supplier::create(['name' => 'Supplier 1', 'zone_id' => $zone->id, 'phone' => '01512345678']);
+        $supplier =Supplier::create(['name' => 'Walk In Supplier', 'zone_id' => $zone->id, 'phone' => '01512345678']);
         $rack = Rack::create(['name' => 'Rack-1', 'zone_id' => $zone->id]);
         for ($i = 1; $i <= 4; $i++) {
             Drawer::create(['name' => 'Drawer-' . $i, 'rack_id' => $rack->id]);

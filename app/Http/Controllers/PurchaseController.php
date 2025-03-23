@@ -161,9 +161,15 @@ class PurchaseController extends Controller
             $account->balance = $account->balance - $request->amount;
             $account->save();
 
+            if($purchase->supplier) {
+                $purchase->supplier->balance += $request->amount;
+                $purchase->supplier->save();
+            }
+            
             if ($request->payment_type == 'full_paid') {
                 $amount = $purchase->grand_total - $purchase->paid_amount;
             }
+           
 
             // Update payment record and add payment detail
             $payment = $purchase->payment;

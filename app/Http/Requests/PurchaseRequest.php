@@ -22,7 +22,7 @@ class PurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'supplier_id' => 'nullable|exists:suppliers,id',
+            'supplier_id' => 'required|exists:suppliers,id',
             'discount_amount' => 'nullable|numeric|min:0',
             'shipping_charge' => 'nullable|numeric|min:0',
             'paid_amount' => 'nullable|numeric|min:0',

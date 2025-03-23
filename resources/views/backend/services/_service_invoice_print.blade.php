@@ -210,9 +210,10 @@
                 <h4>Vehicle Information</h4>
                 <p><strong>License Plate:</strong> {{ $service->vehicle?->license_plate ?? 'N/A' }}</p>
                 <p><strong>Type:</strong> 
-                    <span class="badge {{ $service->vehicle?->owner_type == 1 ? 'badge-success' : 'badge-warning' }}">
+                    {{-- <span class="badge {{ $service->vehicle?->owner_type == 1 ? 'badge-success' : 'badge-warning' }}">
                         {{ $service->vehicle?->owner_type == 1 ? 'Self' : 'External' }}
-                    </span>
+                    </span> --}}
+                    <span>{{ $service->vehicle?->owner_type == 1 ? 'Self' : 'External' }}</span>
                 </p>
                 @if(isset($service->vehicle?->customer))
                 <p><strong>Owner:</strong> {{ $service->vehicle?->customer?->name ?? 'N/A' }}</p>
@@ -225,24 +226,22 @@
                 <div class="invoice-meta-item">
                     <div><strong>Service Type:</strong></div>
                     <div>
-                        <span class="badge {{ $service->service_type == 1 ? 'badge-success' : 'badge-warning' }}">
-                            {{ $service->service_type == 1 ? 'Self' : 'External' }}
-                        </span>
+                        <span>{{ $service->service_type == 1 ? 'Self (In House)' : 'External ' }}</span>
                     </div>
                 </div>
                 <div class="invoice-meta-item">
                     <div><strong>Payment Status:</strong></div>
                     <div>
                         @if ($service->paid_status == 'full_due')
-                            <span class="badge badge-danger">Due</span>
+                            <span class="fw-bold">Due</span>
                         @elseif ($service->paid_status == 'partial_paid')
-                            <span class="badge badge-warning">Partial Paid</span>
+                            <span class="fw-bold">Partial Paid</span>
                         @elseif ($service->paid_status == 'full_paid')
-                            <span class="badge badge-success">Paid</span>
+                            <span class="fw-bold">Paid</span>
                         @elseif ($service->paid_status == 'in_house')
-                            <span class="badge badge-success">In House</span>
+                            <span class="fw-bold">In House</span>
                         @else
-                            <span class="badge badge-danger">Not Defined</span>
+                            <span class="fw-bold">Not Defined</span>
                         @endif
                     </div>
                 </div>

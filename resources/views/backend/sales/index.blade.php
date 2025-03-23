@@ -15,7 +15,7 @@
                             <thead>
                                 <tr>
                                     <th>Invoice No</th>
-                                    <th>Phone</th>
+                                    <th>Sale Type</th>
                                     <th>Grand Total</th>
                                     <th>Date</th>
                                     <th class="no-sort">Action</th>
@@ -25,7 +25,15 @@
                                 @forelse ($sales as $sale)
                                     <tr>
                                         <td class="fw-bold">#{{ $sale->transaction_id }}</td>
-                                        <td>{{ $sale->phone }}</td>
+                                        <td>
+                                            @if ($sale->type == "only_sale")
+                                                <span class="badge bg-info">POS</span>
+                                            @elseif ($sale->type == "external")
+                                                <span class="badge bg-warning">External</span>
+                                            @else
+                                                <span class="badge bg-success">In House</span>
+                                            @endif
+                                        </td>
                                         <td>{{ number_format($sale->grand_total) }}</td>
                                         <td>{{ $sale->created_at?->format('d M Y h:i A') }}</td>
                                         <td class="action-table-data">
@@ -62,7 +70,14 @@
                                                             <div class="card">
                                                                 <div class="card-body">
                                                                     <h5 class="card-title font-weight-bold mb-3">Customer Info</h5>
-                                                                    <p class="mb-1">Customer Phone: {{ $sale->phone ?? "N/A" }}</p>
+                                                                    @if ($sale->type == "only_sale")
+                                                                        <p class="mb-1">Sale Type: <span>POS</span></p>
+                                                                        <p class="mb-1">Customer Phone: {{ $sale->phone ?? "N/A" }}</p>
+                                                                    @elseif ($sale->type == "external")
+                                                                        <p class="mb-1">Customer type: <span class="fw-bold">External</span></p>
+                                                                    @else
+                                                                        <p class="mb-1">Customer type: <span class="fw-bold">In House</span></p>  
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -95,8 +110,8 @@
                                                             <!-- Table Head -->
                                                             <div class="d-flex fw-bold border-bottom pb-2">
                                                                 <div class="p-2" style="flex: 1;">Product Name</div>
+                                                                <div class="p-2" style="flex: 1;">Unit Price</div>
                                                                 <div class="p-2" style="flex: 1;">Quantity</div>
-                                                                <div class="p-2" style="flex: 1;">Price</div>
                                                                 <div class="p-2" style="flex: 1;">Total Price</div>
                                                             </div>
 
@@ -107,9 +122,9 @@
                                                             @foreach($sale->saleDetails as $data)
                                                                 <div class="d-flex border-bottom py-2">
                                                                     <div class="p-2" style="flex: 1;">{{ $data->product?->name }}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ number_format($data->unit_price) }}</div>
                                                                     <div class="p-2" style="flex: 1;">{{ $data->qty }}</div>
-                                                                    <div class="p-2" style="flex: 1;">{{ $data->unit_price }}</div>
-                                                                    <div class="p-2" style="flex: 1;">{{ $data->qty * $data->unit_price }}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ number_format($data->qty * $data->unit_price) }}</div>
                                                                 </div>
                                                                 <?php $total += $data->qty * $data->unit_price ?>
                                                             @endforeach
@@ -129,15 +144,15 @@
                                                             <div class="bg-light p-3 rounded">
                                                                 <div class="d-flex justify-content-between mb-2">
                                                                     <span>Total Price</span>
-                                                                    <span>{{ $total ?? 0 }}</span>
+                                                                    <span>{{ number_format($total) ?? 0 }}</span>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between mb-2">
                                                                     <span>Discount</span>
-                                                                    <span>{{ $sale->discount_amount }}</span>
+                                                                    <span>{{ number_format($sale->discount_amount) }}</span>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between">
                                                                     <span class="font-weight-bold">Grand Total</span>
-                                                                    <span class="font-weight-bold">{{ $sale->grand_total }}</span>
+                                                                    <span class="font-weight-bold">{{ number_format($sale->grand_total) }}</span>
                                                                 </div>
                                                             </div>
                                                         </div>

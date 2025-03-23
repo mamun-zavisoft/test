@@ -272,7 +272,6 @@ class ServiceController extends Controller
         ]);
 
         try {
-
             // If payment type is full_due
             if ($request->payment_type == 'full_due') {
                 return response()->json(['message' => 'Invalid payment type', 'type' => 'error'], 422);
@@ -282,10 +281,6 @@ class ServiceController extends Controller
             $account = Account::find($request->account_id);
             if (!$account) {
                 return response()->json(['message' => 'Account not found', 'type' => 'error'], 422);
-            }
-
-            if ($request->amount > $account->balance) {
-                return response()->json(['message' => 'Payment amount cannot be greater than account balance ' . $account->balance, 'type' => 'error'], 422);
             }
 
             if ($request->payment_type == 'partial_paid' && $request->amount > $service->due_amount) {
