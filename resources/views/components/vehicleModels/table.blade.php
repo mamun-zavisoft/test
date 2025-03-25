@@ -18,9 +18,9 @@
                 <td>{{ $vehicleModel->name }}</td>
                 <td>{{ $vehicleModel->manufacturer }}</td>
                 <td>{{ $vehicleModel->engine_cc }}</td>
-                <td>{{ $vehicleModel->fuel_capacity }}L</td>
-                <td>{{ $vehicleModel->payload_capacity }}kg</td>
-                <td>{{ $vehicleModel->body_length }}feet</td>
+                <td>{{ $vehicleModel->fuel_capacity }} L</td>
+                <td>{{ $vehicleModel->payload_capacity }} kg</td>
+                <td>{{ $vehicleModel->body_length }} feet</td>
                 <td class="action-table-data">
                     <div class="edit-delete-action">
                         <!-- <a class="me-2 edit-icon p-2" href="#" data-bs-toggle="modal"
@@ -70,10 +70,10 @@
                                         <div class="mb-3">
                                             <label class="form-label">Name*</label>
                                             <input type="text" class="form-control"
-                                            value="{{ $vehicleModel->name }}" name="name" readonly>
+                                            value="{{ $vehicleModel->name }}" name="name">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Manufacturer*</label>
+                                            <label class="form-label">Manufacturer*(Brand)</label>
                                             <input type="text" class="form-control"
                                                 value="{{ $vehicleModel->manufacturer }}" name="manufacturer">
                                         </div>
@@ -83,17 +83,17 @@
                                             value="{{ $vehicleModel->engine_cc }}" name="engine_cc">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Fuel Capacity*</label>
+                                            <label class="form-label">Fuel Capacity*(Liter)</label>
                                             <input type="number" class="form-control"
                                             value="{{ $vehicleModel->fuel_capacity }}" name="fuel_capacity">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Payload Capacity*</label>
+                                            <label class="form-label">Payload Capacity*(KG)</label>
                                             <input type="number" class="form-control"
                                             value="{{ $vehicleModel->payload_capacity }}" name="payload_capacity">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Body Length*</label>
+                                            <label class="form-label">Body Length*(Feet)</label>
                                             <input type="number" class="form-control"
                                             value="{{ $vehicleModel->body_length }}" name="body_length">
                                         </div>

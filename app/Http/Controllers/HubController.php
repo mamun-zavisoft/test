@@ -69,6 +69,7 @@ class HubController extends Controller
             $hub->update([
                 'name' => $request->name,
                 'zone_id' => auth()->user()?->zone_id,
+                'custom_hub_id' => $request->custom_hub_id,
                 'phone' => $request->phone,
                 'address' => $request->address
             ]);

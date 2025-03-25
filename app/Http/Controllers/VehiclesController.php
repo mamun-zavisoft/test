@@ -32,7 +32,7 @@ class VehiclesController extends Controller
     {
         try{
 
-            $request->validate([
+            $data = $request->validate([
                 'owner_type' => 'required|in:1,2',
                 'vehicle_type' => 'required|in:1,2,3,4,5',
                 'hub_id' => 'required|exists:hubs,id',
@@ -44,9 +44,16 @@ class VehiclesController extends Controller
                 'road_permit_validity' => 'required|date',
                 'insurance_validity' => 'required|date',
                 'license_plate' => 'required|string|max:50|unique:vehicles,license_plate',
-                'current_odometer' => 'required|numeric',
+                'current_odometer' => 'required|numeric|min:0',
                 'status' => 'required|in:1,2'
             ]);
+
+            $data['registration_date'] = date('Y-m-d', strtotime($request->registration_date));
+            $data['registration_validity'] = date('Y-m-d', strtotime($request->registration_validity));
+            $data['tax_token_validity'] = date('Y-m-d', strtotime($request->tax_token_validity));
+            $data['fitness_validity'] = date('Y-m-d', strtotime($request->fitness_validity));
+            $data['road_permit_validity'] = date('Y-m-d', strtotime($request->road_permit_validity));
+            $data['insurance_validity'] = date('Y-m-d', strtotime($request->insurance_validity));
 
             DB::beginTransaction();
 
@@ -55,12 +62,12 @@ class VehiclesController extends Controller
                 'vehicle_type' => $request->vehicle_type,
                 'hub_id' => $request->hub_id,
                 'vehicle_model_id' => $request->vehicle_model_id,
-                'registration_date' => $request->registration_date,
-                'registration_validity' => $request->registration_validity,
-                'tax_token_validity' => $request->tax_token_validity,
-                'fitness_validity' => $request->fitness_validity,
-                'road_permit_validity' => $request->road_permit_validity,
-                'insurance_validity' => $request->insurance_validity,
+                'registration_date' => $data['registration_date'],
+                'registration_validity' => $data['registration_validity'],
+                'tax_token_validity' => $data['tax_token_validity'],
+                'fitness_validity' => $data['fitness_validity'],
+                'road_permit_validity' => $data['road_permit_validity'],
+                'insurance_validity' => $data['insurance_validity'],
                 'license_plate' => $request->license_plate,
                 'current_odometer' => $request->current_odometer,
                 'zone_id' => auth()->user()?->zone_id,
@@ -98,7 +105,7 @@ class VehiclesController extends Controller
                 'road_permit_validity' => 'required|date_format:Y-m-d',
                 'insurance_validity' => 'required|date_format:Y-m-d',
                 'license_plate' => 'required|string|max:50|unique:vehicles,license_plate,' . $vehicle->id,
-                'current_odometer' => 'required|numeric',
+                'current_odometer' => 'required|numeric|min:0',
                 'status' => 'required|in:1,2'
             ]);
 

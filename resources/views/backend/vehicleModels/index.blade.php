@@ -42,7 +42,7 @@
                                     <input type="text" name="name" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Manufacturer*</label>
+                                    <label class="form-label">Manufacturer*(Brand)</label>
                                     <input type="text" name="manufacturer" class="form-control">
                                 </div>
                                 <div class="mb-3">
@@ -50,15 +50,15 @@
                                     <input type="number" name="engine_cc" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Fuel Capacity*</label>
+                                    <label class="form-label">Fuel Capacity*(Liter)</label>
                                     <input type="number" name="fuel_capacity" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Payload Capacity*</label>
+                                    <label class="form-label">Payload Capacity*(KG)</label>
                                     <input type="number" name="payload_capacity" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Body Length*</label>
+                                    <label class="form-label">Body Length*(Feet)</label>
                                     <input type="number" name="body_length" class="form-control">
                                 </div>
                                 <div class="modal-footer-btn">

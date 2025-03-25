@@ -145,7 +145,7 @@
                                     </div>
                                     <div class="mb-3 col-6">
                                         <label class="form-label">ODO(current odometer)</label>
-                                        <input type="number" name="current_odometer" class="form-control">
+                                        <input type="number" name="current_odometer" class="form-control" placeholder="Current Mileage">
                                     </div>
                                     <div class="mb-3 col-6">
                                         <label class="form-label">Registration Date*</label>
