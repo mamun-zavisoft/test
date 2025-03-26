@@ -25,7 +25,7 @@
                         {{ $vehicle->owner_type == 1 ? 'Self' : 'External' }}
                     </span>
                 </td>
-                <td>{{ $vehicle->license_plate }}</td>
+                <td><span class="copyable">{{ $vehicle->license_plate }}</span></td>
                 <td>{{ $vehicle->vehicleModel?->name ?? '-' }}</td>
                 <td>
                     @if ($vehicle->vehicle_type == 1)

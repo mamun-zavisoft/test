@@ -1,0 +1,32 @@
+.copyable {
+    position: relative; 
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .copyable::before {
+    content: "Copy";
+    position: absolute;
+    top: -70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s linear;
+    z-index: 10;
+  }
+  
+  .copyable:hover::before {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .copyable.copied::before {
+    content: "Copied!";
+    background-color: #FF9F43;
+  }

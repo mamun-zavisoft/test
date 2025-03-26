@@ -173,7 +173,7 @@
                                                             @foreach($service->serviceDetails as $data)
                                                                 <div class="d-flex border-bottom py-2">
                                                                     <div class="p-2" style="flex: 1;">{{ $data->serviceChart?->name }}</div>
-                                                                    <div class="p-2" style="flex: 1;">{{ number_format($data->serviceChart?->price )}}</div>
+                                                                    <div class="p-2" style="flex: 1;">{{ number_format($data->price )}}</div>
                                                                     <div class="p-2" style="flex: 1;">{{ $data->serviceChart?->code }}</div>
                                                                 </div>
                                                             @endforeach

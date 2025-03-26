@@ -86,3 +86,4 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- Main CSS -->
 {{-- <link rel="stylesheet" href="{{ url('build/css/style.css') }}"> --}}
 <link rel="stylesheet" href="{{ url('build/scss/main.css') }}">
+<link rel="stylesheet" href="{{ url('build/css/custom.css') }}">

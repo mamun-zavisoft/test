@@ -268,7 +268,7 @@
             <div class="invoice-col-index">{{ $index + 1 }}</div>
             <div class="invoice-col-name">{{ $data->serviceChart?->name }}</div>
             <div class="invoice-col-code">{{ $data->serviceChart?->code }}</div>
-            <div class="invoice-col-price">{{ number_format($data->serviceChart?->price) }}</div>
+            <div class="invoice-col-price">{{ number_format($data->price) }}</div>
         </div>
         @endforeach
     </div>

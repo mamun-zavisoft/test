@@ -142,6 +142,10 @@
                                         <div class="card-body ms-5">
                                             <h5 class="card-title font-weight-bold mb-3">Invoice Info</h5>
                                             <div class="d-flex justify-content-between mb-1">
+                                                <span>Invoice:</span>
+                                                <span class="fw-bolder copyable">{{ $purchase->transaction_id }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span>Reference:</span>
                                                 <span class="fw-bolder">{{ $purchase->reference_no }}</span>
                                             </div>
@@ -219,14 +223,14 @@
                         </div>
 
                         <!-- Footer Actions -->
-                        <div class="modal-footer d-flex justify-content-end">
+                        {{-- <div class="modal-footer d-flex justify-content-end">
                             <button class="btn btn-secondary me-2" onclick="window.print()">
                                 <i class="fa fa-print me-1"></i> Print
                             </button>
                             <button class="btn btn-primary">
                                 <i class="fa fa-download me-1"></i> Download PDF
                             </button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
