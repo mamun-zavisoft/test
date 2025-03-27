@@ -1,6 +1,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th class="no-sort">SL</th>
             <th>Invoice No</th>
             <th>Sale Type</th>
             <th>Grand Total</th>
@@ -11,7 +12,8 @@
     <tbody>
         @forelse ($sales as $sale)
             <tr>
-                <td class="fw-bold">#{{ $sale->transaction_id }}</td>
+                <td>{{ $loop->iteration + $sales->firstItem() - 1 }}</td>
+                <td class="fw-bold"><span class="copyable">{{ $sale->transaction_id }}</span></td>
                 <td>
                     @if ($sale->type == "only_sale")
                         <span class="badge bg-info">POS</span>
