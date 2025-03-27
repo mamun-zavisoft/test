@@ -33,18 +33,18 @@ class VehiclesController extends Controller
 
             $data = $request->validate([
                 'owner_type' => 'required|in:1,2',
-                'vehicle_type' => 'required|in:1,2,3,4,5',
-                'hub_id' => 'required|exists:hubs,id',
-                'vehicle_model_id' => 'required|exists:vehicle_models,id',
-                'registration_date' => 'required|date',
-                'registration_validity' => 'required|date',
-                'tax_token_validity' => 'required|date',
-                'fitness_validity' => 'required|date',
-                'road_permit_validity' => 'required|date',
-                'insurance_validity' => 'required|date',
-                'license_plate' => 'required|string|max:50|unique:vehicles,license_plate',
-                'current_odometer' => 'required|numeric|min:0',
-                'status' => 'required|in:1,2',
+                'vehicle_type' => 'nullable|in:1,2,3,4,5',
+                'hub_id' => 'nullable|exists:hubs,id',
+                'vehicle_model_id' => 'nullable|exists:vehicle_models,id',
+                'registration_date' => 'nullable|date',
+                'registration_validity' => 'nullable|date',
+                'tax_token_validity' => 'nullable|date',
+                'fitness_validity' => 'nullable|date',
+                'road_permit_validity' => 'nullable|date',
+                'insurance_validity' => 'nullable|date',
+                'license_plate' => 'nullable|string|max:50|unique:vehicles,license_plate',
+                'current_odometer' => 'nullable|numeric|min:0',
+                'status' => 'nullable|in:1,2',
             ]);
 
             $data['registration_date'] = date('Y-m-d', strtotime($request->registration_date));
@@ -70,7 +70,7 @@ class VehiclesController extends Controller
                 'license_plate' => $request->license_plate,
                 'current_odometer' => $request->current_odometer,
                 'zone_id' => auth()->user()?->zone_id,
-                'status' => $request->status,
+                'status' => $request->status ?? 1,
             ]);
 
             DB::commit();
@@ -96,18 +96,18 @@ class VehiclesController extends Controller
         try {
             $request->validate([
                 'owner_type' => 'required|in:1,2',
-                'vehicle_type' => 'required|in:1,2,3,4,5,'.$vehicle->id,
-                'hub_id' => 'required|exists:hubs,id',
-                'vehicle_model_id' => 'required|exists:vehicle_models,id',
-                'registration_date' => 'required|date_format:Y-m-d',
-                'registration_validity' => 'required|date_format:Y-m-d',
-                'tax_token_validity' => 'required|date_format:Y-m-d',
-                'fitness_validity' => 'required|date_format:Y-m-d',
-                'road_permit_validity' => 'required|date_format:Y-m-d',
-                'insurance_validity' => 'required|date_format:Y-m-d',
-                'license_plate' => 'required|string|max:50|unique:vehicles,license_plate,'.$vehicle->id,
-                'current_odometer' => 'required|numeric|min:0',
-                'status' => 'required|in:1,2',
+                'vehicle_type' => 'nullable|in:1,2,3,4,5,'.$vehicle->id,
+                'hub_id' => 'nullable|exists:hubs,id',
+                'vehicle_model_id' => 'nullable|exists:vehicle_models,id',
+                'registration_date' => 'nullable|date',
+                'registration_validity' => 'nullable|date',
+                'tax_token_validity' => 'nullable|date',
+                'fitness_validity' => 'nullable|date',
+                'road_permit_validity' => 'nullable|date',
+                'insurance_validity' => 'nullable|date',
+                'license_plate' => 'nullable|string|max:50|unique:vehicles,license_plate,'.$vehicle->id,
+                'current_odometer' => 'nullable|numeric|min:0',
+                'status' => 'nullable|in:1,2',
             ]);
 
             $vehicle->update([

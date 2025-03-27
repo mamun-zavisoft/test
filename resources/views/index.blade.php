@@ -237,13 +237,13 @@
                                                                     <h5 class="card-title fw-bold mb-3">Service Info</h5>
                                                                     <div class="row mb-2">
                                                                         <div class="col-md-5 fw-bold">Invoice NO:</div>
-                                                                        <div class="col-md-7">{{ $service->transaction_id }}</div>
+                                                                        <div class="col-md-7"><span class="copyable">{{ $service->transaction_id }}</span></div>
                                                                     </div>
                                                                     <div class="row mb-2">
                                                                         <div class="col-md-5 fw-bold">Service Type:</div>
                                                                         <div class="col-md-7">
-                                                                            <span class="text-{{ $service->service_type == 1 ? 'success' : 'warning' }}">
-                                                                                {{ $service->service_type == 1 ? 'Self' : 'External' }}
+                                                                            <span class="text-{{ $service->service_type == 'self' ? 'success' : 'warning' }}">
+                                                                                {{ $service->service_type == 'self' ? 'Self' : 'External' }}
                                                                             </span>
                                                                         </div>
                                                                     </div>

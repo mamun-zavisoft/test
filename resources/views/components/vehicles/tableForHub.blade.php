@@ -2,11 +2,9 @@
     <thead>
         <tr>
             <th class="no-sort">SL</th>
-            <th>Owner Type</th>
             <th>Reg.no</th>
             <th>Model</th>
             <th>Vehicle Type</th>
-            <th>Hub</th>
             <th>Reg.Date</th>
             <th>Reg.Validity</th>
             <th>Status</th>
@@ -20,13 +18,8 @@
                 <td>
                     {{ $loop->iteration + $vehicles->firstItem() - 1 }}
                 </td>
-                <td>
-                    <span class="badge rounded-pill {{ $vehicle->owner_type == 1 ? 'bg-primary' : 'bg-secondary' }}">
-                        {{ $vehicle->owner_type == 1 ? 'Self' : 'External' }}
-                    </span>
-                </td>
-                <td><span class="copyable">{{ $vehicle->license_plate }}</span></td>
-                <td>{{ $vehicle->vehicleModel?->name ?? '-' }}</td>
+                <td>{{ $vehicle->license_plate }}</td>
+                <td>{{ $vehicle->vehicleModel?->name }}</td>
                 <td>
                     @if ($vehicle->vehicle_type == 1)
                         Covered Van
@@ -38,13 +31,10 @@
                         Truck
                     @elseif ($vehicle->vehicle_type == 5)
                         TBA/Other
-                    @else
-                        -
                     @endif
                 </td>
-                <td>{{ $vehicle->hub?->name ?? '-' }}</td>
-                <td>{{ $vehicle->registration_date ?? '-' }}</td>
-                <td>{{ $vehicle->registration_validity ?? '-' }}</td>
+                <td>{{ $vehicle->registration_date }}</td>
+                <td>{{ $vehicle->registration_validity }}</td>
                 
                 <td><span
                         class="badge rounded-pill bg-outline-{{ $vehicle->status == 1 ? 'success' : 'warning' }}">{{ $vehicle->status == 1 ? 'Active' : 'In Service' }}</span>
@@ -81,7 +71,7 @@
                     <div class="modal-content" style="height: 100%;">
                         <div class="page-wrapper-new p-0">
                             <div class="content">
-                                <div class="modal-header border-0 custom-modal-header justify-content-between">
+                                <div class="modal-header border-0 custom-modal-header">
                                     <div class="page-title">
                                         <h4>Edit Vehicle</h4>
                                     </div>
@@ -205,14 +195,7 @@
                                     <div class="card h-100">
                                         <div class="card-body ms-4">
                                             <h5 class="card-title fw-bold mb-3">Vehicle Info</h5>
-                                            <div class="row mb-2">
-                                                <div class="col-md-4 fw-bold">Owner Type:</div>
-                                                <div class="col-md-8">
-                                                    <span class="text-{{ $vehicle->owner_type == 1 ? 'success' : 'warning' }}">
-                                                        {{ $vehicle->owner_type == 1 ? 'Self' : 'External' }}
-                                                    </span>
-                                                </div>                                     
-                                            </div>
+                                            
                                             <div class="row mb-2">
                                                 <div class="col-md-4 fw-bold">Vehicle Type:</div>
                                                 <div class="col-md-8">
@@ -251,7 +234,7 @@
                                 <!-- Table Head -->
                                 <div class="d-flex fw-bold border-bottom pb-2">
                                     <div class="p-2" style="flex: 1;">Reg.No</div>
-                                    <div class="p-2" style="flex: 1;">ODO</div>
+                                    <div class="p-2" style="flex: 1;">Current ODOMeter</div>
                                     <div class="p-2" style="flex: 1;">Tax.T.Validity</div>
                                     <div class="p-2" style="flex: 1;">Fitness Validity</div>
                                     <div class="p-2" style="flex: 1;">Road Permit Validity</div>

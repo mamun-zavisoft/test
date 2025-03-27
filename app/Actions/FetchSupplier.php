@@ -14,14 +14,15 @@ class FetchSupplier
 
         return Supplier::query()
             ->with('zone')
-            ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%");
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%");
+                });
             })
             ->when($zone_id, function ($query) use ($zone_id) {
                 $query->where('zone_id', $zone_id);
             })
-            ->select('id', 'zone_id', 'name', 'phone', 'balance')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
     }
 }

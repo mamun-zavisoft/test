@@ -29,7 +29,7 @@
                             <select class="select filter-input" name="brand_id">
                                 <option value="">Choose</option>
                                 @foreach ($brands as $brand)
-                                <option value="{{ $brand->id }}" @selected($brand->id == request()->brand_id)>{{ $brand->name }}</option>
+                                    <option value="{{ $brand->id }}" @selected($brand->id == request()->brand_id)>{{ $brand->name }}</option>
                                 @endforeach    
                             </select>
                         </div>

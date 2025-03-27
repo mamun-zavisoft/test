@@ -20,7 +20,7 @@
                     <td>{{ $loop->iteration }}</td>
                 @endif
                 <td>{{ $fueling->created_at?->format('d M, Y') }}</td>
-                <td>{{ $fueling->vehicle?->license_plate }}</td>
+                <td><span class="copyable">{{ $fueling->vehicle?->license_plate }}</span></td>
                 <td>{{ $fueling->current_odometer }} KM</td>
                 <td>{{ $fueling->fuel_qty }} Ltr.</td>
                 <td>৳{{ $fueling->fuel_rate }}</td>

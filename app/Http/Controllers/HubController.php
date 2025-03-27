@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\FetchHub;
 use App\Models\Hub;
+use App\Models\VehicleModel;
 use App\Models\Zone;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +35,8 @@ class HubController extends Controller
                 'custom_hub_id' => 'required|string|unique:hubs,custom_hub_id',
                 'phone' => 'nullable|string|max:15|unique:hubs,phone',
                 'address' => 'nullable|string|max:255',
+            ],[
+                'custom_hub_id.unique' => 'hub id already exists',
             ]);
 
             DB::beginTransaction();
@@ -52,6 +56,22 @@ class HubController extends Controller
             DB::rollBack();
 
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
+        }
+    }
+
+    public function show ($id) {
+
+        try {
+            $hub = Hub::with('vehicles.vehicleModel', 'vehicles.hub')->findOrFail($id);
+            $vehicles = $hub->vehicles()->paginate(request('per_page', 10))->withQueryString();
+            $all_hubs = Hub::select('id', 'name')->get();
+            $vehicleModels = VehicleModel::select('id', 'name')->get();
+
+            return view('backend.hubs.show', get_defined_vars());
+        } catch (ModelNotFoundException) {
+            return redirect()->back()->with('error', 'Hub not found');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
 

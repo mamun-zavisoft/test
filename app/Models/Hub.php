@@ -12,4 +12,9 @@ class Hub extends Model
     {
         return $this->belongsTo(Zone::class);
     }
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }

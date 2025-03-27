@@ -25,7 +25,7 @@ class AccountController extends Controller
             $request->validate([
                 'name' => 'required|string|max:50',
                 'type' => 'required|numeric',
-                'balance' => 'nullable|numeric|min:0|max:10000000',
+                'balance' => 'required|numeric|min:0|max:10000000',
             ],
                 [
                     'balance.max' => 'Balance should not exceed 10,000,000.',

@@ -21,10 +21,9 @@
                 <td>{{ $hub->address }}</td>
                 <td class="action-table-data">
                     <div class="edit-delete-action">
-                        <!-- <a class="me-2 edit-icon p-2" href="#" data-bs-toggle="modal"
-                            data-bs-target="#hubs-{{ $hub->id }}">
+                        <a class="me-2 edit-icon p-2" href="{{ route('admin.hubs.show', $hub->id) }}" >
                             <i data-feather="eye" class="feather-eye"></i>
-                        </a> -->
+                        </a>
                         <a class="me-2 p-2" href="#" data-bs-toggle="modal"
                             data-bs-target="#edit-hub-{{ $hub->id }}">
                             <i data-feather="edit" class="feather-edit"></i>

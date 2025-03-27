@@ -108,7 +108,7 @@
                                         <input type="text" name="license_plate" class="form-control">
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Status*</label>
+                                        <label class="form-label">Status</label>
                                         <select class="select form-control" name="status">
                                             <option value="">Choose</option>
                                             <option value="1">Active</option>
@@ -116,7 +116,7 @@
                                         </select>
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Select Hub*</label>
+                                        <label class="form-label">Select Hub</label>
                                         <select class="select form-control" name="hub_id">
                                             <option value="">Choose</option>
                                             @foreach ($hubs as $hub)
@@ -125,7 +125,7 @@
                                         </select>
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Vehicle Type*</label>
+                                        <label class="form-label">Vehicle Type</label>
                                         <select class="select form-control" name="vehicle_type">
                                             <option value="">Choose</option>
                                             <option value="1">Covered Van</option>
@@ -135,7 +135,7 @@
                                         </select>
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Select Model*</label>
+                                        <label class="form-label">Select Model</label>
                                         <select class="select form-control" name="vehicle_model_id">
                                             <option value="">Choose</option>
                                             @foreach ($vehicleModels as $vehicleModel)
@@ -148,27 +148,27 @@
                                         <input type="number" name="current_odometer" class="form-control" placeholder="Current Mileage">
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Registration Date*</label>
+                                        <label class="form-label">Registration Date</label>
                                         <input type="date" name="registration_date" class="form-control">
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Registration Validity*</label>
+                                        <label class="form-label">Registration Validity</label>
                                         <input type="date" name="registration_validity" class="form-control">
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Tax Token Validity*</label>
+                                        <label class="form-label">Tax Token Validity</label>
                                         <input type="date" name="tax_token_validity" class="form-control">
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Fitness Validity*</label>
+                                        <label class="form-label">Fitness Validity</label>
                                         <input type="date" name="fitness_validity" class="form-control">
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Road Permit Validity*</label>
+                                        <label class="form-label">Road Permit Validity</label>
                                         <input type="date" name="road_permit_validity" class="form-control">
                                     </div>
                                     <div class="mb-3 col-6">
-                                        <label class="form-label">Insurance Validity*</label>
+                                        <label class="form-label">Insurance Validity</label>
                                         <input type="date" name="insurance_validity" class="form-control">
                                     </div>
                                 </div>
@@ -256,6 +256,19 @@
                         });
                     }
                 });
+            });
+
+            $('select[name="owner_type"]').change(function () {
+                var ownerType = $(this).val();
+
+                if (ownerType === "2") { // External selected
+                    $('div.mb-3').hide(); // Hide all fields
+                    $('select[name="owner_type"]').closest('div.mb-3').show(); // Keep owner type visible
+                    $('input[name="license_plate"]').closest('div.mb-3').show(); // Show Register Number
+                    $('select[name="vehicle_type"]').closest('div.mb-3').show(); // Show Vehicle Type
+                } else { // Self selected
+                    $('div.mb-3').show(); // Show all fields
+                }
             });
         });
     </script>

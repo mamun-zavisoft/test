@@ -18,7 +18,7 @@
                 </td>
                 <td>{{ $serviceChart->name }}</td>
                 <td>{{ number_format($serviceChart->price) }}</td>
-                <td>{{ $serviceChart->code }}</td>
+                <td>{{ $serviceChart->code ?? 'N/A' }}</td>
                 <td>{{ $serviceChart->description }}</td>
                 {{-- <td>{{ $serviceChart->created_at?->format('d M Y') }}</td> --}}
                 <td class="action-table-data">

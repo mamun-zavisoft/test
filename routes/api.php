@@ -3,6 +3,7 @@
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\VehicleFuelController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->name('admin.')->group(function () {
@@ -12,4 +13,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
 
     Route::post('purchase/{id}/payment', [PurchaseController::class, 'payment'])->name('purchases.payment');
     Route::post('service/{id}/payment', [ServiceController::class, 'payment'])->name('services.payment');
+    
+    // odo meter reading for a vehicle
+    Route::post('current-reading', [VehicleFuelController::class, 'getCurrentOdometer'])->name('vehicle.getCurrentOdometer');
 });

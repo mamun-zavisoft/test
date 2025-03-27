@@ -251,7 +251,7 @@
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
                             <form action="{{ route('admin.categories.store') }}" method="POST"
-                                enctype="multipart/form-data" id="storeForm">
+                                enctype="multipart/form-data" class="storeForm">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Category</label>
@@ -279,7 +279,7 @@
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"
                                         data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
+                                    <button type="submit" class="btn btn-submit" class="submit_btn">Save</button>
                                 </div>
                             </form>
                         </div>
@@ -305,7 +305,7 @@
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
                             <form action="{{ route('admin.brands.store') }}" method="POST" enctype="multipart/form-data"
-                                id="storeForm">
+                                class="storeForm">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Brand</label>
@@ -334,7 +334,7 @@
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"
                                         data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
+                                    <button type="submit" class="btn btn-submit" class="submit_btn">Save</button>
                                 </div>
                             </form>
                         </div>
@@ -368,15 +368,16 @@
 
             $('.remove-product').on('click', function() {
                 var $phoneImg = $(this).closest('.phone-img');
-                var $imageUpload = $phoneImg.prev('.image-upload');
+                var $imageUpload = $phoneImg.siblings('.image-upload');
                 var $fileInput = $imageUpload.find('.file-input');
 
                 $fileInput.val('');
                 $phoneImg.addClass('d-none');
                 $imageUpload.removeClass('d-none');
+                $phoneImg.find('.image-preview').attr('src', '');
+                return false;
             });
         });
-
 
         $('#storeProductForm').submit(function(e) {
             e.preventDefault();
@@ -404,6 +405,41 @@
             }).fail(function(xhr) {
                 SubmitBtn.prop('disabled', false);
                 $('#submit_product_btn').attr('disabled', false);
+                let response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $.each(response.errors, function(key, value) {
+                        toastr.error(value);
+                    });
+                }
+            });
+        });
+
+        $('.storeForm').submit(function(e) {
+            e.preventDefault();
+            let SubmitBtn = $('.submit_btn');
+            SubmitBtn.prop('disabled', true);
+            let formData = new FormData(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+
+            }).done(function(response) {
+                if (response.type == 'success') {
+                    $('#add-category').modal('hide');
+                    toastr.success(response.message);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(response.message);
+                }
+            }).fail(function(xhr) {
+                SubmitBtn.prop('disabled', false);
+                $('#storeForm').attr('disabled', false);
                 let response = xhr.responseJSON;
                 if (response && response.errors) {
                     $.each(response.errors, function(key, value) {

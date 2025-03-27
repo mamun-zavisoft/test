@@ -136,20 +136,21 @@
                 });
             });
 
-            $('.editForm').submit(function(e) {
+            $(document).on('submit', '.editForm', function(e) {
                 e.preventDefault();
+                let form = $(this);
                 let formData = new FormData(this);
+
                 $.ajax({
-                    type: $(this).attr('method'),
-                    url: $(this).attr('action'),
+                    type: form.attr('method'),
+                    url: form.attr('action'),
                     data: formData,
                     cache: false,
                     contentType: false,
                     processData: false,
-
                 }).done(function(response) {
-                    if (response.type == 'success') {
-                        $('.edit-account').modal('hide');
+                    if (response.type === 'success') {
+                        form.closest('.modal').modal('hide');
                         toastr.success(response.message);
                         setTimeout(() => {
                             location.reload();
@@ -158,12 +159,13 @@
                         toastr.error(response.message);
                     }
                 }).fail(function(xhr) {
-                    $('#submit_btn').attr('disabled', false);
                     let response = xhr.responseJSON;
                     if (response && response.errors) {
                         $.each(response.errors, function(key, value) {
                             toastr.error(value);
                         });
+                    } else {
+                        toastr.error("Something went wrong.");
                     }
                 });
             });

@@ -18,9 +18,9 @@
                 <td>{{ $vehicleModel->name }}</td>
                 <td>{{ $vehicleModel->manufacturer }}</td>
                 <td>{{ $vehicleModel->engine_cc }} CC</td>
-                <td>{{ $vehicleModel->fuel_capacity }} L</td>
-                <td>{{ $vehicleModel->payload_capacity }} kg</td>
-                <td>{{ $vehicleModel->body_length }} feet</td>
+                <td>{{ $vehicleModel->fuel_capacity }} Ltr</td>
+                <td>{{ $vehicleModel->payload_capacity }} KG</td>
+                <td>{{ $vehicleModel->body_length }} Feet</td>
                 <td class="action-table-data">
                     <div class="edit-delete-action">
                         <!-- <a class="me-2 edit-icon p-2" href="#" data-bs-toggle="modal"

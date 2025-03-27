@@ -1,6 +1,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th class="no-sort">SL</th>
             <th>Invoice No</th>
             <th>Supplier Name</th>
             <th>Reference</th>
@@ -16,7 +17,8 @@
     <tbody>
         @forelse ($purchases as $purchase)
             <tr>
-                <td class="fw-bold">#{{ $purchase->transaction_id }}</td>
+                <td>{{ $loop->iteration + $purchases->firstItem() - 1 }}</td>
+                <td class="fw-bold"><span class="copyable">{{ $purchase->transaction_id }}</span></td>
                 <td>{{ $purchase->supplier?->name }}</td>
                 <td>{{ $purchase->reference_no }}</td>
                 <td>{{ $purchase->date }}</td>
@@ -142,6 +144,10 @@
                                         <div class="card-body ms-5">
                                             <h5 class="card-title font-weight-bold mb-3">Invoice Info</h5>
                                             <div class="d-flex justify-content-between mb-1">
+                                                <span>Invoice:</span>
+                                                <span class="fw-bolder copyable">{{ $purchase->transaction_id }}</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span>Reference:</span>
                                                 <span class="fw-bolder">{{ $purchase->reference_no }}</span>
                                             </div>
@@ -219,14 +225,14 @@
                         </div>
 
                         <!-- Footer Actions -->
-                        <div class="modal-footer d-flex justify-content-end">
+                        {{-- <div class="modal-footer d-flex justify-content-end">
                             <button class="btn btn-secondary me-2" onclick="window.print()">
                                 <i class="fa fa-print me-1"></i> Print
                             </button>
                             <button class="btn btn-primary">
                                 <i class="fa fa-download me-1"></i> Download PDF
                             </button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

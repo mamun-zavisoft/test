@@ -6,6 +6,7 @@ use App\Actions\FetchVehicleFuel;
 use App\Models\Vehicle;
 use App\Models\VehicleFuel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VehicleFuelController extends Controller
 {
@@ -28,7 +29,7 @@ class VehicleFuelController extends Controller
      */
     public function create()
     {
-        $vehicles = Vehicle::select('id', 'license_plate')->get();
+        $vehicles = Vehicle::select('id', 'license_plate')->where('owner_type', 1)->get();
         $recentFuelings = VehicleFuel::with('vehicle')->latest()->take(5)->get();
 
         return view('backend.vehicle_fuels.create', get_defined_vars());
@@ -40,7 +41,7 @@ class VehicleFuelController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'vehicle_id' => 'required|integer',
+            'vehicle_id' => 'required|integer|exists:vehicles,id',
             'fuel_type' => 'required|integer|in:1,2,3',
             'current_odometer' => 'required|numeric',
             'fuel_qty' => 'required|numeric',
@@ -48,19 +49,35 @@ class VehicleFuelController extends Controller
             'total_price' => 'required|numeric',
         ]);
 
-        $vehicleFuel = VehicleFuel::create([
-            'vehicle_id' => $request->vehicle_id,
-            'fuel_type' => $request->fuel_type,
-            'current_odometer' => $request->current_odometer,
-            'fuel_qty' => $request->fuel_qty,
-            'fuel_rate' => $request->fuel_rate,
-            'total_price' => $request->fuel_qty * $request->fuel_rate, // Auto-calculate
-        ]);
-        $entity = VehicleFuel::with('vehicle')->latest()->take(5)->get();
+        try {
+            $vehicle = Vehicle::find($request->vehicle_id);
+            if ($request->current_odometer < $vehicle->current_odometer) {
+                return response()->json(['message' => 'Current odometer must be greater than last odometer', 'type' => 'error']);
+            }
+            
+            DB::beginTransaction();
+            $vehicleFuel = VehicleFuel::create([
+                'vehicle_id' => $request->vehicle_id,
+                'fuel_type' => $request->fuel_type,
+                'current_odometer' => $request->current_odometer,
+                'fuel_qty' => $request->fuel_qty,
+                'fuel_rate' => $request->fuel_rate,
+                'total_price' => $request->fuel_qty * $request->fuel_rate, // Auto-calculate
+            ]);
+            $vehicle->update(['current_odometer' => $request->current_odometer]);
 
-        $latestFuelingsHtml = view('components.vehicleFuels.table', compact('entity'))->render();
+            DB::commit();
 
-        return response()->json(['message' => 'Fuel entry added successfully!', 'type' => 'success', 'latestFuelingsHtml' => $latestFuelingsHtml]);
+            $entity = VehicleFuel::with('vehicle')->latest()->take(5)->get();
+
+            $latestFuelingsHtml = view('components.vehicleFuels.table', compact('entity'))->render();
+
+            return response()->json(['message' => 'Fuel entry added successfully!', 'type' => 'success', 'latestFuelingsHtml' => $latestFuelingsHtml]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => $e->getMessage(), 'type' => 'error']);
+        }
     }
 
     /**
@@ -107,5 +124,19 @@ class VehicleFuelController extends Controller
         $vehicleFuel->delete();
 
         return redirect()->route('admin.vehicle-fuels.index')->with('success', 'Fuel entry deleted successfully.');
+    }
+
+    /** 
+     * Get the current odometer reading of a vehicle.
+     */
+    public function getCurrentOdometer(Request $request)
+    {
+        $vehicle = Vehicle::where('id', $request->vehicle_id)->first();
+
+        if (!$vehicle) {
+            return response()->json(['error' => 'Vehicle not found'], 404);
+        }
+
+        return response()->json($vehicle);
     }
 }

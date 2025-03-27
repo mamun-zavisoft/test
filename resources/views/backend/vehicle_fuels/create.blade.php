@@ -38,7 +38,7 @@
                                 <div class="input-blocks">
                                     <label>Current ODO Meter (KM)</label>
                                     <input type="text" class="form-control" id="odo_meter" name="current_odometer"
-                                        placeholder="Enter ODO Meter in KM" required>
+                                        placeholder="Enter ODO Meter" required>
 
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
 
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="modal-footer-btn">
+                                <div class="modal-footer-btn" style="margin-top: 0 ! important">
                                     <button type="button" class="btn btn-cancel me-2"
                                         onclick="window.location.href='{{ route('admin.vehicle-fuels.index') }}'">Cancel</button>
                                     <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
@@ -117,6 +117,32 @@
 
                     $(this).trigger("change");
                 }
+
+                let selectedVehicleId = $(this).val();
+                if (selectedVehicleId > 0) {
+                    $.ajax({
+                        url: "{{ route('admin.vehicle.getCurrentOdometer') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            vehicle_id: selectedVehicleId
+                        },
+                        success: function(response) {
+                            $('#odo_meter').attr('placeholder',
+                                `Last ODO Meter was: ${response.current_odometer} KM`);
+                            $('#odo_meter').attr('min', response.current_odometer);
+                        },
+                        error: function() {
+                            toastr.error('Failed to fetch fueling history');
+                            $('#odo_meter').attr('placeholder', 'Enter ODO Meter');
+                            $('#odo_meter').attr('min', 0);
+                        }
+                    });
+                } else {
+                    $('#odo_meter').attr('placeholder', 'Enter ODO Meter');
+                    $('#odo_meter').attr('min', 0);
+                    $('#odo_meter').val('');
+                }
             });
 
             $('#fuel_qty, #fuel_rate').on('input', function() {
@@ -150,7 +176,7 @@
                         $('#submit_btn').attr('disabled', false);
 
                         let recentFuelings = $(response.latestFuelingsHtml);
-                        
+
                         $('#dataTable').html(recentFuelings);
                         // reset form
                         $('#storeForm')[0].reset();

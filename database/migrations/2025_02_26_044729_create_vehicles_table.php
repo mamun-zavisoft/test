@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
             $table->enum('owner_type', [1, 2])->comment('1=self, 2=external');
-            $table->enum('vehicle_type', [1, 2, 3, 4, 5])->comment('1=Covered van, 2=Motorbike, 3=Pickup, 4=Truck, 5=TBA/other');
+            $table->enum('vehicle_type', [1, 2, 3, 4, 5])->nullable()->comment('1=Covered van, 2=Motorbike, 3=Pickup, 4=Truck, 5=TBA/other');
             $table->foreignId('zone_id')->nullable();
             $table->foreignId('hub_id')->nullable();
             $table->foreignId('vehicle_model_id')->nullable()->constrained();
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('fitness_validity')->nullable();
             $table->date('road_permit_validity')->nullable();
             $table->date('insurance_validity')->nullable();
-            $table->double('current_odometer')->nullable()->comment('in kilometer');
+            $table->double('current_odometer')->nullable()->default(0)->comment('in kilometer');
             $table->enum('status', [1, 2])->default(1)->comment('1=active, 2=in service');
             $table->timestamps();
         });

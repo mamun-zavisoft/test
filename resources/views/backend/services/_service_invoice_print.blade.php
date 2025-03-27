@@ -10,6 +10,7 @@
             background: #fff;
             width: 100%;
             font-size: 14px;
+            line-height: 1.3;
         }
         .page-wrapper, .container {
             width: 100%;
@@ -36,71 +37,72 @@
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
         }
     }
 
     /* General styles */
     .invoice-wrapper {
         background: #fff;
-        padding: 30px;
+        padding: 15px;
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         margin-bottom: 30px;
         font-family: 'Poppins', sans-serif;
+        line-height: 1.3;
     }
     .invoice-header {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 30px;
+        margin-bottom: 15px;
         border-bottom: 1px solid #e5e5e5;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
     }
     .invoice-to {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
     .invoice-row {
         display: flex;
         flex-wrap: wrap;
-        margin: 0 -15px;
+        margin: 0 -10px;
     }
     .invoice-col {
-        padding: 0 15px;
+        padding: 0 10px;
     }
     .invoice-col-6 {
         width: 50%;
         flex: 0 0 50%;
     }
     .invoice-meta {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         background-color: #f9f9f9;
         border-radius: 5px;
-        padding: 15px;
+        padding: 10px;
     }
     .invoice-meta-item {
         display: flex;
         justify-content: space-between;
-        padding: 5px 0;
+        padding: 4px 0;
     }
     .invoice-section {
-        margin-bottom: 30px;
+        margin-bottom: 15px;
     }
     .invoice-section-title {
-        margin-bottom: 15px;
-        font-size: 18px;
+        margin-bottom: 8px;
+        font-size: 16px;
         font-weight: 600;
         color: #333;
     }
     .invoice-item {
         display: flex;
         border-bottom: 1px solid #e5e5e5;
-        padding: 12px 0;
+        padding: 8px 0;
     }
     .invoice-item-header {
         display: flex;
         border-bottom: 2px solid #e5e5e5;
         background-color: #f5f5f5;
-        padding: 12px 0;
+        padding: 8px 0;
         font-weight: 600;
     }
     .invoice-col-index {
@@ -125,33 +127,56 @@
         text-align: right;
     }
     .invoice-totals {
-        margin-top: 20px;
-        margin-left: auto;
-        width: 300px;
+        margin-top: 10px;
+        width: 250px;
+    }
+    .note-totals-container {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        justify-content: space-between;
+    }
+    .note-section {
+        flex: 1;
+        padding: 10px;
+        /* border: 1px solid #e4e4e4; */
+        border-radius: 8px;
+        background: #f9f9f9;
+        max-width: 350px;
+    }
+    .note-section-title {
+        font-weight: bold;
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+    .note-section-content {
+        font-size: 13px;
+        line-height: 1.4;
+        color: #333;
+        text-align: justify;
     }
     .invoice-total-row {
         display: flex;
         justify-content: space-between;
-        padding: 5px 0;
+        padding: 4px 0;
     }
     .invoice-total-row.grand-total {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 600;
         color: #0f62fe;
         border-top: 2px solid #e5e5e5;
-        padding-top: 10px;
-        margin-top: 10px;
+        padding-top: 8px;
+        margin-top: 8px;
     }
     .invoice-footer {
-        margin-top: 40px;
-        padding-top: 20px;
-        border-top: 1px solid #e5e5e5;
+        margin-top: 20px;
+        padding-top: 10px;
         font-size: 14px;
         text-align: center;
     }
     .badge {
-        padding: 5px 10px;
-        border-radius: 5px;
+        padding: 3px 8px;
+        border-radius: 4px;
         font-size: 12px;
         display: inline-block;
     }
@@ -176,13 +201,13 @@
     .footer-signature {
         display: flex;
         justify-content: space-between;
-        margin-top: 100px;
+        margin-top: 50px;
     }
     .signature-line {
         border-top: 1px solid #ddd;
         width: 200px;
         text-align: center;
-        padding-top: 10px;
+        padding-top: 8px;
     }
     .text-right {
         text-align: right;
@@ -208,13 +233,8 @@
         <div class="invoice-col invoice-col-6">
             <div class="invoice-to">
                 <h4>Vehicle Information</h4>
-                <p><strong>License Plate:</strong> {{ $service->vehicle?->license_plate ?? 'N/A' }}</p>
-                <p><strong>Type:</strong> 
-                    {{-- <span class="badge {{ $service->vehicle?->owner_type == 1 ? 'badge-success' : 'badge-warning' }}">
-                        {{ $service->vehicle?->owner_type == 1 ? 'Self' : 'External' }}
-                    </span> --}}
-                    <span>{{ $service->vehicle?->owner_type == 1 ? 'Self' : 'External' }}</span>
-                </p>
+                <p><strong>Reg. No:</strong> {{ $service->vehicle?->license_plate ?? 'N/A' }}</p>
+                
                 @if(isset($service->vehicle?->customer))
                 <p><strong>Owner:</strong> {{ $service->vehicle?->customer?->name ?? 'N/A' }}</p>
                 <p><strong>Contact:</strong> {{ $service->vehicle?->customer?->phone ?? 'N/A' }}</p>
@@ -226,7 +246,7 @@
                 <div class="invoice-meta-item">
                     <div><strong>Service Type:</strong></div>
                     <div>
-                        <span>{{ $service->service_type == 1 ? 'Self (In House)' : 'External ' }}</span>
+                        <span>{{ $service->service_type == 'self' ? 'Self' : 'External ' }}</span>
                     </div>
                 </div>
                 <div class="invoice-meta-item">
@@ -268,7 +288,7 @@
             <div class="invoice-col-index">{{ $index + 1 }}</div>
             <div class="invoice-col-name">{{ $data->serviceChart?->name }}</div>
             <div class="invoice-col-code">{{ $data->serviceChart?->code }}</div>
-            <div class="invoice-col-price">{{ number_format($data->serviceChart?->price) }}</div>
+            <div class="invoice-col-price">{{ number_format($data->price) }}</div>
         </div>
         @endforeach
     </div>
@@ -297,29 +317,41 @@
     </div>
     @endif
 
-    <!-- Invoice Totals -->
-    <div class="invoice-totals">
-        <div class="invoice-total-row">
-            <div><strong>Service Total:</strong></div>
-            <div>{{ number_format($service->total_amount) }}</div>
-        </div>
-        @if($service->discount > 0)
-        <div class="invoice-total-row">
-            <div><strong>Discount:</strong></div>
-            <div>{{ number_format($service->discount) }}</div>
-        </div>
-        @endif
-        <div class="invoice-total-row">
-            <div><strong>Grand Total:</strong></div>
-            <div>{{ number_format($service->grand_total) }}</div>
-        </div>
-        <div class="invoice-total-row">
-            <div><strong>Paid Amount:</strong></div>
-            <div>{{ number_format($service->paid_amount) }}</div>
-        </div>
-        <div class="invoice-total-row grand-total">
-            <div><strong>Due Amount:</strong></div>
-            <div>{{ number_format($service->due_amount) }}</div>
+    <!-- Note and Totals Section -->
+    <div class="note-totals-container">
+        <div class="note-section">
+                @if ($service->note != null)
+                    <div class="note-section-title">Service Note</div>
+                    <div class="note-section-content">
+                        {{ Illuminate\Support\Str::limit($service->note, 300) }}
+                    </div>
+                @endif
+            </div>
+    
+        <!-- Invoice Totals -->
+        <div class="invoice-totals">
+            <div class="invoice-total-row">
+                <div><strong>Service Total:</strong></div>
+                <div>{{ number_format($service->total_amount) }}</div>
+            </div>
+            @if($service->discount > 0)
+            <div class="invoice-total-row">
+                <div><strong>Discount:</strong></div>
+                <div>{{ number_format($service->discount) }}</div>
+            </div>
+            @endif
+            <div class="invoice-total-row">
+                <div><strong>Grand Total:</strong></div>
+                <div>{{ number_format($service->grand_total) }}</div>
+            </div>
+            <div class="invoice-total-row">
+                <div><strong>Paid Amount:</strong></div>
+                <div>{{ number_format($service->paid_amount) }}</div>
+            </div>
+            <div class="invoice-total-row grand-total">
+                <div><strong>Due Amount:</strong></div>
+                <div>{{ number_format($service->due_amount) }}</div>
+            </div>
         </div>
     </div>
 
@@ -343,7 +375,6 @@
 
     <!-- Terms and Footer -->
     <div class="invoice-footer">
-        <p>Thank you for your business!</p>
-        <p>This is a computer-generated invoice and does not require a signature.</p>
+        <p>Thank you</p>
     </div>
 </div>

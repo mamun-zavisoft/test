@@ -34,7 +34,7 @@
                                                 New</span></a>
                                     </div>                            
                                     <select name="vehicle_id" class="form-control select2 vehicle-search" required>
-                                        <option value="">Select Vehicle</option>
+                                        <option value="">Search Vehicle</option>
                                         {{-- @foreach ($vehicles as $vehicle)
                                             <option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }} -
                                                 {{ $vehicle->owner_type == '1' ? 'Self' : 'External' }}</option>
@@ -61,10 +61,10 @@
 
                         <div class="row mb-4">
                             <div class="col-md-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="partsCheckbox"
+                                <div class="form-check ps-1">
+                                    <input type="checkbox" id="partsCheckbox"
                                         name="any_parts_purchase" value="1">
-                                    <label class="form-check-label" for="partsCheckbox">
+                                    <label class="form-check-label ps-1" for="partsCheckbox">
                                         Include Parts in Service
                                     </label>
                                 </div>
@@ -922,8 +922,8 @@
             updatePaidDueAmounts();
 
             $('.vehicle-search').select2({
-                placeholder: "Select Vehicle",
-                allowClear: true,
+                placeholder: "Search Vehicle",
+                allowClear: false,
                 ajax: {
                     url: "{{ route('admin.search.vehicle') }}", 
                     dataType: 'json',

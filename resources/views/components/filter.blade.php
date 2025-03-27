@@ -41,6 +41,13 @@
             sendAjaxRequest();
         });
 
+        $('input[name="search"]').on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                sendAjaxRequest();
+            }
+        });
+
         function sendAjaxRequest(url = formAction) {
             $.ajax({
                 url: url,

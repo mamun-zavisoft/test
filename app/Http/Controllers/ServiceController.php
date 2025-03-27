@@ -23,7 +23,7 @@ class ServiceController extends Controller
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
 
         if (request()->ajax()) {
-            return view('components.services.table', ['entity' => $services])->render();
+            return view('components.services.table', ['services' => $services])->render();
         }
 
         return view('backend.services.index', compact('services', 'serviceCharts', 'serviceDetails'));

@@ -95,7 +95,7 @@
                             </div>
                             <div class="col-12">
                                 <button class="btn btn-submit me-2" type="submit">Submit</button>
-                                <a href="javascript:void(0);" class="btn btn-cancel">Cancel</a>
+                                <a href="{{ route('dashboard') }}" class="btn btn-cancel">Cancel</a>
                             </div>
                         </div>
                     </form>

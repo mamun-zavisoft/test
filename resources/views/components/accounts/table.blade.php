@@ -51,7 +51,7 @@
                                 </button>
                             </div>
                             <div class="modal-body custom-modal-body new-employee-field">
-                                <form action="{{ route('admin.accounts.update', $account->id) }}" method="POST">
+                                <form action="{{ route('admin.accounts.update', $account->id) }}" method="POST" class="editForm">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
@@ -60,14 +60,16 @@
                                             name="name">
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Price*</label>
-                                        <input type="text" class="form-control" value="{{ $account->price }}"
-                                            name="price">
+                                        <label class="form-label">Type*</label>
+                                        <select class="select" name="type">
+                                            <option value="1"{{ $account->type == 1 ? 'selected' : '' }}>Cash</option>
+                                            <option value="2"{{ $account->type == 2 ? 'selected' : '' }}>Bank</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Code*</label>
+                                        <label class="form-label">Balance</label>
                                         <input type="text" class="form-control"
-                                            value="{{ $account->code }}" name="code">
+                                            value="{{ $account->balance }}" name="balance" readonly>
                                     </div>
                                     <div class="modal-footer-btn">
                                         <button type="button" class="btn btn-cancel me-2"

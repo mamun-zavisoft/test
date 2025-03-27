@@ -50,3 +50,40 @@ $(document).on("click", ".remove-photo", function () {
 });
 
 // image preview end
+
+
+// copy text
+$(document).ready(function () {
+    $(document).on('click', '.copyable', function () {
+        const textToCopy = $(this).text();
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+                $(this).addClass('copied'); // Add 'copied' class
+                setTimeout(() => {
+                    $(this).removeClass('copied'); // Remove 'copied' class after a delay
+                }, 1000); // 1 seconds delay
+            })
+            .catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+    });
+
+    // Ensure that dynamically loaded elements are also included
+    $(document).ajaxComplete(function () {
+        $(document).on('click', '.copyable', function () {
+            const textToCopy = $(this).text();
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    $(this).addClass('copied'); // Add 'copied' class
+                    setTimeout(() => {
+                        $(this).removeClass('copied'); // Remove 'copied' class after a delay
+                    }, 1000); // 1 seconds delay
+                })
+                .catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+        });
+    });
+});
+
+// copy text end

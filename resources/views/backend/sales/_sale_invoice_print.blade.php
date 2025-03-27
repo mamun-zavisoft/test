@@ -84,6 +84,7 @@
     }
     .invoice-section {
         margin-bottom: 30px;
+        justify-content: space-evenly;
     }
     .invoice-section-title {
         margin-bottom: 15px;
@@ -107,13 +108,13 @@
         flex: 0 0 5%;
     }
     .invoice-col-name {
-        flex: 0 0 50%;
+        flex: 0 0 40%;
     }
     .invoice-col-code {
         flex: 0 0 10%;
     }
     .invoice-col-price {
-        flex: 0 0 15%;
+        flex: 0 0 20%;
         text-align: right;
     }
     .invoice-col-qty {
@@ -121,7 +122,7 @@
         text-align: right;
     }
     .invoice-col-total {
-        flex: 0 0 15%;
+        flex: 0 0 20%;
         text-align: right;
     }
     .invoice-totals {
@@ -145,7 +146,6 @@
     .invoice-footer {
         margin-top: 40px;
         padding-top: 20px;
-        border-top: 1px solid #e5e5e5;
         font-size: 14px;
         text-align: center;
     }
@@ -306,7 +306,6 @@
 
     <!-- Terms and Footer -->
     <div class="invoice-footer">
-        <p>Thank you for your business!</p>
-        <p>This is a computer-generated invoice and does not require a signature.</p>
+        <p>Thank you</p>
     </div>
 </div>
