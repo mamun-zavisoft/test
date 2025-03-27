@@ -139,7 +139,7 @@
     .note-section {
         flex: 1;
         padding: 10px;
-        border: 1px solid #e4e4e4;
+        /* border: 1px solid #e4e4e4; */
         border-radius: 8px;
         background: #f9f9f9;
         max-width: 350px;
@@ -319,14 +319,14 @@
 
     <!-- Note and Totals Section -->
     <div class="note-totals-container">
-        @if ($service->note != null)
-            <div class="note-section">
-                <div class="note-section-title">Service Note</div>
-                <div class="note-section-content">
-                    {{ Illuminate\Support\Str::limit($service->note, 300) }}
-                </div>
+        <div class="note-section">
+                @if ($service->note != null)
+                    <div class="note-section-title">Service Note</div>
+                    <div class="note-section-content">
+                        {{ Illuminate\Support\Str::limit($service->note, 300) }}
+                    </div>
+                @endif
             </div>
-        @endif
     
         <!-- Invoice Totals -->
         <div class="invoice-totals">

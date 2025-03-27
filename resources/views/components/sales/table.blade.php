@@ -77,7 +77,7 @@
                                             <h5 class="card-title font-weight-bold mb-3">Invoice Info</h5>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span>Invoice:</span>
-                                                <span class="fw-bolder">#{{ $sale->transaction_id }}</span>
+                                                <span class="fw-bolder copyable">{{ $sale->transaction_id }}</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span>Payment Status:</span>
@@ -124,10 +124,12 @@
                             <div class="row justify-content-between mt-4">
 
                                 <div class="col-md-4">
-                                    <div class="bg-light p-3 rounded">
-                                        <span class="fw-bold">Note</span>
-                                        <p>{{ $sale->note }}</p>
-                                    </div>
+                                    @if ($sale->note != null)
+                                        <div class="bg-light p-3 rounded">
+                                            <span class="fw-bold">Note</span>
+                                            <p>{{ $sale->note }}</p>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="col-md-5">
                                     <div class="bg-light p-3 rounded">

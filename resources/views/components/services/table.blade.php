@@ -1,6 +1,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th class="no-sort">SL</th>
             <th>Invoice No</th>
             <th>Service Type</th>
             <th>Vehicle </th>
@@ -15,6 +16,7 @@
     <tbody>
         @forelse ($services as $service)
             <tr>
+                <td>{{ $loop->iteration + $services->firstItem() - 1 }}</td>
                 <td class="fw-bold"><span class="copyable">{{ $service->transaction_id }}</span></td>
                 <td>{{ $service->service_type == 'self' ? 'Self' : 'External' }}</td>
                 <td><span class="copyable">{{ $service->vehicle?->license_plate }}</span></td>
@@ -256,9 +258,6 @@
                             <button type="button" class="btn btn-secondary me-2"
                                 onclick="printInvoice(this, {{ $service->id }})">
                                 <i class="fas fa-print me-1"></i> Print
-                            </button>
-                            <button type="button" class="btn btn-primary">
-                                <i class="fas fa-download me-1"></i> Download PDF
                             </button>
                         </div>
                     </div>
