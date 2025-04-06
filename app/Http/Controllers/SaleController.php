@@ -111,7 +111,7 @@ class SaleController extends Controller
                 // Create sale details
                 $sale->saleDetails()->create([
                     'product_id' => $part['product_id'],
-                    'unit_price' => $part['price'],
+                    'unit_price' => $part['unit_sale_price'],
                     'qty' => $part['quantity'],
                 ]);
             }
