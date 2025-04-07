@@ -16,7 +16,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Service Type <span class="text-danger">*</span></label>
-                                    <select name="service_type" class="form-control" required>
+                                    <select name="service_type" id="serviceType" class="form-control" required>
                                         <option value="">Select Type</option>
                                         <option value="self" selected>Self</option>
                                         <option value="external">External</option>
@@ -33,7 +33,7 @@
                                                 class="plus-down-add"></i><span>Add
                                                 New</span></a>
                                     </div>                            
-                                    <select name="vehicle_id" class="form-control select2 vehicle-search" required>
+                                    <select name="vehicle_id" id="vehicleDropdown" class="form-control select2 vehicle-search" required>
                                         <option value="">Search Vehicle</option>
                                         {{-- @foreach ($vehicles as $vehicle)
                                             <option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }} -
@@ -229,113 +229,145 @@
     </div>
 
     <!-- Add Vehicle -->
-    <div class="modal fade" id="add-vehicle">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two" style="max-width: 95%; width: 1400px; max-height: 95vh; height: 90vh;">
-            <div class="modal-content" style="height: 100%;"> 
-                <div class="page-wrapper-new p-0">
-                    <div class="content">
-                        <div class="modal-header border-0 custom-modal-header justify-content-between">
-                            <div class="page-title">
-                                <h4>Create Vehicle</h4>
+    <div class="modal fade" id="add-vehicle" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content border-0 rounded-4 shadow-lg" style="max-height: 100vh;">
+                <div class="modal-header bg-gradient text-white rounded-top-4 justify-content-between"
+                    style="background: linear-gradient(90deg, #007bff, #0056b3);">
+                    <div class="page-title">
+                        <h5 class="modal-title fw-bold">Add Vehicle </h5>
+                    </div>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
+                     onclick="$('#storeForm')[0].reset()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <!-- <div class="mb-3">
+                        <small class="text-muted">Self = SteadFast Vehicle & External = Outside Vehicle</small>
+                    </div> -->
+
+                    <form action="{{ route('admin.vehicles.store') }}" method="POST" id="storeForm">
+                        @csrf
+                        <div class="accordion" id="vehicleAccordion">
+                            <!-- Accordion 1: Basic Info -->
+                            <div class="accordion-item mb-3 rounded-3 overflow-hidden border border-1">
+                                <h2 class="accordion-header" id="basicInfoHeading">
+                                    <button class="accordion-button fw-bold p-3" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#basicInfo" aria-expanded="true" aria-controls="basicInfo">
+                                        Vehicle Basic Info
+                                    </button>
+                                </h2>
+                                <div id="basicInfo" class="accordion-collapse collapse show" aria-labelledby="basicInfoHeading"
+                                    data-bs-parent="#vehicleAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Owner Type*</label>
+                                                <select name="owner_type" class="form-select">
+                                                    <option value="">Choose</option>
+                                                    <option value="1" selected>Self</option>
+                                                    <option value="2">External</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Register Number*</label>
+                                                <input type="text" name="license_plate" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">ODO (current odometer)*</label>
+                                                <input type="number" name="current_odometer" class="form-control"
+                                                    placeholder="Current Mileage" onwheel="this.blur()">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Select Hub</label>
+                                                <select name="hub_id" class="form-select">
+                                                    <option value="">Choose</option>
+                                                    @foreach ($hubs as $hub)
+                                                    <option value="{{ $hub->id }}">{{ $hub->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Vehicle Type</label>
+                                                <select name="vehicle_type" class="form-select">
+                                                    <option value="">Choose</option>
+                                                    <option value="1">Covered Van</option>
+                                                    <option value="2">Motor Bike</option>
+                                                    <option value="3">Pick Up</option>
+                                                    <option value="4">Truck</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Select Model</label>
+                                                <select name="vehicle_model_id" class="form-select">
+                                                    <option value="">Choose</option>
+                                                    @foreach ($vehicleModels as $model)
+                                                    <option value="{{ $model->id }}">{{ $model->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Status</label>
+                                                <select name="status" class="form-select">
+                                                    <option value="">Choose</option>
+                                                    <option value="1">Active</option>
+                                                    <option value="2">In Service</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#storeForm')[0].reset()">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="text-start ms-3 mb-2">
-                        <small>Self=SteadFast Vehicle & External=OutSide Vehicle</small>
-                    </div>
-                        <div class="modal-body custom-modal-body new-employee-field">
-                            <form action="{{ route('admin.vehicles.store') }}" method="POST"
-                                id="storeForm">
-                                @csrf
-                                <div class="row">
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Owner Type*</label>
-                                        <select name="owner_type" class="form-select">
-                                            <option value="">Choose</option>
-                                            <option value="1">Self</option>
-                                            <option value="2">External</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Register Number*</label>
-                                        <input type="text" name="license_plate" class="form-control">
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Status</label>
-                                        <select name="status" class="form-select">
-                                            <option value="">Choose</option>
-                                            <option value="1">Active</option>
-                                            <option value="2">Inactive</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Select Hub</label>
-                                        <select name="hub_id" class="form-select">
-                                            <option value="">Choose</option>
-                                            @foreach ($hubs as $hub)
-                                            <option value="{{ $hub->id }}">{{ $hub->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Vehicle Type</label>
-                                        <select name="vehicle_type" class="form-select">
-                                            <option value="">Choose</option>
-                                            <option value="1">Covered Van</option>
-                                            <option value="2">Motor Bike</option>
-                                            <option value="3">Pick Up</option>
-                                            <option value="4">Truck</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Select Model</label>
-                                        <select name="model_id" class="form-select">
-                                            <option value="">Choose</option>
-                                            @foreach ($vehicleModels as $model)
-                                            <option value="{{ $model->id }}">{{ $model->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">ODO(current odometer)</label>
-                                        <input type="number" name="current_odometer" class="form-control" placeholder="Current Mileage"  onwheel="this.blur()">
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Registration Date</label>
-                                        <input type="date" name="registration_date" class="form-control">
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Registration Validity</label>
-                                        <input type="date" name="registration_validity" class="form-control">
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Tax Token Validity</label>
-                                        <input type="date" name="tax_token_validity" class="form-control">
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Fitness Validity</label>
-                                        <input type="date" name="fitness_validity" class="form-control">
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Road Permit Validity</label>
-                                        <input type="date" name="road_permit_validity" class="form-control">
-                                    </div>
-                                    <div class="mb-3 col-6">
-                                        <label class="form-label">Insurance Validity</label>
-                                        <input type="date" name="insurance_validity" class="form-control">
+
+                            <!-- Accordion 2: Date Info -->
+                            <div class="accordion-item rounded-3 overflow-hidden border border-1">
+                                <h2 class="accordion-header" id="dateInfoHeading">
+                                    <button class="accordion-button collapsed fw-bold p-3" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#dateInfo" aria-expanded="false" aria-controls="dateInfo">
+                                        Vehicle Date Information
+                                    </button>
+                                </h2>
+                                <div id="dateInfo" class="accordion-collapse collapse" aria-labelledby="dateInfoHeading"
+                                    data-bs-parent="#vehicleAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Registration Date</label>
+                                                <input type="date" name="registration_date" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Registration Validity</label>
+                                                <input type="date" name="registration_validity" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Tax Token Validity</label>
+                                                <input type="date" name="tax_token_validity" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Fitness Validity</label>
+                                                <input type="date" name="fitness_validity" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Road Permit Validity</label>
+                                                <input type="date" name="road_permit_validity" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Insurance Validity</label>
+                                                <input type="date" name="insurance_validity" class="form-control">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer-btn">
-                                    <button type="button" class="btn btn-cancel me-2"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                        <!-- Footer -->
+                        <div class="modal-footer d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-outline-secondary py-1 px-2" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-success py-1 px-2" id="submit_btn">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -399,6 +431,7 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+
             // Initialize select2
             $('.select2').select2();
 
@@ -1011,79 +1044,40 @@
                 }
             });
 
-            $('#storeForm1').submit(function(e) {
+            $('#storeForm').on('submit', function (e) {
                 e.preventDefault();
-                let SubmitBtn = $('#submit_btn1');
-                SubmitBtn.prop('disabled', true);
                 let formData = new FormData(this);
+                let url = $(this).attr('action');
+
                 $.ajax({
-                    type: $(this).attr('method'),
-                    url: $(this).attr('action'),
+                    type: "POST",
+                    url: url,
                     data: formData,
-                    cache: false,
-                    contentType: false,
                     processData: false,
-
-                }).done(function(response) {
-                    if (response.type == 'success') {
-                        $('#add-vehicle').modal('hide');
-                        toastr.success(response.message);
-                        $('#storeForm1').trigger('reset');
-
-                        if (response && response.type == 'success' && response.data) {
-                            let vehicle = response.data;
-                            let vehicleText = vehicle.license_plate + ' - ' + (vehicle.owner_type == '1' ? 'Self' : 'External');
-                            let vehicleOption = new Option(vehicleText, vehicle.id, true, true);
-
-                            $('.select2[name="vehicle_id"]').append(vehicleOption).trigger('change.select2');
-
-                            if (vehicle.owner_type == '1') {  
-                                $("select[name='service_type']").val('self');
-                            } else if (vehicle.owner_type == '2') {  
-                                $("select[name='service_type']").val('external');
-                            }
-
-                        } else {
-                            toastr.error('Vehicle data not found or error in response.');
-                        }
-
-                    } else {
-                        SubmitBtn.prop('disabled', false);
-                        toastr.error(response.message);
-                    }
-                }).fail(function(xhr) {
-                    SubmitBtn.prop('disabled', false);
-                    $('#submit_btn1php').attr('disabled', false);
-                    let response = xhr.responseJSON;
-                    if (response && response.errors) {
-                        $.each(response.errors, function(key, value) {
-                            toastr.error(value);
-                        });
-                    }
-                });
-            });
-            $('#storeForm').submit(function(e) {
-                e.preventDefault();
-                let SubmitBtn = $('#submit_btn');
-                SubmitBtn.prop('disabled', true);
-                let formData = new FormData(this);
-                $.ajax({
-                    type: $(this).attr('method'),
-                    url: $(this).attr('action'),
-                    data: formData,
-                    cache: false,
                     contentType: false,
-                    processData: false,
-                }).done(function(response) {
-                    if (response.type == 'success') {
+                }).done(function (response) {
+                    if (response.type === 'success') {
+                        let vehicle = response.vehicle;
+
+                        // Append and select new vehicle
+                        let newOption = new Option(
+                            vehicle.license_plate + ' - ' + (vehicle.owner_type == 1 ? 'Self' : 'External'),
+                            vehicle.id,
+                            true, true
+                        );
+                        $('#vehicleDropdown').append(newOption).trigger('change');
+
+                        // Update service type
+                        $('#serviceType').val(vehicle.owner_type == 1 ? 'self' : 'external').trigger('change');
                         $('#add-vehicle').modal('hide');
+                        $('#add-vehicle').removeAttr('inert'); //Remove insert form before closing modal
+                        // Reset form
+                        $('#storeForm')[0].reset();
                         toastr.success(response.message);
-                        $('#storeForm').trigger('reset');
                     } else {
-                        SubmitBtn.prop('disabled', false);
-                        toastr.error(response.message);
+                        toastr.error(response.message || 'Error creating vehicle.');
                     }
-                }).fail(function(xhr) {
+                }).fail(function (xhr) {
                     SubmitBtn.prop('disabled', false);
                     $('#submit_btn').attr('disabled', false);
                     let response = xhr.responseJSON;
@@ -1092,13 +1086,26 @@
                             toastr.error(value);
                         });
                     }
-                    if (response && response.message) {
-                        toastr.error(response.message);
-                    } else {
-                        toastr.error('An error occurred. Please try again.');
-                    }
-                })
-            })
+                });
+            });
+            
+            $('select[name="owner_type"]').change(function () {
+                var ownerType = $(this).val();
+                if (ownerType === "2") { // External selected
+                    // Hide all form groups inside .accordion-body
+                    $('#add-vehicle .accordion-body .col-md-6').hide();
+                    // Show only selected fields
+                    $('select[name="owner_type"]').closest('.col-md-6').show();
+                    $('input[name="license_plate"]').closest('.col-md-6').show();
+                    $('select[name="vehicle_type"]').closest('.col-md-6').show();
+                } else { // Self or blank
+                    // Show all fields again
+                    $('#add-vehicle .accordion-body .col-md-6').show();
+                }
+            });
+
+            // Trigger change event on page load to set initial visibility
+            $('select[name="owner_type"]').trigger('change');
         });
     </script>
 @endpush

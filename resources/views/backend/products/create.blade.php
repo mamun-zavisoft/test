@@ -37,7 +37,7 @@
                                                                 New</span></a>
                                                     </div>
 
-                                                    <select class="select" name="category_id">
+                                                    <select class="select" name="category_id" id="categoryDropdown">
                                                         <option value="">Choose</option>
                                                         @foreach ($categories as $category)
                                                             <option value="{{ $category->id }}">{{ $category->name }}
@@ -236,7 +236,7 @@
     </div>
 
     {{-- Category modal --}}
-    <div class="modal fade" id="add-category">
+    <div class="modal fade" id="add-category" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
             <div class="modal-content">
                 <div class="page-wrapper-new p-0">
@@ -251,7 +251,7 @@
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
                             <form action="{{ route('admin.categories.store') }}" method="POST"
-                                enctype="multipart/form-data" class="storeForm">
+                                enctype="multipart/form-data" id="storeForm4">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Category</label>
@@ -414,32 +414,42 @@
             });
         });
 
-        $('.storeForm').submit(function(e) {
+        $('#storeForm4').on('submit', function (e) {
             e.preventDefault();
-            let SubmitBtn = $('.submit_btn');
-            SubmitBtn.prop('disabled', true);
             let formData = new FormData(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
+            let url = $(this).attr('action');
 
-            }).done(function(response) {
-                if (response.type == 'success') {
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function (response) {
+                if (response.type === 'success') {
+                    let category = response.category;
+
+                    // Append and select the new category
+                    let newOption = new Option(
+                        category.name,
+                        category.id,
+                        true, true
+                    );
+                    $('#categoryDropdown').append(newOption).trigger('change');
+
+                    // Close the modal
                     $('#add-category').modal('hide');
+                    // Reset form
+                    $('#storeForm4')[0].reset();
+
+                    // Show success message
                     toastr.success(response.message);
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
                 } else {
-                    toastr.error(response.message);
+                    toastr.error(response.message || 'Error creating category.');
                 }
             }).fail(function(xhr) {
                 SubmitBtn.prop('disabled', false);
-                $('#storeForm').attr('disabled', false);
+                $('#storeForm4').attr('disabled', false);
                 let response = xhr.responseJSON;
                 if (response && response.errors) {
                     $.each(response.errors, function(key, value) {
