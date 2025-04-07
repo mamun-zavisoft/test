@@ -6,8 +6,8 @@
             <th>Service Type</th>
             <th>Vehicle </th>
             <th>Part Purchased</th>
-            <th>Payment Type</th>
             <th>Grand Total</th>
+            <th>Due Amount</th>
             <th>Paid Status</th>
             <th>Created On</th>
             <th class="no-sort">Action</th>
@@ -26,8 +26,8 @@
                         {{ $service->any_parts_purchase ? 'Yes' : 'No' }}
                     </span>
                 </td>
-                <td>Cash</td>
                 <td>{{ number_format($service->grand_total) }}</td>
+                <td>{{ $service->service_type == 'self' ? '-' : number_format($service->due_amount) }}</td>
                 <td>
                     @if ($service->paid_status == 'full_due')
                         <span class="badge-linedanger payment_view"

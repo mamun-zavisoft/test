@@ -136,9 +136,9 @@ class ServiceController extends Controller
                 $sale = Sale::create([
                     'transaction_id' => PurchaseController::transactionIdGenerate(),
                     'type' => $request->service_type,
-                    'grand_total' => $request->grand_total,
+                    'grand_total' => $request->parts_total ?? 0,
                     'paid_amount' => $request->paid_amount ?? 0,
-                    'due_amount' => $request->grand_total - $request->amount ?? 0,
+                    'due_amount' => $request->paid_amount >= $request->parts_total ? 0 : $request->parts_total - $request->paid_amount,
                     'paid_status' => $request->service_type == 'self' ? 'in_house' : $this->calculatePaidStatus($request->grand_total, $request->amount),
                     'note' => $request->note,
                 ]);
@@ -262,6 +262,7 @@ class ServiceController extends Controller
     public function payment(Request $request, $id)
     {
         $service = Service::findOrFail($id);
+        $sale = $service->sale;
         $request->validate([
             'payment_type' => 'required|in:partial_paid,full_paid',
             'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
@@ -294,6 +295,13 @@ class ServiceController extends Controller
             $total_paid_amount = $service->paid_amount + $request->amount;
 
             $paid_status = $total_paid_amount < $service->grand_total ? 'partial_paid' : 'full_paid';
+            if($sale && $paid_status == 'full_paid') {
+                $sale->update([
+                    'paid_amount' => $sale->grand_total,
+                    'due_amount' => 0,
+                    'paid_status' => $paid_status,
+                ]);
+            }
 
             // Update service record
             $service->update([

@@ -185,6 +185,7 @@
                                         <div class="form-group">
                                             <label>Parts Total:</label>
                                             <h5 id="partsTotal">0.00</h5>
+                                            <input type="hidden" name="parts_total" id="partsTotalInput" value="0">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -694,6 +695,7 @@
                 });
 
                 $('#partsTotal').text(partsTotal.toFixed(2));
+                $('#partsTotalInput').val(partsTotal);
                 updateTotals();
 
                 // Revalidate discount after parts total changes
@@ -764,14 +766,11 @@
 
             // Handle payment type selection
             $('#payment_type').change(function() {
+                $('#payment_amount').val('');
                 if ($(this).val() === 'partial_paid') {
                     $('.amount-field').show();
                     // Set maximum amount to grand total
                     $('#payment_amount').attr('max', grandTotal);
-                    // Set a default value (e.g., half of grand total)
-                    if (!$('#payment_amount').val()) {
-                        $('#payment_amount').val(Math.round(grandTotal / 2));
-                    }
                     // Update paid/due calculation
                     updatePaidDueAmounts();
                 } else if ($(this).val() === 'full_paid') {

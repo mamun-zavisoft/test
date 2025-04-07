@@ -11,6 +11,7 @@
                         <li><a href="{{ route('admin.sales.create') }}"><i data-feather="shopping-cart"></i><span>Add Sale</span></a></li>
                         <li><a href="{{ route('admin.purchases.create') }}"><i data-feather="shopping-bag"></i><span>Make Purchase</span></a></li>
                         <li><a href="{{ route('admin.vehicle-fuels.create') }}"><i data-feather="filter"></i><span>Fueling</span></a></li>
+                        <li class="{{ Request::is('vehicles*') ? 'active' : '' }}"><a href="{{ route('admin.vehicles.index') }}"><i data-feather="truck"></i><span>Vehicles</span></a></li>
                     </ul>
                 </li>
 
