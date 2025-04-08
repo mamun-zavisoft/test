@@ -54,7 +54,7 @@
                                                             data-bs-target="#add-brand"><i data-feather="plus-circle"
                                                                 class="plus-down-add"></i><span>Add New</span></a>
                                                     </div>
-                                                    <select class="select" name="brand_id">
+                                                    <select class="select" name="brand_id" id="brandDropdown">
                                                         <option value="">Choose</option>
                                                         @foreach ($brands as $brand)
                                                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
@@ -251,7 +251,7 @@
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
                             <form action="{{ route('admin.categories.store') }}" method="POST"
-                                enctype="multipart/form-data" id="storeForm4">
+                                enctype="multipart/form-data" id="categoryStoreForm">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Category</label>
@@ -305,7 +305,7 @@
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
                             <form action="{{ route('admin.brands.store') }}" method="POST" enctype="multipart/form-data"
-                                class="storeForm">
+                                id="brandStoreForm">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Brand</label>
@@ -414,7 +414,7 @@
             });
         });
 
-        $('#storeForm4').on('submit', function (e) {
+        $('#categoryStoreForm').on('submit', function (e) {
             e.preventDefault();
             let formData = new FormData(this);
             let url = $(this).attr('action');
@@ -440,7 +440,7 @@
                     // Close the modal
                     $('#add-category').modal('hide');
                     // Reset form
-                    $('#storeForm4')[0].reset();
+                    $('#categoryStoreForm')[0].reset();
 
                     // Show success message
                     toastr.success(response.message);
@@ -449,7 +449,47 @@
                 }
             }).fail(function(xhr) {
                 SubmitBtn.prop('disabled', false);
-                $('#storeForm4').attr('disabled', false);
+                $('#categoryStoreForm').attr('disabled', false);
+                let response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $.each(response.errors, function(key, value) {
+                        toastr.error(value);
+                    });
+                }
+            });
+        });
+
+        $('#brandStoreForm').on('submit', function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let url = $(this).attr('action');
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data:formData,
+                processData: false,
+                contentType: false,
+            }).done(function (response) {
+                if(response.type == 'success') {
+                    let brand = response.brand;
+                    // Create a new option element
+                    let newBrand = new Option(
+                        brand.name,
+                        brand.id,
+                        true, true
+                    )
+                    // Append and select the new brand
+                    $('#brandDropdown').append(newBrand).trigger('change');
+                    $('#add-brand').modal('hide'); // Close the modal
+                    $('#brandStoreForm')[0].reset(); // Reset form
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message || 'Error creating brand.');
+                }
+            }).fail(function (xhr) {
+                SubmitBtn.prop('disabled', false);
+                $('#brandStoreForm').attr('disabled', false);
                 let response = xhr.responseJSON;
                 if (response && response.errors) {
                     $.each(response.errors, function(key, value) {

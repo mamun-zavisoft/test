@@ -32,4 +32,9 @@ class Vehicle extends Model
     {
         return $this->belongsTo(Hub::class);
     }
+
+    public function service()
+    {
+        return $this->hasMany(Service::class);
+    }
 }

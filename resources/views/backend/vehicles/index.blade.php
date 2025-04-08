@@ -108,7 +108,7 @@
                                     <div class="accordion-body">
                                         <div class="row g-3">
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold">Owner Type*</label>
+                                                <label class="form-label fw-bold">Owner Type<span class="text-danger">*</span></label>
                                                 <select name="owner_type" class="form-select">
                                                     <option value="">Choose</option>
                                                     <option value="1" selected>Self</option>
@@ -116,8 +116,23 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold">Register Number*</label>
+                                                <label class="form-label fw-bold">Register Number<span class="text-danger">*</span></label>
                                                 <input type="text" name="license_plate" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">Vehicle Type<span class="text-danger">*</span></label>
+                                                <select name="vehicle_type" class="form-select">
+                                                    <option value="">Choose</option>
+                                                    <option value="1">Covered Van</option>
+                                                    <option value="2">Motor Bike</option>
+                                                    <option value="3">Pick Up</option>
+                                                    <option value="4">Truck</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">ODO (current odometer)<span class="text-danger">*</span></label>
+                                                <input type="number" name="current_odometer" class="form-control"
+                                                    placeholder="Current Mileage" onwheel="this.blur()">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold">Select Hub</label>
@@ -129,16 +144,6 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold">Vehicle Type</label>
-                                                <select name="vehicle_type" class="form-select">
-                                                    <option value="">Choose</option>
-                                                    <option value="1">Covered Van</option>
-                                                    <option value="2">Motor Bike</option>
-                                                    <option value="3">Pick Up</option>
-                                                    <option value="4">Truck</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
                                                 <label class="form-label fw-bold">Select Model</label>
                                                 <select name="vehicle_model_id" class="form-select">
                                                     <option value="">Choose</option>
@@ -146,11 +151,6 @@
                                                     <option value="{{ $model->id }}">{{ $model->name }}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-bold">ODO (current odometer)*</label>
-                                                <input type="number" name="current_odometer" class="form-control"
-                                                    placeholder="Current Mileage" onwheel="this.blur()">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold">Status</label>
