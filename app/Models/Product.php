@@ -30,6 +30,12 @@ class Product extends Model implements Mediable
         return $this->belongsTo(Zone::class);
     }
 
+    public function purchaseDetails()
+    {
+        return $this->hasMany(PurchaseDetail::class, 'product_id');
+    }
+    
+
     public function setThumbnailAttribute($file)
     {
         if ($file) {

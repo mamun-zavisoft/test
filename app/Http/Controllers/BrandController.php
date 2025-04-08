@@ -35,7 +35,7 @@ class BrandController extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => 'Brand created successfully!', 'type' => 'success'], 200);
+            return response()->json(['message' => 'Brand created successfully!', 'type' => 'success', 'brand' => $brand], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
 
