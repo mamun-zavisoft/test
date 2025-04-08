@@ -67,6 +67,14 @@
                         <li class="{{ Request::is('accounts*') ? 'active' : '' }}"><a href="{{ route('admin.accounts.index') }}"><i data-feather="credit-card"></i><span>Accounts</span></a></li>
                     </ul>
                 </li>
+                
+                {{-- Report --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Report</h6>
+                    <ul>
+                        <li class="{{ Request::is('vehicles.report*') ? 'active' : '' }}"><a href="{{ route('admin.vehicle.reports.index') }}"><i data-feather="bar-chart-2"></i><span>Vehicle Report</span></a></li>
+                    </ul>
+                </li>
 
                 {{-- Hubs --}}
                 <li class="submenu-open">

@@ -872,7 +872,7 @@
                 } else {
                     // For full_due
                     $('.amount-field').hide();
-                    $('#payment_amount').val(0);
+                    $('#payment_amount').val('');
                     // Update paid/due calculation
                     updatePaidDueAmounts();
                 }

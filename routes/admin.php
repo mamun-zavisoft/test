@@ -16,6 +16,7 @@ use App\Http\Controllers\StockPurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\VehicleFuelController;
 use App\Http\Controllers\VehicleModelController;
+use App\Http\Controllers\VehicleReportController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\ZoneController;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,10 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::get('/purchase/view/payments/{id}', [PurchaseController::class, 'view_payments'])->name('purchase.view.payments');
     Route::get('/service/view/payments/{id}', [ServiceController::class, 'view_payments'])->name('service.view.payments');
     Route::get('/search/vehicle', [VehiclesController::class, 'searchVehicle'])->name('search.vehicle');
+
+    // report routes
+    Route::get('/vehicle-reports', [VehicleReportController::class, 'index'])->name('vehicle.reports.index');
+    Route::get('/vehicle-reports/data', [VehicleReportController::class, 'report'])->name('vehicle.reports.data');
 
     // system general settings
     Route::controller(SettingController::class)->group(function () {
