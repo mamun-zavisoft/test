@@ -25,7 +25,7 @@ class PermissionSeeder extends Seeder
             ['guard_name' => 'admin', 'group_name' => 'role', 'name' => 'role-update'],
             ['guard_name' => 'admin', 'group_name' => 'role', 'name' => 'role-delete'],
 
-            ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-list'],
+            ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-list'], // 
             ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-create'],
             ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-update'],
             ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-delete'],

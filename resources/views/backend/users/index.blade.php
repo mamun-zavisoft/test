@@ -4,7 +4,7 @@
     <div class="page-wrapper">
         <div class="content">
             
-            <x-breadcrumb title="User List" sub-title="Manage Your Users" button="Add New User" button-route="users.create" />
+            <x-breadcrumb title="User List" sub-title="Manage Your Users" permission="user-create" button="Add New User" button-route="users.create" />
 
 
             <!-- filter -->

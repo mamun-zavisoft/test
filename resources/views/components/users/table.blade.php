@@ -79,12 +79,15 @@
                 {{-- <td><span class="badge badge-linedanger">Inactive</span></td> --}}
                 <td class="action-table-data">
                     <div class="edit-delete-action">
+                        @permission('user-update')
                         @if ($authUser->id != $user->id && $user->role != 1 || $authUser->role == 1)
                             <a href="{{ route('users.edit', $user->id) }}" class="me-2 p-2 mb-0">
                                 <i data-feather="edit" class="feather-edit"></i>
                             </a>
                         @endif
+                        @endpermission
                         
+                        @permission('user-delete')
                         @if ($user->role != 1 && $authUser->id != $user->id)    
                             <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);">
                                 <i data-feather="trash-2" class="feather-trash-2"></i>
@@ -94,6 +97,7 @@
                                 @method('DELETE')
                             </form>
                         @endif
+                        @endpermission
                     </div>
                 </td>
             </tr>
