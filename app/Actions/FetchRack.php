@@ -13,7 +13,8 @@ class FetchRack
         $perPage = $request->input('per_page', 10);
 
         return Rack::query()
-            ->with('zone:id,name')
+            ->with('zone:id,name',
+                    'drawers:id,name,rack_id',)
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
