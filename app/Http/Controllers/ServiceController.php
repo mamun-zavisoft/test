@@ -97,6 +97,7 @@ class ServiceController extends Controller
                 'paid_status' => $request->service_type == 'self' ? 'in_house' : $this->calculatePaidStatus($request->grand_total, $request->amount),
                 'note' => $request->note,
                 'any_parts_purchase' => $request->any_parts_purchase ?? false,
+                'zone_id' => auth()->user()->zone_id,
             ]);
 
             // Associate service charts

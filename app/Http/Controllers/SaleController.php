@@ -65,6 +65,7 @@ class SaleController extends Controller
                 'account_id' => $request->account_id,
                 'note' => $request->note,
                 'phone' => $request->phone,
+                'zone_id' => auth()->user()->zone_id,
             ]);
 
             // Process parts sale

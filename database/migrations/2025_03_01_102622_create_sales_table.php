@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('transaction_id')->nullable()->index();
             $table->string('account_id')->nullable()->index();
+            $table->foreignId('zone_id')->nullable()->constrained();
             $table->enum('type', ['self', 'external', 'only_sale'])->comment('self, external, only_sale');
             $table->decimal('grand_total', 14, 2);
             $table->decimal('discount_amount', 14, 2)->default(0);
