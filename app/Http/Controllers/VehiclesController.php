@@ -10,6 +10,7 @@ use App\Models\VehicleModel;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class VehiclesController extends Controller
 {
@@ -29,6 +30,7 @@ class VehiclesController extends Controller
 
     public function store(Request $request)
     {
+
         try {
 
             $data = $request->validate([
@@ -42,17 +44,20 @@ class VehiclesController extends Controller
                 'fitness_validity' => 'nullable|date',
                 'road_permit_validity' => 'nullable|date',
                 'insurance_validity' => 'nullable|date',
-                'license_plate' => 'nullable|string|max:50|unique:vehicles,license_plate',
-                'current_odometer' => 'nullable|numeric|min:0',
+                'license_plate' => 'required|string|max:50|unique:vehicles,license_plate',
+                'current_odometer' => ['required_if:owner_type,1', 'nullable', 'numeric', 'min:0'],
                 'status' => 'nullable|in:1,2',
+            ],
+            [
+                'current_odometer.required_if' => 'The current odometer field is required when owner type is Self.',
             ]);
-
-            $data['registration_date'] = date('Y-m-d', strtotime($request->registration_date));
-            $data['registration_validity'] = date('Y-m-d', strtotime($request->registration_validity));
-            $data['tax_token_validity'] = date('Y-m-d', strtotime($request->tax_token_validity));
-            $data['fitness_validity'] = date('Y-m-d', strtotime($request->fitness_validity));
-            $data['road_permit_validity'] = date('Y-m-d', strtotime($request->road_permit_validity));
-            $data['insurance_validity'] = date('Y-m-d', strtotime($request->insurance_validity));
+            
+            $data['registration_date'] = $request->registration_date ? date('Y-m-d', strtotime($request->registration_date)) : null;
+            $data['registration_validity'] = $request->registration_validity ? date('Y-m-d', strtotime($request->registration_validity)) : null;
+            $data['tax_token_validity'] = $request->tax_token_validity ? date('Y-m-d', strtotime($request->tax_token_validity)) : null;
+            $data['fitness_validity'] = $request->fitness_validity ? date('Y-m-d', strtotime($request->fitness_validity)) : null;
+            $data['road_permit_validity'] = $request->road_permit_validity ? date('Y-m-d', strtotime($request->road_permit_validity)) : null;
+            $data['insurance_validity'] = $request->insurance_validity ? date('Y-m-d', strtotime($request->insurance_validity)) : null;
 
             DB::beginTransaction();
 
@@ -74,11 +79,9 @@ class VehiclesController extends Controller
             ]);
 
             DB::commit();
-
-            return response()->json(['message' => 'Vehicle created successfully!', 'type' => 'success', 'data' => $vehicle], 200);
+            return response()->json(['message' => 'Vehicle created successfully!', 'type' => 'success', 'vehicle' => $vehicle], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
-
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
     }
@@ -94,6 +97,7 @@ class VehiclesController extends Controller
     public function update(Request $request, Vehicle $vehicle)
     {
         try {
+
             $request->validate([
                 'owner_type' => 'required|in:1,2',
                 'vehicle_type' => 'nullable|in:1,2,3,4,5,'.$vehicle->id,
@@ -135,8 +139,10 @@ class VehiclesController extends Controller
 
     public function destroy(Vehicle $vehicle)
     {
+        if ($vehicle->service()->count() > 0) {
+            return redirect()->back()->with('error', 'Vehicle has services, cannot be deleted.');
+        }
         $vehicle->delete();
-
         return redirect()->back()->with('success', 'Vehicle deleted successfully!');
     }
 

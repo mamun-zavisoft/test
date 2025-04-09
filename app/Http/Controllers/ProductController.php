@@ -143,6 +143,10 @@ class ProductController extends Controller
         if ($product->getTotalAvailableQuantity() > 0) {
             return redirect()->back()->with('error', 'Product has stock, cannot be deleted');
         }
+
+        if ($product->purchaseDetails()->count() > 0) {
+            return redirect()->back()->with('error', 'Product has purchases, cannot be deleted');
+        }
         $product->delete();
 
         return redirect()->back()->with('success', 'Product deleted successfully!');

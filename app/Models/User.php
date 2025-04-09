@@ -42,6 +42,15 @@ class User extends Authenticatable implements Mediable
 
     public static $FOREMAN = 3; // foreman or users who are under control of in-charge
 
+    public function getRoleNameAttribute()
+    {
+        return match ($this->role) {
+            '1' => 'Super Admin',
+            '2' => 'In Charge',
+            '3' => 'Foreman',
+            default => 'Unknown Role',
+        };
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -67,7 +76,7 @@ class User extends Authenticatable implements Mediable
 
     public function hasPermission($permissionName)
     {
-        $permissions = Cache::remember('user_permissions'.$this->id, now()->addMonths(5), function () {
+        $permissions = Cache::remember('user_permissions' . $this->id, now()->addMonths(5), function () {
             return $this->getAllPermissions()->pluck('name')->toArray();
         });
 

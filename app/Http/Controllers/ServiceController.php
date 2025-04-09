@@ -10,6 +10,8 @@ use App\Models\Service;
 use App\Models\ServiceChart;
 use App\Models\ServiceDetail;
 use App\Models\Vehicle;
+use App\Models\Hub;
+use App\Models\VehicleModel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,8 +40,13 @@ class ServiceController extends Controller
         $serviceCharts = ServiceChart::all();
         $products = Product::get();
         $accounts = Account::select('id', 'name', 'balance')->get();
+        $hubs = Hub::select('id', 'name')->get();
+        $vehicleModels = VehicleModel::select('id', 'name')->get();
+        
+        // Fetch payment types Dynamically
+        $paymentTypes = Service::getPaymentTypes();
 
-        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products', 'accounts'));
+        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products', 'accounts', 'hubs', 'vehicleModels', 'paymentTypes'));
     }
 
     /**
@@ -81,7 +88,7 @@ class ServiceController extends Controller
                 'transaction_id' => PurchaseController::transactionIdGenerate(),
                 'service_type' => $request->service_type,
                 'vehicle_id' => $request->vehicle_id,
-                'payment_type_id' => $request->payment_type_id,
+                'payment_type_id' => $request->payment_type_id ?? Service::CASH,
                 'total_amount' => $request->total_amount,
                 'discount' => $request->discount ?? 0,
                 'grand_total' => $request->grand_total,
@@ -136,9 +143,9 @@ class ServiceController extends Controller
                 $sale = Sale::create([
                     'transaction_id' => PurchaseController::transactionIdGenerate(),
                     'type' => $request->service_type,
-                    'grand_total' => $request->grand_total,
+                    'grand_total' => $request->parts_total ?? 0,
                     'paid_amount' => $request->paid_amount ?? 0,
-                    'due_amount' => $request->grand_total - $request->amount ?? 0,
+                    'due_amount' => $request->paid_amount >= $request->parts_total ? 0 : $request->parts_total - $request->paid_amount,
                     'paid_status' => $request->service_type == 'self' ? 'in_house' : $this->calculatePaidStatus($request->grand_total, $request->amount),
                     'note' => $request->note,
                 ]);
@@ -262,6 +269,7 @@ class ServiceController extends Controller
     public function payment(Request $request, $id)
     {
         $service = Service::findOrFail($id);
+        $sale = $service->sale;
         $request->validate([
             'payment_type' => 'required|in:partial_paid,full_paid',
             'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
@@ -294,6 +302,13 @@ class ServiceController extends Controller
             $total_paid_amount = $service->paid_amount + $request->amount;
 
             $paid_status = $total_paid_amount < $service->grand_total ? 'partial_paid' : 'full_paid';
+            if($sale && $paid_status == 'full_paid') {
+                $sale->update([
+                    'paid_amount' => $sale->grand_total,
+                    'due_amount' => 0,
+                    'paid_status' => $paid_status,
+                ]);
+            }
 
             // Update service record
             $service->update([

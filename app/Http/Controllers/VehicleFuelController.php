@@ -44,9 +44,13 @@ class VehicleFuelController extends Controller
             'vehicle_id' => 'required|integer|exists:vehicles,id',
             'fuel_type' => 'required|integer|in:1,2,3',
             'current_odometer' => 'required|numeric',
-            'fuel_qty' => 'required|numeric',
-            'fuel_rate' => 'required|numeric',
+            'fuel_qty' => 'required|numeric|min:0',
+            'fuel_rate' => 'required|numeric|min:0',
             'total_price' => 'required|numeric',
+        ],
+        [
+            'fuel_qty.min' => 'Fuel quantity must be positive.',
+            'fuel_rate.min' => 'Fuel rate must be positive.'
         ]);
 
         try {

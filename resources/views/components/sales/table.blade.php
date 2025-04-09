@@ -5,6 +5,7 @@
             <th>Invoice No</th>
             <th>Sale Type</th>
             <th>Grand Total</th>
+            <th>Paid Status</th>
             <th>Date</th>
             <th class="no-sort">Action</th>
         </tr>
@@ -15,26 +16,42 @@
                 <td>{{ $loop->iteration + $sales->firstItem() - 1 }}</td>
                 <td class="fw-bold"><span class="copyable">{{ $sale->transaction_id }}</span></td>
                 <td>
-                    @if ($sale->type == "only_sale")
+                    @if ($sale->type == 'only_sale')
                         <span class="badge bg-info">POS</span>
-                    @elseif ($sale->type == "external")
+                    @elseif ($sale->type == 'external')
                         <span class="badge bg-warning">External</span>
                     @else
                         <span class="badge bg-success">In House</span>
                     @endif
                 </td>
                 <td>{{ number_format($sale->grand_total) }}</td>
+                <td>
+                    @if ($sale->paid_status == 'full_due')
+                        <span class="badge-linedanger payment_view">Due</span>
+                    @elseif ($sale->paid_status == 'partial_paid')
+                        <span class="badge-linewarning payment_view">Partial
+                            Paid</span>
+                    @elseif ($sale->paid_status == 'full_paid')
+                        <span class="badge-linesuccess">Paid</span>
+                    @elseif ($sale->paid_status == 'in_house')
+                        <span class="badge-linesuccess">In House</span>
+                    @else
+                        <span class="badge-linedanger">Not Defined</span>
+                    @endif
+                </td>
                 <td>{{ $sale->created_at?->format('d M Y h:i A') }}</td>
                 <td class="action-table-data">
                     <div class="edit-delete-action">
                         <a class="me-2 p-2" href="javascript:void(0);" data-bs-toggle="modal"
-                        data-bs-target="#sale-{{ $sale->id }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye action-eye">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
+                            data-bs-target="#sale-{{ $sale->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-eye action-eye">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
                         </a>
-                        
+
                     </div>
                 </td>
             </tr>
@@ -51,21 +68,24 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body custom-modal-body new-employee-field" style="flex-grow: 1; overflow-y: auto;">
-                            
+                        <div class="modal-body custom-modal-body new-employee-field"
+                            style="flex-grow: 1; overflow-y: auto;">
+
                             <!-- Supplier Info -->
                             <div class="row mb-4">
                                 <div class="col-md-8">
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title font-weight-bold mb-3">Customer Info</h5>
-                                            @if ($sale->type == "only_sale")
+                                            @if ($sale->type == 'only_sale')
                                                 <p class="mb-1">Sale Type: <span>POS</span></p>
-                                                <p class="mb-1">Customer Phone: {{ $sale->phone ?? "N/A" }}</p>
-                                            @elseif ($sale->type == "external")
-                                                <p class="mb-1">Customer type: <span class="fw-bold">External</span></p>
+                                                <p class="mb-1">Customer Phone: {{ $sale->phone ?? 'N/A' }}</p>
+                                            @elseif ($sale->type == 'external')
+                                                <p class="mb-1">Customer type: <span class="fw-bold">External</span>
+                                                </p>
                                             @else
-                                                <p class="mb-1">Customer type: <span class="fw-bold">In House</span></p>  
+                                                <p class="mb-1">Customer type: <span class="fw-bold">In House</span>
+                                                </p>
                                             @endif
                                         </div>
                                     </div>
@@ -81,7 +101,8 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span>Payment Status:</span>
-                                                <span class="fw-bolder
+                                                <span
+                                                    class="fw-bolder
                                                     text-{{ $sale->paid_status == 'full_paid' ? 'success' : 'warning' }}">
                                                     {{ $sale->paid_status == 'full_paid' ? 'Paid' : 'Unpaid' }}
                                                 </span>
@@ -108,14 +129,16 @@
                                     @php
                                         $total = 0;
                                     @endphp
-                                    @foreach($sale->saleDetails as $data)
+                                    @foreach ($sale->saleDetails as $data)
                                         <div class="d-flex border-bottom py-2">
                                             <div class="p-2" style="flex: 1;">{{ $data->product?->name }}</div>
-                                            <div class="p-2" style="flex: 1;">{{ number_format($data->unit_price) }}</div>
+                                            <div class="p-2" style="flex: 1;">{{ number_format($data->unit_price) }}
+                                            </div>
                                             <div class="p-2" style="flex: 1;">{{ $data->qty }}</div>
-                                            <div class="p-2" style="flex: 1;">{{ number_format($data->qty * $data->unit_price) }}</div>
+                                            <div class="p-2" style="flex: 1;">
+                                                {{ number_format($data->qty * $data->unit_price) }}</div>
                                         </div>
-                                        <?php $total += $data->qty * $data->unit_price ?>
+                                        <?php $total += $data->qty * $data->unit_price; ?>
                                     @endforeach
                                 </div>
                             </div>
@@ -143,7 +166,8 @@
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <span class="font-weight-bold">Grand Total</span>
-                                            <span class="font-weight-bold">{{ number_format($sale->grand_total) }}</span>
+                                            <span
+                                                class="font-weight-bold">{{ number_format($sale->grand_total) }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +180,8 @@
 
                         <!-- Footer Actions -->
                         <div class="modal-footer justify-content-end">
-                            <button type="button" class="btn btn-secondary me-2" onclick="printInvoice(this, {{ $sale->id }})">
+                            <button type="button" class="btn btn-secondary me-2"
+                                onclick="printInvoice(this, {{ $sale->id }})">
                                 <i class="fas fa-print me-1"></i> Print
                             </button>
                         </div>
@@ -164,10 +189,10 @@
                 </div>
             </div>
 
-            @empty
+        @empty
             <tr class="text-center">
-            <td colspan="7">No Sale Found</td>
-        </tr>
+                <td colspan="7">No Sale Found</td>
+            </tr>
         @endforelse
     </tbody>
 </table>

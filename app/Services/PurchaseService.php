@@ -17,7 +17,7 @@ class PurchaseService
         $statusType = request()->input('statusType', '');
 
         return Purchase::query()
-            ->with('supplier:id,name', 'zone:id,name')
+            ->with('supplier:id,name', 'zone:id,name', 'purchaseDetails.product:id,name')
             ->where(function ($query) use ($search) {
                 $query->where('reference_no', 'like', "%{$search}%")
                     ->orWhere('transaction_id', 'like', "%{$search}%")

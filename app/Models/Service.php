@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    const CASH = 1;
+    const BANK = 2;
+
     protected $guarded = [];
 
     public function serviceDetails()
@@ -32,4 +35,13 @@ class Service extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public static function getPaymentTypes()
+    {
+        return [
+            self::CASH => 'Cash',
+            self::BANK => 'Bank',
+        ];
+    }
+    
 }

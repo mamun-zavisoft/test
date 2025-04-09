@@ -32,7 +32,7 @@ class CategoryController extends Controller
             $category->image = $request->file('image');
             $category->save();
 
-            return response()->json(['message' => 'Category created successfully!', 'type' => 'success'], 200);
+            return response()->json(['message' => 'Category created successfully!', 'type' => 'success', 'category' => $category], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }

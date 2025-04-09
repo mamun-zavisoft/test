@@ -1,3 +1,6 @@
+@php
+    $user = auth()->user();
+@endphp
 <!-- Header -->
 <div class="header">
 
@@ -206,24 +209,24 @@
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
                 <span class="user-info">
                     <span class="user-letter">
-                        <img src="{{ auth()->user() ? auth()->user()->image : '#' }}" alt=""
+                        <img src="{{ $user ? $user->image : '#' }}" alt=""
                             class="img-fluid">
                     </span>
                     <span class="user-detail">
-                        <span class="user-name">{{ auth()->user() ? auth()->user()->name : '' }}</span>
-                        <span class="user-role">Super Admin</span>
+                        <span class="user-name">{{ $user ? $user->name : '' }}</span>
+                        <span class="user-role">{{ $user ? $user->role_name : '' }}</span>
                     </span>
                 </span>
             </a>
             <div class="dropdown-menu menu-drop-user">
                 <div class="profilename">
-                    <div class="profileset">
+                    <div class="profileset px-3">
                         <span class="user-img"><img src="#"
                                 alt="">
                             <span class="status online"></span></span>
                         <div class="profilesets">
-                            <h6>{{ auth()->user() ? auth()->user()->name : '' }}</h6>
-                            <h5>Super Admin</h5>
+                            <h6>{{ $user ? $user->name : '' }}</h6>
+                            <h5>{{ $user ? $user->role_name : '' }}</h5>
                         </div>
                     </div>
                     <hr class="m-0">

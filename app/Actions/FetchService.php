@@ -14,7 +14,10 @@ class FetchService
         $serviceType = request()->input('serviceType', '');
 
         return Service::query()
-            ->with('vehicle:id,license_plate', 'account:id,type', 'sale')
+            ->with('vehicle:id,license_plate',
+                    'account:id,type', 
+                    'sale.saleDetails.product', 
+                    'serviceDetails.serviceChart')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->orWhere('service_type', 'like', "%{$search}%")

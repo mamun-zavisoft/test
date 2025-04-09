@@ -11,6 +11,7 @@
                         <li><a href="{{ route('admin.sales.create') }}"><i data-feather="shopping-cart"></i><span>Add Sale</span></a></li>
                         <li><a href="{{ route('admin.purchases.create') }}"><i data-feather="shopping-bag"></i><span>Make Purchase</span></a></li>
                         <li><a href="{{ route('admin.vehicle-fuels.create') }}"><i data-feather="filter"></i><span>Fueling</span></a></li>
+                        <li class="{{ Request::is('vehicles*') ? 'active' : '' }}"><a href="{{ route('admin.vehicles.index') }}"><i data-feather="truck"></i><span>Vehicles</span></a></li>
                     </ul>
                 </li>
 
@@ -64,6 +65,14 @@
                     <h6 class="submenu-hdr">Accounts & Finance</h6>
                     <ul>
                         <li class="{{ Request::is('accounts*') ? 'active' : '' }}"><a href="{{ route('admin.accounts.index') }}"><i data-feather="credit-card"></i><span>Accounts</span></a></li>
+                    </ul>
+                </li>
+                
+                {{-- Report --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Report</h6>
+                    <ul>
+                        <li class="{{ Request::is('vehicles.report*') ? 'active' : '' }}"><a href="{{ route('admin.vehicle.reports.index') }}"><i data-feather="bar-chart-2"></i><span>Vehicle Report</span></a></li>
                     </ul>
                 </li>
 

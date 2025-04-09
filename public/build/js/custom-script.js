@@ -44,45 +44,31 @@ $(".image-input").change(function () {
     }
 });
 $(document).on("click", ".remove-photo", function () {
-    $(this).closest(".profile-pic-upload").find(".image-preview").attr("src", defaultUploadImagePath);
+    $(this)
+        .closest(".profile-pic-upload")
+        .find(".image-preview")
+        .attr("src", defaultUploadImagePath);
     $(this).closest(".profile-pic-upload").find(".image-input").val("");
     $(this).addClass("d-none");
 });
 
 // image preview end
 
-
 // copy text
 $(document).ready(function () {
-    $(document).on('click', '.copyable', function () {
+    $(document).on("click", ".copyable", function () {
         const textToCopy = $(this).text();
-        navigator.clipboard.writeText(textToCopy)
+        navigator.clipboard
+            .writeText(textToCopy)
             .then(() => {
-                $(this).addClass('copied'); // Add 'copied' class
+                $(this).addClass("copied"); // Add 'copied' class
                 setTimeout(() => {
-                    $(this).removeClass('copied'); // Remove 'copied' class after a delay
+                    $(this).removeClass("copied"); // Remove 'copied' class after a delay
                 }, 1000); // 1 seconds delay
             })
-            .catch(err => {
-                console.error('Could not copy text: ', err);
+            .catch((err) => {
+                console.error("Could not copy text: ", err);
             });
-    });
-
-    // Ensure that dynamically loaded elements are also included
-    $(document).ajaxComplete(function () {
-        $(document).on('click', '.copyable', function () {
-            const textToCopy = $(this).text();
-            navigator.clipboard.writeText(textToCopy)
-                .then(() => {
-                    $(this).addClass('copied'); // Add 'copied' class
-                    setTimeout(() => {
-                        $(this).removeClass('copied'); // Remove 'copied' class after a delay
-                    }, 1000); // 1 seconds delay
-                })
-                .catch(err => {
-                    console.error('Could not copy text: ', err);
-                });
-        });
     });
 });
 
