@@ -24,7 +24,6 @@ class FetchProduct
             ->when($category_id, function ($query, $category_id) {
                 $query->where('category_id', $category_id);
             })
-            ->select('id', 'name', 'sale_price', 'category_id', 'brand_id', 'created_at')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
     }
 }
