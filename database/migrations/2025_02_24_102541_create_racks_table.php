@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('racks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('zone_id')->constrained();
+            $table->foreignId('zone_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

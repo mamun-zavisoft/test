@@ -33,10 +33,21 @@
     @endisset
 
     @if (isset($button) && isset($buttonRoute))
-        <div class="page-btn">
-            <a href="{{ route($buttonRoute) }}" class="btn btn-added"><i data-feather="plus-circle" class="me-2"></i>
-                {{ $button }}</a>
-        </div>
+        @if (isset($permission) && !empty($permission))
+            @permission($permission)
+                <div class="page-btn">
+                    <a href="{{ route($buttonRoute) }}" class="btn btn-added"><i data-feather="plus-circle"
+                            class="me-2"></i>
+                        {{ $button }}</a>
+                </div>
+            @endpermission
+        @else
+            <div class="page-btn">
+                <a href="{{ route($buttonRoute) }}" class="btn btn-added"><i data-feather="plus-circle"
+                        class="me-2"></i>
+                    {{ $button }}</a>
+            </div>
+        @endif
     @endif
 
     @if (isset($button) && isset($backButtonRoute))

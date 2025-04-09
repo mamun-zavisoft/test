@@ -58,7 +58,7 @@
                                 <div class="d-flex justify-content-center align-items-center mt-2 text-white">
                                     <span class="me-3">Self: {{ $selfVehicle }}</span>
                                     <div style="width: 2px; height: 20px; background: white; margin: 0 10px;"></div>
-                                    <span class="ms-3">Outside: {{ $outsideVehicle }}</span>
+                                    <span class="ms-3">External: {{ $outsideVehicle }}</span>
                                 </div>
                             </div>
                         </a>
@@ -94,7 +94,7 @@
                 <div class="col-xl-7 col-sm-12 col-12 d-flex">
                     <div class="card flex-fill">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">Purchase & Sales<span id="selected-year">{{ $year }}</span></h5>
+                            <h5 class="card-title mb-0">Purchase & Sales <span id="selected-year">{{ $year }}</span></h5>
                             <div class="graph-sets">
                                 <ul class="mb-0">
                                     <li>
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div id="sales_charts"></div>
+                            {{-- <div id="sales_charts"></div> --}}
                             <canvas id="chart"></canvas>
                         </div>
                     </div>

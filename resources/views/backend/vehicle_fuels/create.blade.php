@@ -14,7 +14,6 @@
                                 <div class="input-blocks">
                                     <label>Select Vehicle</label>
                                     <select class="select" name="vehicle_id" id="vehicleSelect" required multiple>
-                                        <option value="">Select</option>
                                         @foreach ($vehicles as $vehicle)
                                             <option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }} </option>
                                         @endforeach
@@ -48,8 +47,8 @@
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="input-blocks">
                                     <label>Fuel Quantity (Ltr.)</label>
-                                    <input type="number" step="0.01" class="form-control" id="fuel_qty" name="fuel_qty"
-                                        placeholder="Enter quantity" required>
+                                    <input type="number" class="form-control" id="fuel_qty" name="fuel_qty"
+                                        placeholder="Enter quantity" onwheel="this.blur()" required>
 
                                 </div>
                             </div>
@@ -57,8 +56,8 @@
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="input-blocks">
                                     <label>Fuel Rate</label>
-                                    <input type="number" step="0.01" class="form-control" id="fuel_rate"
-                                        name="fuel_rate" placeholder="Enter fuel rate" required>
+                                    <input type="number" class="form-control" id="fuel_rate"
+                                        name="fuel_rate" placeholder="Enter fuel rate" onwheel="this.blur()" required>
 
                                 </div>
                             </div>
@@ -66,7 +65,7 @@
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="input-blocks">
                                     <label>Total Price</label>
-                                    <input type="number" step="0.01" class="form-control" id="total_price"
+                                    <input type="number" class="form-control" id="total_price"
                                         name="total_price" placeholder="Enter price" readonly>
 
                                 </div>
@@ -104,7 +103,7 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $("#vehicleSelect").on("change", function() {
+            $("#vehicleSelect").on("change", function() { 
                 let selectedOptions = $(this).find("option:selected");
 
                 if (selectedOptions.length > 1) {
@@ -199,6 +198,20 @@
                         toastr.error(response.message);
                     }
                 });
+            });
+            
+            // Don't get negative values in fuel qty
+            $('#fuel_qty').on('keypress', function (e) {
+                if (e.key === '-' ){
+                    e.preventDefault();
+                }
+            });
+
+            // Don't get negative values in fuel rate
+            $('#fuel_rate').on('keypress', function (e) {
+                if (e.key === '-' ){
+                    e.preventDefault();
+                }
             });
         });
     </script>

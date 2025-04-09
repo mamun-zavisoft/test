@@ -16,7 +16,7 @@
                                         <label>Supplier Name</label>
                                         <div class="row">
                                             <div class="col-lg-10 col-sm-10 col-10">
-                                                <select class="select" name="supplier_id">
+                                                <select class="select" name="supplier_id" id="supplierDropdown">
                                                     <option value="">Select</option>
                                                     @foreach ($suppliers as $supplier)
                                                         <option value="{{ $supplier->id }}"> {{ $supplier->name }} </option>
@@ -24,8 +24,9 @@
                                                 </select>
                                             </div>
                                             <div class="col-lg-2 col-sm-2 col-2 ps-0">
-                                                <div class="add-icon tab">
-                                                    <a href="javascript:void(0);"><i data-feather="plus-circle"
+                                                <div class="add-icon tab" id="add_supplier">
+                                                    <a href="javascript:void(0);" data-bs-toggle="modal"
+                                                    data-bs-target="#add-supplier"><i data-feather="plus-circle"
                                                             class="feather-plus-circles"></i></a>
                                                 </div>
                                             </div>
@@ -85,7 +86,7 @@
                                 <div class="row">
                                     <div class="col-lg-3 col-md-6 col-sm-12">
                                         <div class="input-blocks">
-                                            <label>Discount</label>
+                                            <label>Discount (৳)</label>
                                             <input type="text" value="0" name="discount_amount">
                                         </div>
                                     </div>
@@ -187,8 +188,68 @@
                             </div>
                         </div>
                     </div>
+                </div>
             </form>
             <!-- /add -->
+
+            <!-- Add supplier -->
+            <div class="modal fade" id="add-supplier">
+                <div class="modal-dialog modal-dialog-centered custom-modal-two">
+                    <div class="modal-content">
+                        <div class="page-wrapper-new p-0">
+                            <div class="content">
+                                <div class="modal-header border-0 custom-modal-header justify-content-between">
+                                    <div class="page-title">
+                                        <h4>Create Supplier</h4>
+                                    </div>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#storeForm')[0].reset()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body custom-modal-body new-employee-field">
+                                    <form action="{{ route('admin.suppliers.store') }}" method="POST" enctype="multipart/form-data"
+                                        id="supplierForm">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label class="form-label">Name*</label>
+                                            <input type="text" name="name" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Zone*</label>
+                                            <select class="select" name="zone_id">
+                                                <option value="">Select Zone</option>
+                                                @foreach ($zones as $zone)
+                                                    <option value="{{ $zone->id }}">
+                                                        {{ $zone->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone*</label>
+                                            <input type="text" class="form-control"
+                                                value="{{ old('phone') }}" name="phone">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Balance</label>
+                                            <input type="text" class="form-control"
+                                                value="{{ old('balance') }}" name="balance">
+                                        </div>
+                                        
+
+                                        <div class="modal-footer-btn">
+                                            <button type="button" class="btn btn-cancel me-2"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -443,6 +504,47 @@
         // Make sure to call updateCartAction when payment account changes
         $('#payment_account').on('change', function() {
             updateCartAction();
+        });
+
+        $('#supplierForm').on('submit', function (e) {
+            e.preventDefault();
+            let SubmitBtn = $('#submit_btn');
+            SubmitBtn.prop('disabled', true);
+            let formData = new FormData(this);
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+            }).done(function (response) {
+                if (response.type == 'success') {
+                    let supplier = response.supplier;
+
+                    let supplierOption = new Option(
+                        supplier.name,
+                        supplier.id,
+                        true,true
+                    )
+                    $('#supplierDropdown').append(supplierOption).trigger('change');
+                    $('#add-supplier').modal('hide');
+                    $('#supplierForm')[0].reset();
+                    toastr.success(response.message);
+                }else {
+                    SubmitBtn.prop('disabled', false);
+                    toastr.error(response.message);
+                }
+            }).fail(function (xhr) {
+                SubmitBtn.prop('disabled', false);
+                $('#submit_btn').attr('disabled', false);
+                let response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $.each(response.errors, function (key, value) {
+                        toastr.error(value);
+                    });
+                }
+            });
         });
     </script>
 @endpush

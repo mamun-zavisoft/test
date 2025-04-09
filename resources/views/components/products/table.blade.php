@@ -55,7 +55,7 @@
                     <div class="modal-content shadow-lg rounded-3"
                         style="width: 90vw; max-width: 1200px; height: 95vh;">
                         <div
-                            class="modal-header bg-white text-dark border-0 rounded-top d-flex align-items-center">
+                            class="modal-header bg-white text-dark border-0 rounded-top d-flex align-items-center justify-content-between">
                             <h5 class="modal-title me-3" id="productDetailsLabel">Product Details
                             </h5>
                             <button type="button" class="close border-0" data-bs-dismiss="modal"
@@ -88,12 +88,12 @@
                                 <div class="p-4 border rounded shadow-sm flex-grow-1 bg-light">
                                     <h5 class="fw-bold mb-2">Purchase Price</h5>
                                     <p class="text-primary fs-4 fw-bold">
-                                        {{ number_format($product->purchase_price, 2) }}</p>
+                                        {{ number_format($product->purchase_price) }}</p>
                                 </div>
                                 <div class="p-4 border rounded shadow-sm flex-grow-1 bg-light">
                                     <h5 class="fw-bold mb-2">Sale Price</h5>
                                     <p class="text-success fs-4 fw-bold">
-                                        {{ number_format($product->sale_price, 2) }}</p>
+                                        {{ number_format($product->sale_price) }}</p>
                                 </div>
                                 <div class="p-4 border rounded shadow-sm flex-grow-1 bg-light">
                                     <h5 class="fw-bold mb-2">Available Quantity</h5>

@@ -109,14 +109,14 @@
                                                 aria-labelledby="pills-home-tab">
                                                 <div class="row">
                                                     <div class="col-lg-4 col-sm-6 col-12">
-                                                        <div class="input-blocks add-product">
+                                                        <div class="input-blocks add-product" id="purchase_price">
                                                             <label>Purchase Price*</label>
                                                             <input type="text" class="form-control"
                                                                 name="purchase_price">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4 col-sm-6 col-12">
-                                                        <div class="input-blocks add-product">
+                                                        <div class="input-blocks add-product" id="sale_price">
                                                             <label>Sale Price*</label>
                                                             <input type="text" class="form-control" name="sale_price">
                                                         </div>
@@ -384,6 +384,16 @@
             let SubmitBtn = $('#submit_product_btn');
             SubmitBtn.prop('disabled', true);
             let formData = new FormData(this);
+            
+            // Compare and validate purchase and selling prices
+            let purchasePrice = parseFloat(formData.get('purchase_price'));
+            let salePrice = parseFloat(formData.get('sale_price'));
+            if (purchasePrice > salePrice) {
+                toastr.error('Purchase price cannot be greater than sale price.');
+                SubmitBtn.prop('disabled', false);
+                return;
+            }
+            
             $.ajax({
                 type: $(this).attr('method'),
                 url: $(this).attr('action'),
@@ -498,5 +508,6 @@
                 }
             });
         });
+
     </script>
 @endpush

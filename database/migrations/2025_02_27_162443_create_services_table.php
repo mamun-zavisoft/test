@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('service_type', ['self', 'external'])->comment('self, external');
             $table->string('transaction_id')->nullable()->index();
             $table->foreignId('vehicle_id')->nullable()->constrained();
+            $table->foreignId('zone_id')->nullable()->constrained();
             $table->decimal('total_amount', 14, 2);
             $table->decimal('discount', 14, 2)->default(0);
             $table->decimal('grand_total', 14, 2);

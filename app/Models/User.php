@@ -98,4 +98,9 @@ class User extends Authenticatable implements Mediable
     {
         return $this->getFirstUrl('images');
     }
+
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
 }

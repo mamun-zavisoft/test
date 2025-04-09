@@ -39,7 +39,7 @@ class SupplierController extends Controller
                 'balance' => $request->balance ?? 0,
             ]);
 
-            return response()->json(['message' => 'Supplier created successfully!', 'type' => 'success'], 200);
+            return response()->json(['message' => 'Supplier created successfully!', 'type' => 'success', 'supplier' => $supplier], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }

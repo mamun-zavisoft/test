@@ -154,7 +154,10 @@
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span>Payment Status:</span>
                                                 <span class="fw-bolder text-{{ $purchase->paid_status == 'full_paid' ? 'success' : 'warning' }}">
-                                                    {{ $purchase->paid_status == 'full_paid' ? 'Full Paid' : 'Partial Paid' }}
+                                                    {{ 
+                                                        $purchase->paid_status == 'full_paid' ? 'Full Paid' : 
+                                                        ($purchase->paid_status == 'partial_paid' ? 'Partial Paid' : 'Full Due')
+                                                    }}
                                                 </span>
                                             </div>
                                             <div class="d-flex justify-content-between">
@@ -239,7 +242,7 @@
 
         @empty
             <tr class="text-center">
-            <td colspan="7">No Product Found</td>
+            <td colspan="11">No Product Found</td>
         </tr>
         @endforelse
     </tbody>

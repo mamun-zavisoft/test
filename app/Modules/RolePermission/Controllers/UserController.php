@@ -17,6 +17,9 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('permission:user-create')->only('create', 'store');
+        $this->middleware('permission:user-list')->only('index');
+        $this->middleware('permission:user-update')->only('edit', 'update');
+        $this->middleware('permission:user-delete')->only('destroy');
     }
 
     public function index(Request $request)
@@ -25,7 +28,7 @@ class UserController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $users = User::query()
-            ->with('roles', 'media')
+            ->with('roles', 'media', 'zone')
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', '%'.$search.'%')
                     ->orWhere('email', 'like', '%'.$search.'%')
@@ -95,11 +98,12 @@ class UserController extends Controller
     {
         $roles = Role::get();
         $user = User::findOrFail($id);
+        $zones = Zone::select('id', 'name')->get();
 
         $groupedPermissions = Permission::select('group_name', 'id', 'name')
             ->orderBy('group_name')->get()->groupBy('group_name');
 
-        return view('backend.users.edit', compact('user', 'roles', 'groupedPermissions'));
+        return view('backend.users.edit', get_defined_vars());
     }
 
     public function update(Request $request, $id)
@@ -108,7 +112,8 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'nullable|email|unique:users,email,'.$id,
             'phone' => 'required|unique:users,phone,'.$id,
-            'role_id' => 'required',
+            'role_id' => auth()->user()->role == User::$SUPER_ADMIN ? 'nullable' : 'required|exists:roles,id',
+            'zone_id' => auth()->user()->role == User::$SUPER_ADMIN ? 'required|exists:zones,id' : 'nullable',
         ]);
 
         $user = User::findOrFail($id);
@@ -116,10 +121,11 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'zone_id' => auth()->user()->role == User::$SUPER_ADMIN ? $request->zone_id : auth()->user()->zone_id,
         ]);
-
-        $role = Role::findOrFail($request->role_id);
-        if ($user) {
+        
+        $role = Role::find($request->role_id);
+        if ($user && $role) {
             $user->syncRoles($role);
         }
 

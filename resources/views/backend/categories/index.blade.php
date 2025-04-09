@@ -45,21 +45,21 @@
                                 <div class="profile-pic-upload mb-3 image-container">
                                     <div class="profile-pic brand-pic">
                                         <span>
-                                            <img src="{{ asset('build/img/icons/upload.svg') }}"
-                                                class="image-preview" alt="">
+                                            <label for="image-upload">
+                                                <img id="image-preview" src="{{ asset('build/img/icons/upload.svg') }}" class="image-preview" alt="">
+                                            </label>
                                         </span>
                                         <a href="javascript:void(0);" class="remove-photo d-none">
                                             <i data-feather="x" class="x-square-add"></i>
                                         </a>
                                     </div>
                                     <div class="image-upload mb-0">
-                                        <input class="image-input" type="file" name="image">
+                                        <input class="image-input" type="file" name="image" id="image-upload">
                                         <div class="image-uploads">
                                             <h4>Change Image</h4>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"
                                         data-bs-dismiss="modal">Cancel</button>

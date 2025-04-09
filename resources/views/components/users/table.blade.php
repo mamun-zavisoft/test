@@ -1,3 +1,6 @@
+@php
+    $authUser = auth()->user();
+@endphp
 <table class="table">
     <thead>
         <tr>
@@ -11,6 +14,7 @@
             <th>User Name</th>
             <th>Phone</th>
             <th>email</th>
+            <th>zone</th>
             <th>Role</th>
             <th>Permissions</th>
             {{-- <th>Status</th> --}}
@@ -34,13 +38,14 @@
                                 alt="product">
                         </a>
                         <div>
-                            <a href="javascript:void(0);">{{ $user->name }}</a>
+                            <span class="{{ $authUser->id == $user->id ? 'badge bg-primary text-white': '' }}">{{ $user->name }}</span>
                         </div>
 
                     </div>
                 </td>
                 <td>{{ $user->phone }}</td>
-                <td>{{ $user->email }}</td>
+                <td>{{ $user->email ?? '-' }}</td>
+                <td>{{ $user->zone?->name ?? "-" }}</td>
                 <td>
                     @php
                         if($user->role == 1){
@@ -60,26 +65,30 @@
                             ->unique('id');
                     @endphp
                     <div class="d-flex flex-wrap gap-2" style="max-height: 50px; overflow-y: auto;">
-                        @foreach ($permissions as $permission)
+                        @forelse ($permissions as $permission)
                             <span class="badge bg-light text-dark d-flex align-items-center">
                                 <span class="me-2"
                                     style="width: 8px; height: 8px; background: {{ $user->permissions->contains('id', $permission->id) ? 'red' : 'blue' }}; border-radius: 50%;"></span>
                                 {{ $permission->name }}
                             </span>
-                        @endforeach
+                        @empty
+                            {{-- <span class="badge bg-light text-dark">  </span> --}}
+                        @endforelse
                     </div>
                 </td>
                 {{-- <td><span class="badge badge-linedanger">Inactive</span></td> --}}
                 <td class="action-table-data">
                     <div class="edit-delete-action">
-                        {{-- <a class="me-2 p-2 mb-0" href="javascript:void(0);">
-                            <i data-feather="eye" class="action-eye"></i>
-                        </a> --}}
-                        <a href="{{ route('users.edit', $user->id) }}" class="me-2 p-2 mb-0">
-                            <i data-feather="edit" class="feather-edit"></i>
-                        </a>
+                        @permission('user-update')
+                        @if ($authUser->id != $user->id && $user->role != 1 || $authUser->role == 1)
+                            <a href="{{ route('users.edit', $user->id) }}" class="me-2 p-2 mb-0">
+                                <i data-feather="edit" class="feather-edit"></i>
+                            </a>
+                        @endif
+                        @endpermission
                         
-                        @if ($user->role != 1 || auth()->user()->id != $user->id)    
+                        @permission('user-delete')
+                        @if ($user->role != 1 && $authUser->id != $user->id)    
                             <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);">
                                 <i data-feather="trash-2" class="feather-trash-2"></i>
                             </a>
@@ -88,6 +97,7 @@
                                 @method('DELETE')
                             </form>
                         @endif
+                        @endpermission
                     </div>
                 </td>
             </tr>

@@ -48,7 +48,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Select Services <span class="text-danger">*</span></label>
-                                    <select name="service_chart_ids[]" class="form-control select2" multiple required
+                                    <select name="service_chart_ids[]" class="form-control select2" multiple
                                         id="serviceChartSelect">
                                         @foreach ($serviceCharts as $chart)
                                             <option value="{{ $chart->id }}" data-price="{{ $chart->price }}">
@@ -111,9 +111,9 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Discount</label>
+                                    <label>Discount (৳)</label>
                                     <input type="number" name="discount" id="discount" class="form-control" value="0"
-                                        min="0">
+                                        min="0" onmousewheel="this.blur()">
                                 </div>
                             </div>
 
@@ -414,7 +414,7 @@
             <div class="col-md-2">
                 <label>Quantity</label>
                 <input type="number" name="parts[__index__][quantity]" class="form-control part-quantity"
-                    min="1" value="1" disabled>
+                    min="1" value="1" onmousewheel="this.blur()" disabled>
                 <small class="text-muted stock-info">Available: 0</small>
             </div>
             <div class="col-md-2">
@@ -689,12 +689,6 @@
             $('#serviceForm').submit(function(e) {
                 e.preventDefault();
 
-                // Validate service selection
-                if ($('#serviceChartSelect').val() === null || $('#serviceChartSelect').val().length ===
-                    0) {
-                    toastr.error('Please select at least one service');
-                    return false;
-                }
 
                 // Validate parts if parts checkbox is checked
                 if ($('#partsCheckbox').is(':checked')) {
@@ -990,20 +984,10 @@
                     }
 
                     // Validate account is selected for partial_paid and full_paid
-                    if (($('#payment_type').val() === 'partial_paid' || $('#payment_type').val() ===
-                            'full_paid') &&
-                        $('#payment_account').val() === '') {
-                        toastr.error('Please select an account for the payment');
-                        return false;
-                    }
 
                     // Validate amount for partial payment
                     if ($('#payment_type').val() === 'partial_paid') {
                         let amount = parseFloat($('#payment_amount').val()) || 0;
-                        if (amount <= 0) {
-                            toastr.error('Please enter a valid payment amount');
-                            return false;
-                        }
                         if (amount > grandTotal) {
                             $('#payment_amount').val(grandTotal);
                             toastr.warning('Payment amount adjusted to match grand total');
@@ -1124,6 +1108,12 @@
             });
 
             $('#serviceType').trigger('change');
+        });
+
+        $('#payment_amount').on('keypress', function (e) {
+            if (e.key === '-' ){
+                e.preventDefault();
+            }
         });
     </script>
 @endpush

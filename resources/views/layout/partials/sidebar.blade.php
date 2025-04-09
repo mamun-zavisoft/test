@@ -97,7 +97,9 @@
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>
                     <ul>
-                        <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{ route('users.index') }}"><i data-feather="user-check"></i><span>Users</span></a></li>
+                        @permission('user-list')
+                            <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{ route('users.index') }}"><i data-feather="user-check"></i><span>Users</span></a></li>
+                        @endpermission
                         <li class="{{ Request::is('roles') ? 'active' : '' }}"><a href="{{ route('roles.index') }}"><i data-feather="shield"></i><span>Roles & Permissions</span></a></li>
                     </ul>
                 </li>

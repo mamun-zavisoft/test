@@ -30,9 +30,9 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Discount</label>
+                                    <label>Discount (৳)</label>
                                     <input name="discount" type="number" class="form-control" id="discount" value="0"
-                                        min="0">
+                                        min="0" onwheel="this.blur()">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -129,7 +129,7 @@
             <div class="col-md-2">
                 <label>Quantity</label>
                 <input type="number" name="parts[__index__][quantity]" class="form-control part-quantity" min="1"
-                    value="0" step="1" disabled>
+                    value="0" step="1" onmousewheel="this.blur()" disabled>
                 <small class="text-muted stock-info">Available: 0</small>
             </div>
             <div class="col-md-2">

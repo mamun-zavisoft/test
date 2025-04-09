@@ -55,6 +55,7 @@
                                     <div class="form-group">
                                         <label for="role">Role<span class="manitory">*</span></label>
                                         <select id="role" name="role_id" class="select">
+                                            <option value="">Select Role</option>
                                             @foreach ($roles as $item)
                                                 <option value="{{ $item->id }}" {{ old('role_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                                             @endforeach

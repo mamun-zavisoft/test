@@ -6,6 +6,7 @@ use App\Http\Requests\PurchaseRequest;
 use App\Models\Account;
 use App\Models\Purchase;
 use App\Models\Supplier;
+use App\Models\Zone;
 use App\Services\PurchaseService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -39,8 +40,9 @@ class PurchaseController extends Controller
     {
         $accounts = Account::select('id', 'name', 'balance')->get();
         $suppliers = Supplier::select('id', 'name')->get();
+        $zones = Zone::select('id', 'name')->get();
 
-        return view('backend.purchases.create', compact('suppliers', 'accounts'));
+        return view('backend.purchases.create', compact('suppliers', 'accounts', 'zones'));
     }
 
     public function store(PurchaseRequest $request)

@@ -47,18 +47,40 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-6 col-12">
-                                <div class="form-group">
-                                    <label for="role">Role<span class="manitory">*</span></label>
-                                    <select id="role" name="role_id" class="select">
-                                        @foreach ($roles as $item)
-                                            <option {{ $user->roles->contains('id', $item->id) ? 'selected' : '' }} value="{{ $item->id }}">
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+
+                            @if (Auth::user()->role != 1)
+                                <div class="col-lg-3 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="role">Role<span class="manitory">*</span></label>
+                                        <select id="role" name="role_id" class="select">
+                                            <option value="">Select Role</option>
+                                            @foreach ($roles as $item)
+                                                <option {{ $user->roles->contains('id', $item->id) ? 'selected' : '' }} value="{{ $item->id }}">
+                                                    {{ $item->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('role_id')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
+                            @if (Auth::user()->role == 1)
+                                <div class="col-lg-3 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="zone">Zone<span class="manitory">*</span></label>
+                                        <select id="zone" name="zone_id" class="select">
+                                            @foreach ($zones as $zone)
+                                                <option value="{{ $zone->id }}" {{ $user->zone_id == $zone->id ? 'selected' : '' }}>{{ $zone->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('zone_id')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="card mt-4">

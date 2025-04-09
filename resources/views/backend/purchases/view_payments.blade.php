@@ -48,7 +48,7 @@
             </div>
             <div class="text-center" style="width: 110px;">{{ $paymentDetail?->amount }}</div>
             <div class="text-center" style="width: 110px;">{{ $paymentDetail?->date }}</div>
-            <div class="text-center" style="width: 110px;">{{ $paymentDetail?->note ?? 'N/A' }}
+            <div class="text-center" style="width: 110px;">{!! $paymentDetail?->note ?? 'N/A' !!}
             </div>
         </div>
     @empty

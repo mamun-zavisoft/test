@@ -59,9 +59,9 @@ class ServiceController extends Controller
             $validated = $request->validate([
                 'service_type' => 'required|in:self,external',
                 'vehicle_id' => 'required|exists:vehicles,id',
-                'service_chart_ids' => 'required|array|exists:service_charts,id',
+                'service_chart_ids' => 'nullable|array|exists:service_charts,id',
                 'any_parts_purchase' => 'nullable|boolean',
-                'parts' => 'required_if:any_parts_purchase,1|array',
+                'parts' => 'required_without:service_chart_ids|array',
                 'payment_type_id' => 'nullable|integer',
                 'discount' => 'nullable|numeric',
                 'note' => 'nullable|string',
@@ -72,7 +72,12 @@ class ServiceController extends Controller
                 'payment_type' => 'nullable|in:full_due,partial_paid,full_paid|required_if:service_type,external',
                 'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
                 'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
-            ]);
+            ],
+            [
+                'amount.required_if' => 'Please insert amount.',
+                'parts.required_without' => 'Parts are required if no service is selected.',
+            ]
+        );
 
             $vehicle = Vehicle::find($request->vehicle_id);
             $owner_type = $request->service_type == 'self' ? '1' : '2';
@@ -97,16 +102,20 @@ class ServiceController extends Controller
                 'paid_status' => $request->service_type == 'self' ? 'in_house' : $this->calculatePaidStatus($request->grand_total, $request->amount),
                 'note' => $request->note,
                 'any_parts_purchase' => $request->any_parts_purchase ?? false,
+                'zone_id' => auth()->user()->zone_id,
             ]);
 
             // Associate service charts
-            foreach ($request->service_chart_ids as $chartId) {
-                $chart = ServiceChart::select('id', 'price')->where('id', $chartId)->first();
-                ServiceDetail::create([
-                    'service_id' => $service->id,
-                    'service_chart_id' => $chartId,
-                    'price' => $chart->price,
-                ]);
+            if ($request->service_chart_ids) {
+                foreach ($request->service_chart_ids as $chart_id) {
+                    $serviceChart = ServiceChart::find($chart_id);
+                    if ($serviceChart) {
+                        $service->serviceDetails()->create([
+                            'service_chart_id' => $chart_id,
+                            'price' => $serviceChart->price,
+                        ]);
+                    }
+                }
             }
 
             // account amount increment

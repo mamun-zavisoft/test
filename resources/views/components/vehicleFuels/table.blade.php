@@ -35,7 +35,7 @@
             </tr>
         @empty
             <tr class="text-center">
-                <td colspan="7">No Fueling Info Found</td>
+                <td colspan="8">No Fueling Info Found</td>
             </tr>
         @endforelse
 
