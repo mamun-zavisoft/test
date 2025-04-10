@@ -3,8 +3,7 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            <x-breadcrumb title="Rack List" sub-title="Manage Your Rack" permission="rack-create" button="Add Rack"
-                button-route="admin.racks.create" />
+            <x-breadcrumb-modal title="Rack List" sub-title="Manage Your Rack" permission="rack-create" button="Add Rack" modal-id="add-rack" />
 
             <!-- /Rack list -->
             <div class="card table-list-card">

@@ -31,11 +31,23 @@
     @endisset
 
     @if (isset($button) && isset($modalId))
-        <div class="page-btn">
-            <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#{{ $modalId }}"><i
-                data-feather="plus-circle" class="me-2"></i> {{ $button }}</a>
-        </div>
+        @if (isset($permission) && !empty($permission))
+            @permission($permission)
+            <div class="page-btn">
+                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#{{ $modalId }}"><i
+                    data-feather="plus-circle" class="me-2"></i> {{ $button }}</a>
+            </div>
+        @endpermission
+        @else
+            <div class="page-btn">
+                <a href="#" class="btn btn-added" data-bs-toggle="modal" data-bs-target="#{{ $modalId }}"><i
+                    data-feather="plus-circle" class="me-2"></i> {{ $button }}</a>
+            </div>
+        @endif    
     @endif
+
+
+    
 
    
 </div>

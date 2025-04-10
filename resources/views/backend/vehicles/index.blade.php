@@ -3,8 +3,7 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            <x-breadcrumb title="Vehicle List" sub-title="Manage Vehicle" permission="vehicle-create" button="Add Vehicle"
-             button-route="admin.vehicles.create" />
+            <x-breadcrumb-modal title="Vehicle List" sub-title="Manage Vehicle" permission="vehicle-create" button="Add Vehicle" modal-id="add-vehicle" />
 
             <!-- Filter -->
             <div class="card table-list-card">

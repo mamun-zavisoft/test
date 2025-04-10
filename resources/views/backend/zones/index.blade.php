@@ -3,8 +3,7 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            <x-breadcrumb title="Zone List" sub-title="Manage Your Zone" permission="zone-create" button="Add Zone"
-            button-route="admin.zones.create" />
+            <x-breadcrumb-modal title="Zone List" sub-title="Manage Your Zone" permission="zone-create" button="Add Zone" modal-id="add-zone" />
 
             <!-- filter -->
             <div class="card table-list-card">

@@ -14,10 +14,10 @@ class RackController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:rack-create')->only(['create', 'store']);
-        $this->middleware('permission:rack-list')->only(['index']);
-        $this->middleware('permission:rack-update')->only(['edit', 'update']);
-        $this->middleware('permission:rack-delete')->only(['destroy']);
+        $this->middleware('permission:rack-create')->only('store');
+        $this->middleware('permission:rack-list')->only('index');
+        $this->middleware('permission:rack-update')->only('edit', 'update');
+        $this->middleware('permission:rack-delete')->only('destroy');
     }
     
     public function index(Request $request)
