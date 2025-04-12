@@ -30,10 +30,6 @@
                             </a>
                         @endpermission
                         @permission('zone-delete')
-                        <a class="me-2 p-2" href="#" data-bs-toggle="modal"
-                            data-bs-target="#edit-zone-{{ $zone->id }}">
-                            <i data-feather="edit" class="feather-edit"></i>
-                        </a>
                         <form action="{{ route('admin.zones.destroy', $zone->id) }}"
                             method="post" class="delete-form">
                             @csrf

@@ -33,12 +33,12 @@
                                                     <div class="add-newplus">
                                                         <label class="form-label">Category</label>
                                                         <a href="javascript:void(0);" data-bs-toggle="modal"
-                                                            data-bs-target="#add-units-category"><i
+                                                            data-bs-target="#add-category"><i
                                                                 data-feather="plus-circle"
                                                                 class="plus-down-add"></i><span>Add
                                                                 New</span></a>
                                                     </div>
-                                                    <select class="select" name="category_id">
+                                                    <select class="select" name="category_id" id="categoryDropdown">
                                                         <option value="">Choose</option>
                                                         @foreach ($categories as $category)
                                                             <option value="{{ $category->id }}"
@@ -54,10 +54,10 @@
                                                     <div class="add-newplus">
                                                         <label class="form-label">Brand</label>
                                                         <a href="javascript:void(0);" data-bs-toggle="modal"
-                                                            data-bs-target="#add-units-brand"><i data-feather="plus-circle"
+                                                            data-bs-target="#add-brand"><i data-feather="plus-circle"
                                                                 class="plus-down-add"></i><span>Add New</span></a>
                                                     </div>
-                                                    <select class="select" name="brand_id">
+                                                    <select class="select" name="brand_id" id="brandDropdown">
                                                         <option value="">Choose</option>
                                                         @foreach ($brands as $brand)
                                                             <option value="{{ $brand->id }}"
@@ -245,6 +245,117 @@
             </form>
             <!-- /update -->
 
+            <!-- Add Category -->
+            <div class="modal fade" id="add-category" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-two">
+                    <div class="modal-content">
+                        <div class="page-wrapper-new p-0">
+                            <div class="content">
+                                <div class="modal-header border-0 custom-modal-header justify-content-between">
+                                    <div class="page-title">
+                                        <h4>Create Category</h4>
+                                    </div>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body custom-modal-body new-employee-field">
+                                    <form action="{{ route('admin.categories.store') }}" method="POST"
+                                        enctype="multipart/form-data" id="categoryStoreForm">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label class="form-label">Category</label>
+                                            <input type="text" name="name" class="form-control">
+                                        </div>
+                                        <label class="form-label">Logo</label>
+                                        <div class="profile-pic-upload mb-3 image-container">
+                                            <div class="profile-pic brand-pic">
+                                                <span>
+                                                    <img src="{{ asset('build/img/icons/upload.svg') }}" class="image-preview"
+                                                        alt="">
+                                                </span>
+                                                <a href="javascript:void(0);" class="remove-photo d-none">
+                                                    <i data-feather="x" class="x-square-add"></i>
+                                                </a>
+                                            </div>
+                                            <div class="image-upload mb-0">
+                                                <input class="image-input" type="file" name="image">
+                                                <div class="image-uploads">
+                                                    <h4>Change Image</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer-btn">
+                                            <button type="button" class="btn btn-cancel me-2"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-submit" class="submit_btn">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Add Category -->
+
+            <!-- Add Brand -->
+            <div class="modal fade" id="add-brand">
+                <div class="modal-dialog modal-dialog-centered custom-modal-two">
+                    <div class="modal-content">
+                        <div class="page-wrapper-new p-0">
+                            <div class="content">
+                                <div class="modal-header border-0 custom-modal-header justify-content-between">
+                                    <div class="page-title">
+                                        <h4>Create Brand</h4>
+                                    </div>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body custom-modal-body new-employee-field">
+                                    <form action="{{ route('admin.brands.store') }}" method="POST" enctype="multipart/form-data"
+                                        id="brandStoreForm">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label class="form-label">Brand</label>
+                                            <input type="text" name="name" class="form-control">
+                                        </div>
+                                        <label class="form-label">Logo</label>
+                                        <div class="profile-pic-upload mb-3 image-container">
+                                            <div class="profile-pic brand-pic">
+                                                <span>
+                                                    <img src="{{ asset('build/img/icons/upload.svg') }}" class="image-preview"
+                                                        alt="">
+                                                </span>
+                                                <a href="javascript:void(0);" class="remove-photo d-none">
+                                                    <i data-feather="x" class="x-square-add"></i>
+                                                </a>
+                                            </div>
+                                            <div class="image-upload mb-0">
+                                                <input class="image-input" type="file" name="image">
+                                                <div class="image-uploads">
+                                                    <h4>Change Image</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="modal-footer-btn">
+                                            <button type="button" class="btn btn-cancel me-2"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-submit" id="brand_submit_btn" class="submit_btn">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Add Brand -->
+
         </div>
     </div>
 @endsection
@@ -322,6 +433,92 @@
             }).fail(function(xhr) {
                 SubmitBtn.prop('disabled', false);
                 $('#submit_btn').attr('disabled', false);
+                let response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $.each(response.errors, function(key, value) {
+                        toastr.error(value);
+                    });
+                }
+            });
+        });
+
+        $('#categoryStoreForm').on('submit', function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let url = $(this).attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function (response) {
+                if (response.type === 'success') {
+                    let category = response.category;
+
+                    // Append and select the new category
+                    let newOption = new Option(
+                        category.name,
+                        category.id,
+                        true, true
+                    );
+                    $('#categoryDropdown').append(newOption).trigger('change');
+
+                    // Close the modal
+                    $('#add-category').modal('hide');
+                    // Reset form
+                    $('#categoryStoreForm')[0].reset();
+
+                    // Show success message
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message || 'Error creating category.');
+                }
+            }).fail(function(xhr) {
+                SubmitBtn.prop('disabled', false);
+                $('#categoryStoreForm').attr('disabled', false);
+                let response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $.each(response.errors, function(key, value) {
+                        toastr.error(value);
+                    });
+                }
+            });
+        });
+
+        $('#brandStoreForm').on('submit', function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let url = $(this).attr('action');
+            let SubmitBtn = $('#brandStoreForm');
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data:formData,
+                processData: false,
+                contentType: false,
+            }).done(function (response) {
+                if(response.type == 'success') {
+                    let brand = response.brand;
+                    // Create a new option element
+                    let newBrand = new Option(
+                        brand.name,
+                        brand.id,
+                        true, true
+                    )
+                    // Append and select the new brand
+                    $('#brandDropdown').append(newBrand).trigger('change');
+                    $('#add-brand').modal('hide'); // Close the modal
+                    $('#brandStoreForm')[0].reset(); // Reset form
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message || 'Error creating brand.');
+                }
+            }).fail(function (xhr) {
+                SubmitBtn.prop('disabled', false);
+                $('#brandStoreForm').attr('disabled', false);
                 let response = xhr.responseJSON;
                 if (response && response.errors) {
                     $.each(response.errors, function(key, value) {

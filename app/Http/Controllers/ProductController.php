@@ -77,7 +77,7 @@ class ProductController extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => 'Product created successfully!', 'type' => 'success', 'redirectUrl' => route('admin.products.index')], 200);
+            return response()->json(['message' => 'Product created successfully!', 'type' => 'success', 'redirect' => route('admin.products.index')], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
 
@@ -118,7 +118,7 @@ class ProductController extends Controller
                 'zone_id' => auth()->user()?->zone_id,
             ]);
 
-            $product->thumbnail = $request->file('thumbnail');
+            $product->thumbnail = $request->file('thumbnail');           
 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {

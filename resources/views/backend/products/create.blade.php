@@ -407,7 +407,7 @@
                     $('#add-brand').modal('hide');
                     toastr.success(response.message);
                     setTimeout(() => {
-                        location.reload();
+                        window.location.href = response.redirect;
                     }, 1000);
                 } else {
                     toastr.error(response.message);
