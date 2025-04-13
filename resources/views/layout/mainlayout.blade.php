@@ -9,6 +9,7 @@
         content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Fast Auto Clinic</title>
 
     <!-- Favicon -->
@@ -54,6 +55,11 @@
 <script>
     // Default image path
     const defaultUploadImagePath = '{{ asset('build/img/icons/upload.svg') }}';
+    window.Laravel = {
+        routes: {
+            deleteMedia: '{{ route("admin.media.delete") }}'
+        }
+    };
 </script>
 
 @stack('scripts')

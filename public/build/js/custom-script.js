@@ -73,3 +73,41 @@ $(document).ready(function () {
 });
 
 // copy text end
+
+// Delete Media
+
+function deleteMedia({
+    model,
+    model_id,
+    media_id = null,
+    collection_name = null,
+}) {
+    $.ajax({
+        url: window.Laravel.routes.deleteMedia,
+        type: "DELETE",
+        data: {
+            model,
+            model_id,
+            media_id,
+            collection_name,
+        },
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        success: function (response) {
+            console.log("media deleted");
+        },
+        error: function (xhr, status, error) {
+            if (xhr.status === 422) {
+                const errors = xhr.responseJSON.errors;
+                $.each(errors, function (key, value) {
+                    toastr.error(value);
+                });
+            } else {
+                toastr.error("Something went wrong");
+            }
+        },
+    });
+}
+
+// Delete Media End

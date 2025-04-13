@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Media\Media;
 use App\Models\Purchase;
 use App\Models\Sale;
 use App\Models\Service;
 use App\Models\Supplier;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
-{  
+{
     public function index(Request $request)
     {
         // Get all vehicle counts in a single query
@@ -120,5 +122,36 @@ class DashboardController extends Controller
         }
 
         return $chartData;
+    }
+
+    public function deleteMedia(Request $request)
+    {
+        $request->validate([
+            'model'             => 'required',
+            'model_id'          => 'required',
+            'media_id'          => 'nullable|exists:media,id',
+            'collection_name'   => 'nullable|exists:media,collection_name',
+        ]);
+
+        try {
+
+            $model = "App\Models\\{$request->model}"::findOrFail($request->model_id);
+
+            if ($request->collection_name) {
+                $existingMedia =  $model->media()->where('collection_name', $request->collection_name)->first();
+            }
+
+            if ($request->media_id) {
+                $existingMedia =  $model->media()->where('id', $request->media_id)->first();
+            }
+
+            if ($existingMedia) {
+                $model->deleteMedia($existingMedia->id);
+            }
+
+            return response()->json(['type' => 'success']);
+        } catch (\Exception $e) {
+            return response()->json(['type' => 'error', 'message' => $e->getMessage()], 422);
+        }
     }
 }

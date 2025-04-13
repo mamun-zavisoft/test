@@ -119,15 +119,19 @@ class StockController extends Controller
             ->count();
 
         // Get the sale price (using the latest purchase price if multiple exist)
-        $latestPurchase = DB::table('stock_purchases')
-            ->where('product_id', $productId)
-            ->where('drawer_id', $drawerId)
-            ->orderBy('created_at', 'desc')
+        // $latestPurchase = DB::table('stock_purchases')
+        //     ->where('product_id', $productId)
+        //     ->where('drawer_id', $drawerId)
+        //     ->orderBy('created_at', 'desc')
+        //     ->first();
+
+        $product = DB::table('products')
+            ->where('id', $productId)
             ->first();
 
         $stockInfo = [
             'available_qty' => $availableQty,
-            'sale_price' => $latestPurchase->sale_price,
+            'sale_price' => $product->sale_price,
         ];
 
         return response()->json(['stock' => $stockInfo]);

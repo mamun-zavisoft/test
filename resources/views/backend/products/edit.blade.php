@@ -174,7 +174,8 @@
                                                                                     <img class="image-preview"
                                                                                      src="{{ $product->thumbnail }}" alt="image">
                                                                                     <a href="javascript:void(0);"
-                                                                                     class="remove-product">
+                                                                                     class="remove-product"
+                                                                                     onclick="deleteMedia({model: 'Product', model_id: {{ $product->id }}, collection_name: 'thumbnail'})">
                                                                                         <i data-feather="x" class="x-square-add"></i>
                                                                                     </a>
                                                                                 </div>
@@ -194,7 +195,7 @@
                                                                                         <div class="phone-img">
                                                                                             <img class="image-preview" src="{{ $image->url }}" alt="Product Image">
                                                                                             <a href="javascript:void(0);" class="remove-product"
-                                                                                             data-id="{{ $image->id }}">
+                                                                                             data-id="{{ $image->id }}" onclick="deleteMedia({model: 'Product', model_id: {{ $product->id }}, media_id: {{ $image->id }}})">
                                                                                                 <i data-feather="x" class="x-square-add"></i>
                                                                                             </a>
                                                                                         </div>

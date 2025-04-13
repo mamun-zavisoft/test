@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StockController;
@@ -16,4 +17,5 @@ Route::middleware('auth')->name('admin.')->group(function () {
     
     // odo meter reading for a vehicle
     Route::post('current-reading', [VehicleFuelController::class, 'getCurrentOdometer'])->name('vehicle.getCurrentOdometer');
+    Route::delete('delete-media', [DashboardController::class, 'deleteMedia'])->name('media.delete');
 });
