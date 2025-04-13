@@ -130,7 +130,7 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0">Recent Purchase</h4>
                             <div class="view-all-link">
-                                <a href="javascript:void(0);" class="view-all d-flex align-items-center">
+                                <a href="{{ route('admin.purchases.index') }}" class="view-all d-flex align-items-center">
                                     View All<span class="ps-2 d-flex align-items-center"><i data-feather="arrow-right"
                                             class="feather-16"></i></span>
                                 </a>

@@ -47,7 +47,13 @@
                         <div class="row mb-4">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label>Select Services <span class="text-danger">*</span></label>
+                                    <div class="add-newplus">
+                                        <label>Select Services <span class="text-danger">*</span></label>
+                                        <a href="javascript:void(0);" data-bs-toggle="modal"
+                                            data-bs-target="#add-serviceChart" style="margin-left: 320px;"><i data-feather="plus-circle"
+                                                class="plus-down-add"></i><span>Add
+                                                New</span></a>
+                                    </div>    
                                     <select name="service_chart_ids[]" class="form-control select2" multiple
                                         id="serviceChartSelect">
                                         @foreach ($serviceCharts as $chart)
@@ -63,8 +69,8 @@
                             <div class="col-md-12">
                                 <div class="form-check ps-1">
                                     <input type="checkbox" id="partsCheckbox"
-                                        name="any_parts_purchase" value="1">
-                                    <label class="form-check-label ps-1" for="partsCheckbox">
+                                        name="any_parts_purchase" value="1" style="width: 15px; height: 15px;">
+                                    <label class="form-check-label ps-1 fw-bold" for="partsCheckbox">
                                         Include Parts in Service
                                     </label>
                                 </div>
@@ -171,8 +177,6 @@
                             </div>
                         </div>
 
-
-
                         <div class="card bg-light mb-4">
                             <div class="card-body">
                                 <div class="row">
@@ -225,7 +229,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -381,6 +384,57 @@
             </div>
         </div>
     </div>
+
+    <!-- Add Service-chart -->
+    <div class="modal fade" id="add-serviceChart">
+        <div class="modal-dialog modal-dialog-centered custom-modal-two">
+            <div class="modal-content">
+                <div class="page-wrapper-new p-0">
+                    <div class="content">
+                        <div class="modal-header border-0 custom-modal-header justify-content-between">
+                            <div class="page-title">
+                                <h4>Create Service Chart</h4>
+                            </div>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#serviceChartForm')[0].reset()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body custom-modal-body new-employee-field">
+                            <form action="{{ route('admin.service-charts.store') }}" method="POST"
+                                id="serviceChartForm">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label">Name*</label>
+                                    <input type="text" name="name" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Price*</label>
+                                    <input type="text" name="price" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Code</label>
+                                    <input type="text" class="form-control" name="code">
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="input-blocks summer-description-box transfer mb-3">
+                                        <label>Description</label>
+                                        <textarea class="form-control h-100" rows="5" name="description"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer-btn">
+                                    <button type="button" class="btn btn-cancel me-2"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Add Service-chart -->
 
     <!-- Part row template  -->
     <template id="partRowTemplate">
@@ -1115,5 +1169,50 @@
                 e.preventDefault();
             }
         });
+
+        $('#serviceChartForm').submit(function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let url = $(this).attr('action');
+            let SubmitBtn = $('#submit_btn');
+            SubmitBtn.prop('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function (response) {
+                if (response.type === 'success') {
+                    
+                    let serviceChart = response.serviceChart;
+                    let newServiceChart = new Option(
+                        serviceChart.name + ' - ' + serviceChart.price,
+                        serviceChart.id,
+                        true, true
+                    )
+                    $('#serviceChartSelect').append(newServiceChart).trigger('change');
+
+                    // Reset form
+                    $('#serviceChartForm')[0].reset();
+                    // Close the modal
+                    $('#add-serviceChart').modal('hide');
+                    toastr.success(response.message);
+
+                } else {
+                    SubmitBtn.prop('disabled', false);
+                    toastr.error(response.message);
+                }
+            }).fail(function (xhr) {
+                SubmitBtn.prop('disabled', false);
+                $('#submit_btn').attr('disabled', false);
+                let response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $.each(response.errors, function(key, value) {
+                        toastr.error(value);
+                    });
+                }
+            });
+        })
     </script>
 @endpush

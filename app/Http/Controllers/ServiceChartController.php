@@ -52,7 +52,7 @@ class ServiceChartController extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => 'Service charts created successfully!', 'type' => 'success'], 200);
+            return response()->json(['message' => 'Service charts created successfully!', 'type' => 'success', 'serviceChart' => $serviceChart], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }

@@ -88,19 +88,23 @@
                                         <div class="card-body ms-4">
                                             <h5 class="card-title fw-bold mb-3">Vehicle Info</h5>
                                             <div class="row mb-2">
-                                                <div class="col-md-4 fw-bold">Vehicle Type:</div>
+                                                <!-- <div class="col-md-4 fw-bold">Vehicle Type:</div>
                                                 <div class="col-md-8">
+                                                   
+                                                </div> -->
+                                                <p class="fw-bold">Vehicle Type:
                                                     <span
-                                                        class="text-{{ $service->service_type == 'self' ? 'success' : 'warning' }}">
+                                                        class="ps-2 text-{{ $service->service_type == 'self' ? 'success' : 'warning' }}">
                                                         {{ $service->service_type == 'self' ? 'Self' : 'External' }}
                                                     </span>
-                                                </div>
+                                                </p>
                                             </div>
                                             <div class="row mb-2">
-                                                <div class="col-md-4 fw-bold">Vehicle Number:</div>
+                                                <!-- <div class="col-md-4 fw-bold">Vehicle Number:</div>
                                                 <div class="col-md-8"><span
                                                         class="copyable">{{ $service->vehicle?->license_plate ?? 'N/A' }}</span>
-                                                </div>
+                                                </div> -->
+                                                <p class="fw-bold">Vehicle Number: <span class="copyable ps-2">{{ $service->vehicle?->license_plate ?? 'N/A' }} </span></p>
                                             </div>
                                         </div>
                                     </div>
@@ -208,30 +212,37 @@
                                 <div class="card-header bg-light">
                                     <h5 class="card-title fw-bold m-0">Billing Summary</h5>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body mt-4">
                                     <div class="row justify-content-end">
-                                        <div class="col-md-6">
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <div class="fw-bold">Service Total:</div>
-                                                <div>{{ number_format($service->total_amount) }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <div class="fw-bold">Discount:</div>
-                                                <div>{{ number_format($service->discount) }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <div class="fw-bold">Grand Total:</div>
-                                                <div>{{ number_format($service->grand_total) }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <div class="fw-bold">Paid:</div>
-                                                <div>{{ number_format($service->paid_amount) }}</div>
-                                            </div>
-
-                                            <hr>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="fw-bold fs-5">Due:</div>
-                                                <div class="fw-bold fs-5">{{ number_format($service->due_amount) }}
+                                        <div class="col-md-3">
+                                            <div class="border rounded p-3 bg-light">
+                                                <div class="mb-2">
+                                                    <div class="fw-bold d-flex justify-content-between">
+                                                        <span>Service Total:</span>
+                                                        <span>{{ number_format($service->total_amount) }}.00</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <div class="fw-bold d-flex justify-content-between">
+                                                        <span>Discount:</span>
+                                                        <span>{{ number_format($service->discount_amount) }}.00</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <div class="fw-bold d-flex justify-content-between">
+                                                        <span>Grand Total:</span>
+                                                        <span>{{ number_format($service->grand_total) }}.00</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <div class="fw-bold d-flex justify-content-between">
+                                                        <span>Paid:</span>
+                                                        <span>{{ number_format($service->paid_amount) }}.00</span>
+                                                    </div>
+                                                </div><hr>
+                                                <div class="fw-bold fs-5 d-flex justify-content-between">
+                                                    <span>Due:</span>
+                                                    <span>{{ number_format($service->due_amount) }}.00</span>
                                                 </div>
                                             </div>
                                         </div>

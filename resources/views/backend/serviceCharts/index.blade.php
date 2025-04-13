@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <!-- Add Brand -->
+    <!-- Add Service Chart -->
     <div class="modal fade" id="add-serviceChart">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
             <div class="modal-content">
