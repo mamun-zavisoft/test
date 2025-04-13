@@ -31,7 +31,7 @@ class AccountController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string|max:50',
+                'name' => 'required|string|max:50|unique:accounts,name',
                 'type' => 'required|numeric',
                 'balance' => 'required|numeric|min:0|max:10000000',
             ],
