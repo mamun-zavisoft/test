@@ -47,19 +47,19 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Engine CC*</label>
-                                    <input type="number" name="engine_cc" class="form-control">
+                                    <input type="number" step="0.01" name="engine_cc" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Fuel Capacity*(Liter)</label>
-                                    <input type="number" name="fuel_capacity" class="form-control">
+                                    <input type="number" step="0.01" name="fuel_capacity" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Payload Capacity*(KG)</label>
-                                    <input type="number" name="payload_capacity" class="form-control">
+                                    <input type="number" step="0.01" name="payload_capacity" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Body Length(Feet)</label>
-                                    <input type="number" name="body_length" class="form-control">
+                                    <input type="number" step="0.01" name="body_length" class="form-control">
                                 </div>
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"

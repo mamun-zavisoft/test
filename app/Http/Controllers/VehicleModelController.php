@@ -35,7 +35,7 @@ class VehicleModelController extends Controller
             $request->validate([
                 'name' => 'required|string|max:50|unique:vehicle_models,name',
                 'manufacturer' => 'required|string|max:50',
-                'engine_cc' => 'required|integer',
+                'engine_cc' => 'required|numeric',
                 'fuel_capacity' => 'required|numeric',
                 'payload_capacity' => 'required|numeric',
                 'body_length' => 'nullable|numeric',
@@ -69,7 +69,7 @@ class VehicleModelController extends Controller
             $data = $request->validate([
                 'name' => 'required|string|max:50',
                 'manufacturer' => 'required|string|max:50',
-                'engine_cc' => 'required|integer',
+                'engine_cc' => 'required|numeric',
                 'fuel_capacity' => 'required|numeric',
                 'payload_capacity' => 'required|numeric',
                 'body_length' => 'nullable|numeric',

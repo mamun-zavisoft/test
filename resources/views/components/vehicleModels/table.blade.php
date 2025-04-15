@@ -83,22 +83,22 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Engine CC*</label>
-                                            <input type="number" class="form-control"
+                                            <input type="number" class="form-control" step="0.01"
                                             value="{{ $vehicleModel->engine_cc }}" name="engine_cc">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Fuel Capacity*(Liter)</label>
-                                            <input type="number" class="form-control"
+                                            <input type="number" class="form-control" step="0.01"
                                             value="{{ $vehicleModel->fuel_capacity }}" name="fuel_capacity">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Payload Capacity*(KG)</label>
-                                            <input type="number" class="form-control"
+                                            <input type="number" class="form-control" step="0.01"
                                             value="{{ $vehicleModel->payload_capacity }}" name="payload_capacity">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Body Length*(Feet)</label>
-                                            <input type="number" class="form-control"
+                                            <label class="form-label">Body Length(Feet)</label>
+                                            <input type="number" class="form-control" step="0.01"
                                             value="{{ $vehicleModel->body_length }}" name="body_length">
                                         </div>
 

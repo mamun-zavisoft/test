@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('manufacturer')->nullable()->comment('vehicle manufacturer / brand');
-            $table->integer('engine_cc')->nullable();
+            $table->double('engine_cc')->nullable();
             $table->double('fuel_capacity')->nullable()->comment('max fuel capacity in liters');
             $table->double('payload_capacity')->nullable()->comment('max load capacity in kg');
             $table->double('body_length')->nullable()->comment('in feet');
