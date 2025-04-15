@@ -25,7 +25,7 @@
                 {{-- <td>{{ $serviceChart->created_at?->format('d M Y') }}</td> --}}
                 <td class="action-table-data">
                     <div class="edit-delete-action">
-                        @permission('service-chart-edit')
+                        @permission('service-chart-update')
                         <a class="me-2 p-2" href="#" data-bs-toggle="modal"
                             data-bs-target="#edit-serviceChart-{{ $serviceChart->id }}">
                             <i data-feather="edit" class="feather-edit"></i>
