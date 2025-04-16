@@ -44,8 +44,8 @@
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="input-blocks">
                                     <label>Current ODO Meter</label>
-                                    <input type="text" class="form-control" id="odo_meter" name="current_odometer"
-                                        value="{{ $vehicleFuel->current_odometer }}" placeholder="Enter Meter no" required>
+                                    <input type="number" class="form-control" id="odo_meter" name="current_odometer"
+                                    step="0.01" value="{{ $vehicleFuel->current_odometer }}" placeholder="Enter Meter no" required>
                                 </div>
                             </div>
 
@@ -66,7 +66,7 @@
                                 <div class="input-blocks">
                                     <label>Fuel Quantity (Ltr.)</label>
                                     <input type="number" step="0.01" class="form-control" id="fuel_qty" name="fuel_qty"
-                                        value="{{ $vehicleFuel->fuel_qty }}" placeholder="Enter quantity" required>
+                                    step="0.01" value="{{ $vehicleFuel->fuel_qty }}" placeholder="Enter quantity" required>
                                 </div>
                             </div>
 

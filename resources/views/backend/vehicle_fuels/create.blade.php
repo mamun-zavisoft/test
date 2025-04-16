@@ -36,8 +36,8 @@
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="input-blocks">
                                     <label>Current ODO Meter (KM)</label>
-                                    <input type="text" class="form-control" id="odo_meter" name="current_odometer"
-                                        placeholder="Enter ODO Meter" required>
+                                    <input type="number" class="form-control" id="odo_meter" name="current_odometer"
+                                    step="0.01" placeholder="Enter ODO Meter" required>
 
                                 </div>
                             </div>
@@ -48,7 +48,7 @@
                                 <div class="input-blocks">
                                     <label>Fuel Quantity (Ltr.)</label>
                                     <input type="number" class="form-control" id="fuel_qty" name="fuel_qty"
-                                        placeholder="Enter quantity" onwheel="this.blur()" required>
+                                    step="0.01" placeholder="Enter quantity" onwheel="this.blur()" required>
 
                                 </div>
                             </div>
