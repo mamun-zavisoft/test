@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\CategoriesImport;
 use App\Imports\HubsImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -19,21 +18,10 @@ class HubImportController extends Controller
                 'file' => 'required|mimes:xls,xlsx',
             ]);
 
-
             $filePath = $request->file('file')->store('imports', 'public');
-
-
             $path = Storage::disk('public')->path($filePath);
-
-
             Excel::import(new HubsImport, $path);
-
-
-            // (new HubsImport)->import('test.xlsx', null, \Maatwebsite\Excel\Excel::XLSX);
-
-
             Storage::delete($filePath);
-
 
             return response()->json(['message' => 'Hubs imported successfully'], 200);
         } catch (ValidationException $v) {
