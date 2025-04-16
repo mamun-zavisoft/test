@@ -113,6 +113,11 @@ class VehicleFuelController extends Controller
             'total_price' => 'required|numeric',
         ]);
 
+        // Check if the current odometer is less than the last odometer
+        if ($request->current_odometer < $vehicleFuel->vehicle->current_odometer) {
+            return response()->json(['message' => 'Current odometer must be greater than last odometer', 'type' => 'error']);
+        }
+
         $vehicleFuel->update([
             'vehicle_id' => $request->vehicle_id,
             'fuel_type' => $request->fuel_type,
@@ -122,10 +127,6 @@ class VehicleFuelController extends Controller
             'total_price' => $request->fuel_qty * $request->fuel_rate,
         ]);
 
-        // Check if the current odometer is less than the last odometer
-        if ($request->current_odometer < $vehicleFuel->vehicle->current_odometer) {
-            return response()->json(['message' => 'Current odometer must be greater than last odometer', 'type' => 'error']);
-        }
 
         return response()->json(['message' => 'Fuel entry updated successfully!', 'type' => 'success', 'redirectUrl' => route('admin.vehicle-fuels.index')]);
     }
