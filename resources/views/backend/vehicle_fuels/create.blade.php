@@ -229,6 +229,12 @@
                     e.preventDefault();
                 }
             });
+
+            $('#odo_meter').on('keypress', function (e) {
+                if (e.key === '-' ){
+                    e.preventDefault();
+                }
+            });
         });
     </script>
 @endpush
