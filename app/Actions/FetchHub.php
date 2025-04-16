@@ -16,10 +16,12 @@ class FetchHub
         return Hub::query()
             ->with('zone:id,name')
             ->when($search, function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('custom_hub_id', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('address', 'like', "%{$search}%");
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('custom_hub_id', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('address', 'like', "%{$search}%");
+                });
             })
             ->when($zone_id, function ($query) use ($zone_id) {
                 $query->where('zone_id', $zone_id);
