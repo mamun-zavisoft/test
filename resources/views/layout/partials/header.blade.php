@@ -213,7 +213,7 @@
                             class="img-fluid">
                     </span>
                     <span class="user-detail">
-                        <span class="user-name">{{ $user ? $user->name : '' }}</span>
+                        <span class="user-name fw-bold">{{ $user ? $user->name : '' }}</span>
                         <span class="user-role">{{ $user ? $user->role_name : '' }}</span>
                     </span>
                 </span>
@@ -225,16 +225,14 @@
                                 alt="">
                             <span class="status online"></span></span>
                         <div class="profilesets">
-                            <h6>{{ $user ? $user->name : '' }}</h6>
-                            <h5>{{ $user ? $user->role_name : '' }}</h5>
+                            <h4>{{ $user ? $user->name : '' }}</h4>
+                            <h6>{{ $user ? $user->role_name : '' }}</h6>
                         </div>
                     </div>
-                    <hr class="m-0">
                     <a class="dropdown-item" href="{{ url('profile') }}"> <i class="me-2"
                             data-feather="user"></i> My Profile</a>
                     <!-- <a class="dropdown-item" href="{{ url('general-settings') }}"><i class="me-2"
                             data-feather="settings"></i>Settings</a> -->
-                    <hr class="m-0">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                     <a class="dropdown-item logout pb-0" href="#" onclick="event.preventDefault();
