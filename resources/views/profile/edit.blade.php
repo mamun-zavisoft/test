@@ -43,7 +43,7 @@
                                 </div> -->
                             </div>
                     
-                            <div class="row">
+                            <div class="row mt-4">
                                 <div class="col-lg-6 col-sm-12">
                                     <div class="input-blocks">
                                         <label class="form-label">User Name</label>
@@ -87,7 +87,7 @@
                                                     <div class="input-blocks">
                                                         <label class="form-label">Old Password</label>
                                                         <div class="pass-group">
-                                                            <input type="password" name="current_password">
+                                                            <input type="password" class="pass-input" name="current_password">
                                                             <span class="fas toggle-password fa-eye-slash"></span>
                                                         </div>
                                                     </div>
@@ -96,7 +96,7 @@
                                                     <div class="input-blocks">
                                                         <label class="form-label">New Password</label>
                                                         <div class="pass-group">
-                                                            <input type="password" name="password" id="new_password">
+                                                            <input type="password" class="pass-input" name="password" id="new_password">
                                                             <span class="fas toggle-password fa-eye-slash"></span>
                                                         </div>
                                                     </div>
@@ -105,7 +105,7 @@
                                                     <div class="input-blocks">
                                                         <label class="form-label">Confirm Password</label>
                                                         <div class="pass-group">
-                                                            <input type="password" name="password_confirmation">
+                                                            <input type="password" class="pass-input" name="password_confirmation">
                                                             <span class="fas toggle-password fa-eye-slash"></span>
                                                         </div>
                                                     </div>
