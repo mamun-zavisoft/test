@@ -5,6 +5,7 @@ namespace App\Modules\RolePermission\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -103,7 +104,7 @@ class RoleController extends Controller
                 ->with('error', 'Cannot delete this role because users are assigned to it.');
         }
 
-        $role->delete();
+        DB::table('roles')->where('id', $id)->delete();
 
         return redirect()->route('roles.index')
             ->with('success', 'Role deleted successfully.');

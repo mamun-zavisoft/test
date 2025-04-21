@@ -49,9 +49,12 @@ class ProductController extends Controller
             'description' => 'nullable|string|max:4000',
             'purchase_price' => 'required|numeric|min:0',
             'sale_price' => 'required|numeric|min:0',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'thumbnail' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ],[
+            'thumbnails.mimes' => 'The thumbnail must be a file of type: jpeg, png, jpg, gif, svg.',
+            'images.*.mimes' => 'The images must be a file of type: jpeg, png, jpg, gif, svg.',
         ]);
         try {
             DB::beginTransaction();

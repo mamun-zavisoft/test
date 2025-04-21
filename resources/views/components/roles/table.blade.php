@@ -35,7 +35,7 @@
                         </a>
                         @endpermission
                         @permission('role-delete')
-                        <a class="me-2 p-2 confirm-text" href="javascript:void(0);">
+                        <a class="me-2 p-2 confirm-text2" href="javascript:void(0);">
                             <i data-feather="trash-2" class="feather-trash-2"></i>
                         </a>
                         <form action="{{ route('roles.destroy', $role->id) }}" method="POST" class="delete-form d-none">

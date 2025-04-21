@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DrawerController;
@@ -47,6 +48,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::post('/stock-purchases/{id}/store', [StockPurchaseController::class, 'store'])->name('stock-purchases.store');
     Route::get('/service/{id}/details', [ServiceController::class, 'printInvoice'])->name('service.print');
     Route::patch('/brands/{id}/status', [BrandController::class, 'updateStatus'])->name('brands.status');
+    Route::put('/password/update', [PasswordController::class, 'update'])->name('password.update');
 
     // ajax call routes
     Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');

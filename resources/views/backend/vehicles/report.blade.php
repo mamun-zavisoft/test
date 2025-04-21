@@ -26,6 +26,7 @@
                                            class="form-select daterange" 
                                            id="dateRangeSelect"
                                            value="{{ $startDate }} - {{ $endDate }}"
+                                           style=" cursor: pointer !important;"
                                            readonly>
                                 </div>
                                 <input type="hidden" name="start_date" id="start_date" value="{{ $startDate }}">

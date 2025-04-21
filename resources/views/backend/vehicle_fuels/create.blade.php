@@ -36,8 +36,8 @@
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="input-blocks">
                                     <label>Current ODO Meter (KM)</label>
-                                    <input type="text" class="form-control" id="odo_meter" name="current_odometer"
-                                        placeholder="Enter ODO Meter" required>
+                                    <input type="number" class="form-control" id="odo_meter" name="current_odometer"
+                                    step="0.01" placeholder="Enter ODO Meter" required>
 
                                 </div>
                             </div>
@@ -48,7 +48,7 @@
                                 <div class="input-blocks">
                                     <label>Fuel Quantity (Ltr.)</label>
                                     <input type="number" class="form-control" id="fuel_qty" name="fuel_qty"
-                                        placeholder="Enter quantity" onwheel="this.blur()" required>
+                                    step="0.01" placeholder="Enter quantity" onwheel="this.blur()" required>
 
                                 </div>
                             </div>
@@ -157,8 +157,24 @@
             }
 
             // Form submission with AJAX
-            $('#storeForm').submit(function(e) {
+            $('#storeForm').submit(async function(e) {
                 e.preventDefault();
+
+                $confirm = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to update fueling later!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, proceed!',
+                    cancelButtonText: 'Cancel'
+                });
+
+                if(! $confirm.isConfirmed){
+                    return false;
+                }
+                
                 let SubmitBtn = $('#submit_btn');
                 SubmitBtn.prop('disabled', true);
                 let formData = new FormData(this);
@@ -201,16 +217,46 @@
             });
             
             // Don't get negative values in fuel qty
-            $('#fuel_qty').on('keypress', function (e) {
-                if (e.key === '-' ){
-                    e.preventDefault();
+            $('#fuel_qty').on('keypress', function () {
+                if (event.key === '-' ){
+                        Swal.fire({
+                        title: 'Oops...',
+                        text: 'Fuel quantity cannot be negative!',
+                        didOpen: () => {
+                            const popup = document.querySelector('.swal2-popup');
+                            popup.style.width = '400px';
+                            popup.style.height = '170px';
+                        }
+                    });
                 }
             });
 
             // Don't get negative values in fuel rate
-            $('#fuel_rate').on('keypress', function (e) {
-                if (e.key === '-' ){
-                    e.preventDefault();
+            $('#fuel_rate').on('keypress', function () {
+                if (event.key === '-' ){
+                        Swal.fire({
+                        title: 'Oops...',
+                        text: 'Fuel rate cannot be negative!',
+                        didOpen: () => {
+                            const popup = document.querySelector('.swal2-popup');
+                            popup.style.width = '400px';
+                            popup.style.height = '170px';
+                        }
+                    });
+                }
+            });
+
+            $('#odo_meter').on('keypress', function () {
+                if (event.key === '-' ){
+                        Swal.fire({
+                        title: 'Oops...',
+                        text: 'Odo meter cannot be negative!',
+                        didOpen: () => {
+                            const popup = document.querySelector('.swal2-popup');
+                            popup.style.width = '400px';
+                            popup.style.height = '170px';
+                        }
+                    });
                 }
             });
         });

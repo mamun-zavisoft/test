@@ -93,7 +93,7 @@
                                     <div class="col-lg-3 col-md-6 col-sm-12">
                                         <div class="input-blocks">
                                             <label>Shipping</label>
-                                            <input type="text" value="0" name="shipping_charge">
+                                            <input type="text" value="0" name="shipping_charge" id="shipping_charge">
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -132,7 +132,7 @@
                                     <div class="col-md-6 mb-3 amount-field" style="display: none;">
                                         <label for="amount" class="form-label">Amount</label>
                                         <input type="number" class="form-control" id="amount" name="amount"
-                                            placeholder="Enter amount">
+                                          onwheel="this.blur()" placeholder="Enter amount">
                                     </div>
 
                                     <div class="col-md-6 mb-3">
@@ -316,7 +316,7 @@
                     <td>
                         <div class="product-quantity">
                             <span class="quantity-btn" >+<i data-feather="plus-circle" class="plus-circle"></i></span>
-                            <input type="number" id="qty${id}" name="qty[]" data-price="${purchase_price}" class="quntity-input" value="1" data-id="${id}" >
+                            <input type="number" id="qty${id}" onwheel="this.blur()" name="qty[]" data-price="${purchase_price}" class="quntity-input" value="1" data-id="${id}" >
                             <span class="quantity-btn" ><i data-feather="minus-circle" class="feather-search"></i></span>
                         </div>
                     </td>
@@ -546,5 +546,20 @@
                 }
             });
         });
+
+        $('#shipping_charge').on('keypress', function (){
+            if (event.key === '-'){
+                Swal.fire({
+                    title: 'Oops...',
+                    text: 'Shipping charge cannot be negative!',
+                    didOpen: () => {
+                        const popup = document.querySelector('.swal2-popup');
+                        popup.style.width = '400px';
+                        popup.style.height = '170px';
+                    }
+                });
+            }
+        })
+ 
     </script>
 @endpush

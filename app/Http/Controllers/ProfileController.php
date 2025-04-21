@@ -6,7 +6,6 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -28,18 +27,11 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request)
     {
         $user = $request->user();
 
         $user->fill($request->validated());
-
-        if ($request->filled('new_password')) {
-            if (! Hash::check($request->old_password, $user->password)) {
-                return back()->with('error', 'Old Password is incorrect');
-            }
-            $user->password = Hash::make($request->new_password);
-        }
 
         if ($request->hasFile('image')) {
             $user->image = $request->file('image');
@@ -51,7 +43,10 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('success', 'profile-updated');
+        return response()->json([
+            'type' => 'success',
+            'message' => 'Profile updated successfully',
+        ]);
     }
 
     /**

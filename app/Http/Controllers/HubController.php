@@ -44,7 +44,7 @@ class HubController extends Controller
                 'phone' => 'nullable|string|max:15|unique:hubs,phone',
                 'address' => 'nullable|string|max:255|unique:hubs,address',
             ],[
-                'custom_hub_id.unique' => 'hub id already exists',
+                'custom_hub_id.unique' => 'Hub id already exists',
             ]);
 
             DB::beginTransaction();

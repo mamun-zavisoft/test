@@ -31,7 +31,7 @@
                     @if ($vehicle->hub)
                         {{ $vehicle->license_plate }}
                     @else
-                        <span class="text-danger">{{ $vehicle->license_plate }}</span>
+                        <span class="text-danger" title="This vehicle is not assigned to any hub">{{ $vehicle->license_plate }}</span>
                     @endif    
                 </span></td>
                 <td>{{ $vehicle->vehicleModel?->name ?? '-' }}</td>

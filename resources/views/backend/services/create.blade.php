@@ -157,7 +157,7 @@
                                             <div class="col-md-6 mb-3 amount-field" style="display: none;">
                                                 <label for="amount" class="form-label">Amount</label>
                                                 <input type="number" class="form-control" id="payment_amount"
-                                                    name="amount" placeholder="Enter amount">
+                                                  onwheel="this.blur()" name="amount" placeholder="Enter amount">
                                             </div>
 
                                             <div class="col-md-6 mb-3">

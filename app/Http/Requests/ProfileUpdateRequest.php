@@ -27,8 +27,6 @@ class ProfileUpdateRequest extends FormRequest
             ],
 
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-            'old_password' => ['nullable', 'string', 'min:8'],
-            'new_password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ];
     }
 }
