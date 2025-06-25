@@ -8,6 +8,7 @@
             <th>Vehicle Type</th>
             <th>Hub</th>
             <th>Document Validity</th>
+            <th>Mileage</th>
             <th>Status</th>
             @permission(['vehicle-show', 'vehicle-update', 'vehicle-delete'])
                 <th class="no-sort">Action</th>
@@ -90,6 +91,7 @@
                     </div>
                     @endforeach
                 </td>
+                <td>{{ $vehicle->mileage }}</td>
                 <td><span
                         class="badge rounded-pill bg-outline-{{ $vehicle->status == 1 ? 'success' : 'warning' }}">{{ $vehicle->status == 1 ? 'Active' : 'In Service' }}</span>
                 </td>

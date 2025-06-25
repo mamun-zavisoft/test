@@ -33,9 +33,6 @@ class FetchVehicle
             ->when($hub_id, function ($query) use ($hub_id) {
                 $query->where('hub_id', $hub_id);
             })
-            ->select('id', 'owner_type', 'license_plate', 'zone_id', 'status', 'registration_date',
-                'registration_validity', 'vehicle_model_id', 'hub_id', 'tax_token_validity', 'road_permit_validity',
-                'fitness_validity', 'insurance_validity', 'vehicle_type', 'current_odometer', 'created_at')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
 
     }

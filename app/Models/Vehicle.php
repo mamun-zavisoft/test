@@ -39,6 +39,17 @@ class Vehicle extends Model
         return $this->hasMany(Service::class);
     }
 
+    public function fuels()
+    {
+        return $this->hasMany(VehicleFuel::class);
+    }
+
+    public function getAverageMileageAttribute()
+    {
+        $avgMileage = $this->fuels()->where('mileage', '>', 0)->avg('mileage');
+        return number_format($avgMileage, 2);
+    }
+
     /**
      * Get document validity status and message
      * 
