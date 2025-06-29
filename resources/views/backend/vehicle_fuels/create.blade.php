@@ -35,7 +35,9 @@
 
                             <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="input-blocks">
-                                    <label>Current ODO Meter (KM)</label>
+                                    <div class="d-flex">
+                                        <label class="me-1">Current ODO Meter (KM)</label> <span id="mileage_warning" class="text-danger"></span>
+                                    </div>
                                     <input type="number" class="form-control" id="odo_meter" name="current_odometer"
                                     step="0.01" placeholder="Enter ODO Meter" required>
 
@@ -127,9 +129,17 @@
                             vehicle_id: selectedVehicleId
                         },
                         success: function(response) {
+                            let model_data = response.vehicle_model;
+                            // if response.vehicle.mileage is  less than model_data.avg_mileage then show mileage warning in id="mileage_warning"
+                            if (response.vehicle.mileage < model_data.avg_mileage) {
+                                $('#mileage_warning').text(`Warning: Mileage is less than average (${model_data.avg_mileage} KM/L)`);
+                            } else {
+                                $('#mileage_warning').text('');
+                            }
+                            
                             $('#odo_meter').attr('placeholder',
-                                `Last ODO Meter was: ${response.current_odometer} KM`);
-                            $('#odo_meter').attr('min', response.current_odometer);
+                                `Last ODO: ${response.vehicle.current_odometer} KM | Last Mileage: ${response.vehicle.mileage} KM/L`);
+                            $('#odo_meter').attr('min', response.vehicle.current_odometer);
                         },
                         error: function() {
                             toastr.error('Failed to fetch fueling history');

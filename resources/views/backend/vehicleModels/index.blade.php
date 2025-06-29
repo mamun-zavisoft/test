@@ -58,6 +58,10 @@
                                     <input type="number" step="0.01" name="payload_capacity" class="form-control">
                                 </div>
                                 <div class="mb-3">
+                                    <label class="form-label">Average Mileage(KM/L)</label>
+                                    <input type="number" step="0.01" name="avg_mileage" class="form-control">
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label">Body Length(Feet)</label>
                                     <input type="number" step="0.01" name="body_length" class="form-control">
                                 </div>

@@ -144,7 +144,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold">Select Model</label>
+                                                <label class="form-label fw-bold">Select Model<span class="text-danger">*</span></label>
                                                 <select name="vehicle_model_id" class="form-select">
                                                     <option value="">Choose</option>
                                                     @foreach ($vehicleModels as $model)

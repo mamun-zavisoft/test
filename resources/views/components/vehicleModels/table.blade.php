@@ -7,6 +7,7 @@
             <th>Engine CC</th>
             <th>Fuel Capacity</th>
             <th>Payload Capacity</th>
+            <th>Average Mileage</th>
             <th>Body Length</th>
             @permission(['vehicle-model-update', 'vehicle-model-delete'])
             <th class="no-sort">Action</th>
@@ -22,6 +23,7 @@
                 <td>{{ $vehicleModel->engine_cc }} CC</td>
                 <td>{{ $vehicleModel->fuel_capacity }} Ltr</td>
                 <td>{{ $vehicleModel->payload_capacity }} KG</td>
+                <td>{{ $vehicleModel->avg_mileage }} KM/L</td>
                 <td>{{ $vehicleModel->body_length }} Feet</td>
                 <td class="action-table-data">
                     <div class="edit-delete-action">
@@ -95,6 +97,11 @@
                                             <label class="form-label">Payload Capacity*(KG)</label>
                                             <input type="number" class="form-control" step="0.01"
                                             value="{{ $vehicleModel->payload_capacity }}" name="payload_capacity">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Average Mileage(KM/L)</label>
+                                            <input type="number" class="form-control" step="0.01"
+                                            value="{{ $vehicleModel->avg_mileage }}" name="avg_mileage">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Body Length(Feet)</label>

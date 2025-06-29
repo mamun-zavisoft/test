@@ -39,6 +39,7 @@ class VehicleModelController extends Controller
                 'fuel_capacity' => 'required|numeric',
                 'payload_capacity' => 'required|numeric',
                 'body_length' => 'nullable|numeric',
+                'avg_mileage' => 'nullable|numeric',
             ]);
 
             DB::beginTransaction();
@@ -50,6 +51,7 @@ class VehicleModelController extends Controller
                 'fuel_capacity' => $request->fuel_capacity,
                 'payload_capacity' => $request->payload_capacity,
                 'body_length' => $request->body_length,
+                'avg_mileage' => $request->avg_mileage ?? 0,
             ]);
 
             DB::commit();
@@ -73,6 +75,7 @@ class VehicleModelController extends Controller
                 'fuel_capacity' => 'required|numeric',
                 'payload_capacity' => 'required|numeric',
                 'body_length' => 'nullable|numeric',
+                'avg_mileage' => 'nullable|numeric',
             ]);
 
             DB::beginTransaction();

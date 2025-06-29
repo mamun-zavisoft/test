@@ -156,12 +156,15 @@ class VehicleFuelController extends Controller
      */
     public function getCurrentOdometer(Request $request)
     {
-        $vehicle = Vehicle::where('id', $request->vehicle_id)->first();
+        $vehicle = Vehicle::with('vehicleModel')->where('id', $request->vehicle_id)->first();
 
         if (!$vehicle) {
             return response()->json(['error' => 'Vehicle not found'], 404);
         }
 
-        return response()->json($vehicle);
+        return response()->json([
+            'vehicle' => $vehicle,
+            'vehicle_model' => $vehicle->vehicleModel,
+        ]);
     }
 }
