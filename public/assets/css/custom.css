@@ -1,0 +1,91 @@
+.document-validity {
+    min-width: 200px;
+}
+
+.doc-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    padding: .2em 0;
+}
+
+.doc-item:last-child {
+    margin-bottom: 0;
+}
+
+.doc-name {
+    color: #6c757d;
+    margin-right: 8px;
+    min-width: fit-content;
+}
+
+.doc-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-expired {
+    background-color: #ffe2e5;
+    color: rgb(255, 24, 24);
+}
+
+.copyable {
+    cursor: pointer;
+}
+
+.action-table-data .edit-delete-action {
+    display: flex;
+    align-items: center;
+}
+
+.feather-edit,
+.feather-trash-2 {
+    width: 16px;
+    height: 16px;
+}
+
+.action-eye {
+    width: 16px;
+    height: 16px;
+}
+
+.status-warning {
+    background-color: #fff6d8;
+    color: #5c5b01;
+}
+
+.status-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.days-badge-danger {
+    font-size: 0.65rem;
+    padding: 1px 5px;
+    border-radius: 8px;
+    background-color: rgb(253 149 149 / 34%);
+    color: inherit;
+    margin-left: 2px;
+}
+
+.days-badge-warning {
+    font-size: 0.65rem;
+    padding: 1px 5px;
+    border-radius: 8px;
+    background-color: rgb(213 168 47 / 34%);
+    color: inherit;
+    margin-left: 2px;
+}

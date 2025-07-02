@@ -19,38 +19,17 @@
     @include('layout.partials.head')
 </head>
 
-@if (Route::is(['chat']))
-
-    <body class="main-chat-blk">
-@endif
 @if (!Route::is(['register', 'login']))
-
     <body>
-@endif
-
-@if (Route::is(['register', 'login']))
-
+    @include('layout.partials.header')
+    @include('layout.partials.sidebar')
+@else
     <body class="account-page">
 @endif
-{{-- @component('components.loader')
-@endcomponent --}}
-<!-- Main Wrapper -->
-@if (!Route::is(['lock-screen']))
-    <div class="main-wrapper">
-@endif
-@if (Route::is(['lock-screen']))
-    <div class="main-wrapper login-body">
-@endif
-@if (!Route::is(['register', 'login']))
-    @include('layout.partials.header')
-@endif
-@if (!Route::is(['register', 'login']))
-    @include('layout.partials.sidebar')
-@endif
+
 @yield('content')
+
 </div>
-<!-- /Main Wrapper -->
-{{-- @include('layout.partials.theme-settings') --}}
 @include('layout.partials.footer-scripts')
 <script>
     // Default image path

@@ -87,3 +87,4 @@ crossorigin="anonymous" referrerpolicy="no-referrer" />
 {{-- <link rel="stylesheet" href="{{ url('build/css/style.css') }}"> --}}
 <link rel="stylesheet" href="{{ url('build/scss/main.css') }}">
 <link rel="stylesheet" href="{{ url('build/css/custom.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">

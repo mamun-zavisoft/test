@@ -3,73 +3,63 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            <x-breadcrumb-modal title="Vehicle List" sub-title="Manage Vehicle" permission="vehicle-create" button="Add Vehicle" modal-id="add-vehicle" />
+            <x-breadcrumb-modal title="Vehicle List" sub-title="Manage Vehicle" permission="vehicle-create" button="Add Vehicle"
+                modal-id="add-vehicle" />
 
-            <!-- Filter -->
             <div class="card table-list-card">
-                    <x-filter>
-                        <div class="col-lg-4 col-sm-3 col-12" style="width: 200px;">
-                            <div class="mb-3 add-product">
-                                <div class="add-newplus">
-                                    <label class="form-label">Owner Type</label>
-                                </div>
-                                <select class="select filter-input" name="vehicle_type">
-                                    <option value="">Choose</option>
-                                    <option value="self" @selected(request()->vehicle_type == 'self')>Self</option>
-                                    <option value="external" @selected(request()->vehicle_type == 'external')>External</option>
-                                </select>
+                <!-- Filter -->
+                <x-filter>
+                    <div class="col-lg-4 col-sm-3 col-12" style="width: 200px;">
+                        <div class="mb-3 add-product">
+                            <div class="add-newplus">
+                                <label class="form-label">Owner Type</label>
                             </div>
+                            <select class="select filter-input" name="vehicle_type">
+                                <option value="">Choose</option>
+                                <option value="self" @selected(request()->vehicle_type == 'self')>Self</option>
+                                <option value="external" @selected(request()->vehicle_type == 'external')>External</option>
+                            </select>
                         </div>
-                        <!-- <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
-                            <div class="mb-3 add-product">
-                                <div class="add-newplus">
-                                    <label class="form-label">Zone</label>
-                                </div>
-                                <select class="select filter-input" name="zone_id">
-                                    <option value="">Choose</option>
-                                    @foreach($zones as $zone)    
-                                        <option value="{{$zone->id}}" @selected(request()->zone_id == $zone->id)>{{ $zone->name }}</option>
-                                    @endforeach    
-                                </select>
-                            </div>
-                        </div> -->
-                        <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
-                            <div class="mb-3 add-product">
-                                <div class="add-newplus">
-                                    <label class="form-label">Hub</label>
-                                </div>
-                                <select class="select filter-input" name="hub_id">
-                                    <option value="">Choose</option>
-                                    @foreach ($hubs as $hub)
-                                    <option value="{{$hub->id}}" @selected(request()->hub_id == $hub->id)>{{ $hub->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
-                            <div class="mb-3 add-product">
-                                <div class="add-newplus">
-                                    <label class="form-label">Vehicle Model</label>
-                                </div>
-                                <select class="select filter-input" name="vehicle_model_id">
-                                    <option value="">Choose</option>
-                                    @foreach ($vehicleModels as $vehicleModel)
-                                    <option value="{{$vehicleModel->id}}" @selected(request()->vehicle_model_id == $vehicleModel->id)>{{ $vehicleModel->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </x-filter>
-
-                    <!-- /Filter -->
-
-                    <div class="table-responsive" id="dataTable">
-                        <x-vehicles.table :vehicles="$vehicles" :zones="$zones" :vehicleModels="$vehicleModels" :hubs="$hubs"/>
                     </div>
+
+                    <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                        <div class="mb-3 add-product">
+                            <div class="add-newplus">
+                                <label class="form-label">Hub</label>
+                            </div>
+                            <select class="select filter-input" name="hub_id">
+                                <option value="">Choose</option>
+                                @foreach ($hubs as $hub)
+                                    <option value="{{ $hub->id }}" @selected(request()->hub_id == $hub->id)>{{ $hub->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                        <div class="mb-3 add-product">
+                            <div class="add-newplus">
+                                <label class="form-label">Vehicle Model</label>
+                            </div>
+                            <select class="select filter-input" name="vehicle_model_id">
+                                <option value="">Choose</option>
+                                @foreach ($vehicleModels as $vehicleModel)
+                                    <option value="{{ $vehicleModel->id }}" @selected(request()->vehicle_model_id == $vehicleModel->id)>
+                                        {{ $vehicleModel->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </x-filter>
+
+                <!-- /Filter -->
+
+                <div class="table-responsive" id="dataTable">
+                    <x-vehicles.table :vehicles="$vehicles" :zones="$zones" :vehicleModels="$vehicleModels" :hubs="$hubs" />
                 </div>
             </div>
-            <!-- /vehicle list -->
         </div>
+        <!-- /vehicle list -->
     </div>
 
     <!-- Add Vehicle -->
@@ -82,15 +72,15 @@
                         <h5 class="modal-title fw-bold">Add Vehicle </h5>
                     </div>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
-                     onclick="$('#storeForm')[0].reset()">
+                        onclick="$('#storeForm')[0].reset()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
                 <div class="modal-body p-4">
                     <!-- <div class="mb-3">
-                        <small class="text-muted">Self = SteadFast Vehicle & External = Outside Vehicle</small>
-                    </div> -->
+                                        <small class="text-muted">Self = SteadFast Vehicle & External = Outside Vehicle</small>
+                                    </div> -->
 
                     <form action="{{ route('admin.vehicles.store') }}" method="POST" id="storeForm">
                         @csrf
@@ -103,12 +93,13 @@
                                         Vehicle Basic Info
                                     </button>
                                 </h2>
-                                <div id="basicInfo" class="accordion-collapse collapse show" aria-labelledby="basicInfoHeading"
-                                    data-bs-parent="#vehicleAccordion">
+                                <div id="basicInfo" class="accordion-collapse collapse show"
+                                    aria-labelledby="basicInfoHeading" data-bs-parent="#vehicleAccordion">
                                     <div class="accordion-body">
                                         <div class="row g-3">
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold">Owner Type<span class="text-danger">*</span></label>
+                                                <label class="form-label fw-bold">Owner Type<span
+                                                        class="text-danger">*</span></label>
                                                 <select name="owner_type" class="form-select">
                                                     <option value="">Choose</option>
                                                     <option value="1" selected>Self</option>
@@ -116,7 +107,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold">Register Number<span class="text-danger">*</span></label>
+                                                <label class="form-label fw-bold">Register Number<span
+                                                        class="text-danger">*</span></label>
                                                 <input type="text" name="license_plate" class="form-control">
                                             </div>
                                             <div class="col-md-6">
@@ -130,7 +122,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold">ODO (current odometer)<span class="text-danger">*</span></label>
+                                                <label class="form-label fw-bold">ODO (current odometer)<span
+                                                        class="text-danger">*</span></label>
                                                 <input type="number" name="current_odometer" class="form-control"
                                                     placeholder="Current Mileage" onwheel="this.blur()">
                                             </div>
@@ -139,16 +132,17 @@
                                                 <select name="hub_id" class="form-select">
                                                     <option value="">Choose</option>
                                                     @foreach ($hubs as $hub)
-                                                    <option value="{{ $hub->id }}">{{ $hub->name }}</option>
+                                                        <option value="{{ $hub->id }}">{{ $hub->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-bold">Select Model</label>
+                                                <label class="form-label fw-bold">Select Model<span
+                                                        class="text-danger">*</span></label>
                                                 <select name="vehicle_model_id" class="form-select">
                                                     <option value="">Choose</option>
                                                     @foreach ($vehicleModels as $model)
-                                                    <option value="{{ $model->id }}">{{ $model->name }}</option>
+                                                        <option value="{{ $model->id }}">{{ $model->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -168,8 +162,9 @@
                             <!-- Accordion 2: Date Info -->
                             <div class="accordion-item rounded-3 overflow-hidden border border-1">
                                 <h2 class="accordion-header" id="dateInfoHeading">
-                                    <button class="accordion-button collapsed fw-bold p-3" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#dateInfo" aria-expanded="false" aria-controls="dateInfo">
+                                    <button class="accordion-button collapsed fw-bold p-3" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#dateInfo" aria-expanded="false"
+                                        aria-controls="dateInfo">
                                         Vehicle Date Information
                                     </button>
                                 </h2>
@@ -208,7 +203,8 @@
                         </div>
                         <!-- Footer -->
                         <div class="modal-footer d-flex justify-content-between mt-4">
-                            <button type="button" class="btn btn-outline-secondary py-1 px-2" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-outline-secondary py-1 px-2"
+                                data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-success py-1 px-2" id="submit_btn">Save</button>
                         </div>
                     </form>
@@ -258,7 +254,7 @@
                 });
             });
 
-            $('.editForm').submit(function(e) {
+            $(document).on('submit', '.editForm', function(e) {
                 e.preventDefault();
                 let formData = new FormData(this);
                 $.ajax({
@@ -290,7 +286,7 @@
                 });
             });
 
-            $('select[name="owner_type"]').change(function () {
+            $('select[name="owner_type"]').change(function() {
                 var ownerType = $(this).val();
                 if (ownerType === "2") { // External selected
                     // Hide all form groups inside accordion body

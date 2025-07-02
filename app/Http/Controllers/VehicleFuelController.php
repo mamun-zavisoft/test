@@ -63,7 +63,16 @@ class VehicleFuelController extends Controller
             if ($request->current_odometer < $vehicle->current_odometer) {
                 return response()->json(['message' => 'Current odometer must be greater than last odometer', 'type' => 'error']);
             }
-            
+
+            $last_odo = $vehicle->fuels()->latest()->first()?->current_odometer;
+
+            if ($last_odo) {
+                $distance = $request->current_odometer - $last_odo;
+                $mileage = number_format($distance / $request->fuel_qty, 2);
+            } else {
+                $mileage = 0;
+            }
+
             DB::beginTransaction();
             $vehicleFuel = VehicleFuel::create([
                 'vehicle_id' => $request->vehicle_id,
@@ -71,9 +80,10 @@ class VehicleFuelController extends Controller
                 'current_odometer' => $request->current_odometer,
                 'fuel_qty' => $request->fuel_qty,
                 'fuel_rate' => $request->fuel_rate,
-                'total_price' => $request->fuel_qty * $request->fuel_rate, // Auto-calculate
+                'total_price' => $request->fuel_qty * $request->fuel_rate,
+                'mileage' => $mileage
             ]);
-            $vehicle->update(['current_odometer' => $request->current_odometer]);
+            $vehicle->update(['current_odometer' => $request->current_odometer, 'mileage' => $mileage]);
 
             DB::commit();
 
@@ -146,12 +156,15 @@ class VehicleFuelController extends Controller
      */
     public function getCurrentOdometer(Request $request)
     {
-        $vehicle = Vehicle::where('id', $request->vehicle_id)->first();
+        $vehicle = Vehicle::with('vehicleModel')->where('id', $request->vehicle_id)->first();
 
         if (!$vehicle) {
             return response()->json(['error' => 'Vehicle not found'], 404);
         }
 
-        return response()->json($vehicle);
+        return response()->json([
+            'vehicle' => $vehicle,
+            'vehicle_model' => $vehicle->vehicleModel,
+        ]);
     }
 }

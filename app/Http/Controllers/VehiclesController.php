@@ -45,7 +45,7 @@ class VehiclesController extends Controller
                 'owner_type' => 'required|in:1,2',
                 'vehicle_type' => 'nullable|in:1,2,3,4,5',
                 'hub_id' => 'nullable|exists:hubs,id',
-                'vehicle_model_id' => 'nullable|exists:vehicle_models,id',
+                'vehicle_model_id' => 'required|exists:vehicle_models,id',
                 'registration_date' => 'nullable|date',
                 'registration_validity' => 'nullable|date',
                 'tax_token_validity' => 'nullable|date',
@@ -59,6 +59,7 @@ class VehiclesController extends Controller
             [
                 'current_odometer.required_if' => 'The current odometer field is required when owner type is Self.',
                 'license_plate.unique' => 'The Registration Number has already been taken.',
+                'vehicle_model_id.required' => 'The Vehicle Model field is required.',
             ]);
             
             $data['registration_date'] = $request->registration_date ? date('Y-m-d', strtotime($request->registration_date)) : null;
@@ -111,7 +112,7 @@ class VehiclesController extends Controller
                 'owner_type' => 'required|in:1,2',
                 'vehicle_type' => 'nullable|in:1,2,3,4,5,'.$vehicle->id,
                 'hub_id' => 'nullable|exists:hubs,id',
-                'vehicle_model_id' => 'nullable|exists:vehicle_models,id',
+                'vehicle_model_id' => 'required|exists:vehicle_models,id',
                 'registration_date' => 'nullable|date',
                 'registration_validity' => 'nullable|date',
                 'tax_token_validity' => 'nullable|date',
@@ -121,6 +122,8 @@ class VehiclesController extends Controller
                 'license_plate' => 'nullable|string|max:50|unique:vehicles,license_plate,'.$vehicle->id,
                 'current_odometer' => 'nullable|numeric|min:0',
                 'status' => 'nullable|in:1,2',
+            ],[
+                'vehicle_model_id.required' => 'The Vehicle Model field is required.',
             ]);
 
             $vehicle->update([

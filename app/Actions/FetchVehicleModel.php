@@ -21,7 +21,7 @@ class FetchVehicleModel
                     ->orWhere('payload_capacity', 'like', "%{$search}%")
                     ->orWhere('body_length', 'like', "%{$search}%");
             })
-            ->select('id', 'name', 'manufacturer', 'engine_cc', 'fuel_capacity', 'payload_capacity', 'body_length', 'created_at')
+            ->select('id', 'name', 'manufacturer', 'engine_cc', 'fuel_capacity', 'payload_capacity', 'body_length', 'avg_mileage','created_at')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
     }
 }
