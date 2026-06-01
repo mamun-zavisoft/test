@@ -1,0 +1,179 @@
+name: Laravel CI Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+      - staging
+      - main
+
+  pull_request:
+    branches:
+      - develop
+      - staging
+      - main
+
+jobs:
+  laravel-ci:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: testing
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:SomeFakeKeyForCIOnly=
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: testing
+      DB_USERNAME: root
+      DB_PASSWORD: root
+
+    steps:
+
+      # Checkout source code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Install PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, pdo, pdo_mysql
+          coverage: none
+
+      #################################################################
+      # 1. Validate composer.json
+      #################################################################
+      - name: Validate Composer
+        run: composer validate --strict
+
+      #################################################################
+      # 2. Install dependencies
+      #################################################################
+      - name: Install Dependencies
+        run: |
+          composer install \
+            --prefer-dist \
+            --no-progress \
+            --no-interaction
+
+      #################################################################
+      # 3. PHP syntax validation
+      #################################################################
+      - name: PHP Lint Check
+        run: |
+          find app routes config database tests \
+          -type f -name "*.php" \
+          -exec php -l {} \;
+
+      #################################################################
+      # 4. Code Style Check
+      #################################################################
+      - name: PHP CS Fixer
+        run: |
+          vendor/bin/php-cs-fixer fix \
+          --dry-run \
+          --diff
+
+      #################################################################
+      # 5. Static Analysis
+      #################################################################
+      - name: PHPStan Analysis
+        run: |
+          vendor/bin/phpstan analyse
+
+      #################################################################
+      # 6. Security Audit
+      #################################################################
+      - name: Composer Security Audit
+        run: |
+          composer audit
+
+      #################################################################
+      # 7. Laravel Setup
+      #################################################################
+      - name: Prepare Laravel
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      #################################################################
+      # 8. Database Migration Check
+      #################################################################
+      - name: Run Migrations
+        run: |
+          php artisan migrate --force
+
+      #################################################################
+      # 9. Seeder Validation
+      #################################################################
+      - name: Run Seeders
+        run: |
+          php artisan db:seed --force
+
+      #################################################################
+      # 10. Unit + Feature Tests
+      #
+      # Validates:
+      # - Authentication
+      # - APIs
+      # - Services
+      # - Business Logic
+      # - Middleware
+      #################################################################
+      - name: Run PHPUnit Tests
+        run: |
+          mkdir -p storage/test-results
+
+          php artisan test \
+            --log-junit storage/test-results/junit.xml
+
+      #################################################################
+      # 11. Duplicate Code Detection
+      #################################################################
+      - name: PHPCPD
+        run: |
+          vendor/bin/phpcpd app
+
+      #################################################################
+      # 12. Mess Detection
+      #################################################################
+      - name: PHPMD
+        run: |
+          vendor/bin/phpmd app text \
+          cleancode,codesize,design,naming
+
+      #################################################################
+      # 13. Deployment Pre-Check
+      #################################################################
+      - name: Laravel Optimization Check
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan event:cache
+          php artisan optimize
+
+      #################################################################
+      # 14. Upload Test Results
+      #################################################################
+      - name: Upload JUnit Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: storage/test-results
