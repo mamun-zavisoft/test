@@ -19,5 +19,4 @@ yarn-error.log
 /.idea
 /.nova
 /.vscode
-/.zed
-composer.lock
+/.zed	
