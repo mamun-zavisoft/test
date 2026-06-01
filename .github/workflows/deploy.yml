@@ -84,8 +84,8 @@ jobs:
       #################################################################
       # 4. Code Style Check
       #################################################################
-      - name: Install PHP CS Fixer
-        run: composer global requier friendsofphp/php-cs-fixer
+      - #name: Install PHP CS Fixer
+        #run: composer global requier friendsofphp/php-cs-fixer
 
       #################################################################
       # 5. Static Analysis
