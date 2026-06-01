@@ -84,13 +84,8 @@ jobs:
       #################################################################
       # 4. Code Style Check
       #################################################################
-      - name: PHP CS Fixer
-        run: |
-            if [ -f vendor/bin/php-cs-fixer ]; then
-              vendor/bin/php-cs-fixer fix --dry-run --diff
-            else
-              echo "PHP CS Fixer not installed, skipping..."
-            fi
+      - name: Install PHP CS Fixer
+        run: composer global requier friendsofphp/php-cs-fixer
 
       #################################################################
       # 5. Static Analysis
