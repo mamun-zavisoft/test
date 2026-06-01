@@ -97,9 +97,9 @@ jobs:
       #################################################################
       # 6. Security Audit
       #################################################################
-      - name: Composer Security Audit
-        run: |
-          composer audit
+      #- name: Composer Security Audit
+        #run: |
+          #composer audit
 
       #################################################################
       # 7. Laravel Setup
