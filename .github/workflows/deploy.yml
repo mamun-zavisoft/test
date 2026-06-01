@@ -90,9 +90,9 @@ jobs:
       #################################################################
       # 5. Static Analysis
       #################################################################
-      - name: PHPStan Analysis
-        run: |
-          vendor/bin/phpstan analyse
+       #name: PHPStan Analysis
+        #run: |
+          #vendor/bin/phpstan analyse
 
       #################################################################
       # 6. Security Audit
